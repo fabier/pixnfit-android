@@ -98,20 +98,20 @@
             android:background="@drawable/button_login"
             android:text="@string/login" />
 
-        <Button
-            android:id="@+id/recoverPasswordButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/loginButton"
-            android:layout_centerHorizontal="true"
-            android:width="300dp"
-            android:background="@color/transparent"
-            android:shadowColor="@color/transparent"
-            android:shadowDx="0"
-            android:shadowDy="0"
-            android:text="Recover your password"
-            android:textAllCaps="false"
-            android:textSize="12dp" />
+        <!--<Button-->
+            <!--android:id="@+id/recoverPasswordButton"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_below="@id/loginButton"-->
+            <!--android:layout_centerHorizontal="true"-->
+            <!--android:width="300dp"-->
+            <!--android:background="@color/transparent"-->
+            <!--android:shadowColor="@color/transparent"-->
+            <!--android:shadowDx="0"-->
+            <!--android:shadowDy="0"-->
+            <!--android:text="Recover your password"-->
+            <!--android:textAllCaps="false"-->
+            <!--android:textSize="12dp" />-->
     </RelativeLayout>
 
     <LinearLayout
