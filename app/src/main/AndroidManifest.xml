@@ -29,14 +29,6 @@
         <activity
             android:name=".RecoverPasswordActivity"
             android:label="@string/title_activity_recover_password" />
-        <activity
-            android:name=".ScrollingActivity"
-            android:label="@string/title_activity_scrolling"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".GridActivity"
-            android:label="@string/title_activity_grid"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
