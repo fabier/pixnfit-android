@@ -31,7 +31,7 @@ public class GetPostAsyncTask extends WsAsyncTask<Void, Post, List<Post>> {
     protected List<Post> doInBackground(Void... params) {
         List<Post> posts = new ArrayList<>();
         try {
-            HttpURLConnection connection = initConnection("/posts/help?max=32");
+            HttpURLConnection connection = initConnection("/posts/help?max=64");
             connection.connect();
 
             int responseCode = connection.getResponseCode();
