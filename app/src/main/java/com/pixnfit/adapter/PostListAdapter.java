@@ -54,9 +54,7 @@ public class PostListAdapter extends BaseAdapter {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.item_post, null);
             imageView = (ImageView) view.findViewById(R.id.postImageView);
-//            imageView.setLayoutParams(new GridView.LayoutParams(85, 85));
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setPadding(5, 5, 5, 5);
         } else {
             view = convertView;
             imageView = (ImageView) view.findViewById(R.id.postImageView);
