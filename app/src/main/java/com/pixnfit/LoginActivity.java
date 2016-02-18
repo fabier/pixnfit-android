@@ -59,7 +59,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                     protected void onPostExecute(JSONObject result) {
                         if (result != null) {
                             // Store credentials for next launch
-                            Intent intent = new Intent(getApplicationContext(), GridActivity.class);
+                            Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                             startActivity(intent);
                         } else {
                             Toast toast = Toast.makeText(getApplicationContext(), "Invalid login/password", Toast.LENGTH_SHORT);
