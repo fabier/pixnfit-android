@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.pixnfit.ui.SquareImageView
+        android:id="@+id/postImageView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/camera_transparent" />
+
+    <LinearLayout
+        android:id="@+id/buttonPanel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/postImageView"
+        android:orientation="horizontal"
+        android:weightSum="10">
+
+        <ImageButton
+            android:id="@+id/postButtonHeart"
+            android:layout_width="0dp"
+            android:layout_height="64dp"
+            android:layout_weight="1"
+            android:background="@color/background_floating_material_light"
+            android:padding="5dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/heart_empty" />
+
+        <ImageButton
+            android:id="@+id/postButtonComments"
+            android:layout_width="0dp"
+            android:layout_height="64dp"
+            android:layout_weight="1"
+            android:background="@color/background_floating_material_light"
+            android:padding="5dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/comments" />
+
+        <ImageButton
+            android:id="@+id/postButtonShare"
+            android:layout_width="0dp"
+            android:layout_height="64dp"
+            android:layout_weight="1"
+            android:background="@color/background_floating_material_light"
+            android:padding="5dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/share" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="64dp"
+            android:layout_weight="5" />
+
+
+        <ImageButton
+            android:id="@+id/postButtonHanger"
+            android:layout_width="0dp"
+            android:layout_height="64dp"
+            android:layout_weight="1"
+            android:background="@color/background_floating_material_light"
+            android:padding="5dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/hanger" />
+
+        <ImageButton
+            android:id="@+id/postButtonMoreOptions"
+            android:layout_width="0dp"
+            android:layout_height="64dp"
+            android:layout_weight="1"
+            android:background="@color/background_floating_material_light"
+            android:padding="5dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/more_options" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/postTitleLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/buttonPanel"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/postTitleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/imageView"
+            android:padding="4dp"
+            android:text="Post Title"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <TextView
+            android:id="@+id/postTitleViewCountTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/imageView"
+            android:padding="4dp"
+            android:text="250 views"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+    </LinearLayout>
+</RelativeLayout>
