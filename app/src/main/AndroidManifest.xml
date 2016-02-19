@@ -29,6 +29,7 @@
         <activity
             android:name=".RecoverPasswordActivity"
             android:label="@string/title_activity_recover_password" />
+        <activity android:name=".PostActivity"></activity>
     </application>
 
 </manifest>
