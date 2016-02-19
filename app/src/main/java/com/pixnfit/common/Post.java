@@ -15,4 +15,5 @@ public class Post extends BaseEntity {
     public PostType postType;
     public Visibility visibility;
     public State state;
+    public int viewCount;
 }
