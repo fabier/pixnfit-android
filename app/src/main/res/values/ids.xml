@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <item name="postImageView_tagImageId" type="id" />
+    <item name="tagImageUrl" type="id" />
 </resources>
