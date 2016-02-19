@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.pixnfit.common.Image;
 import com.pixnfit.common.Post;
+import com.pixnfit.common.PostComment;
 import com.pixnfit.common.PostType;
 import com.pixnfit.common.State;
 import com.pixnfit.common.User;
@@ -48,7 +49,7 @@ public class JSONWsParser {
     /**
      * http://stackoverflow.com/questions/4032967/json-date-to-java-date
      */
-    private static Date parseDate(String date) {
+    public static Date parseDate(String date) {
         if (date == null) {
             return null;
         } else {
@@ -73,7 +74,7 @@ public class JSONWsParser {
         }
     }
 
-    private static User parseUser(JSONObject json) throws JSONException {
+    public static User parseUser(JSONObject json) throws JSONException {
         if (json == null) {
             return null;
         } else {
@@ -85,7 +86,7 @@ public class JSONWsParser {
         }
     }
 
-    private static List<Image> parseImageList(JSONArray array) throws JSONException {
+    public static List<Image> parseImageList(JSONArray array) throws JSONException {
         if (array == null) {
             return null;
         } else {
@@ -98,7 +99,7 @@ public class JSONWsParser {
         }
     }
 
-    private static Image parseImage(JSONObject json) throws JSONException {
+    public static Image parseImage(JSONObject json) throws JSONException {
         if (json == null) {
             return null;
         } else {
@@ -109,7 +110,7 @@ public class JSONWsParser {
         }
     }
 
-    private static PostType parsePostType(JSONObject json) throws JSONException {
+    public static PostType parsePostType(JSONObject json) throws JSONException {
         if (json == null) {
             return null;
         } else {
@@ -120,7 +121,7 @@ public class JSONWsParser {
         }
     }
 
-    private static Visibility parseVisibility(JSONObject json) throws JSONException {
+    public static Visibility parseVisibility(JSONObject json) throws JSONException {
         if (json == null) {
             return null;
         } else {
@@ -131,7 +132,7 @@ public class JSONWsParser {
         }
     }
 
-    private static State parseState(JSONObject json) throws JSONException {
+    public static State parseState(JSONObject json) throws JSONException {
         if (json == null) {
             return null;
         } else {
@@ -139,6 +140,21 @@ public class JSONWsParser {
             state.id = json.getInt("id");
             state.name = json.getString("name");
             return state;
+        }
+    }
+
+    public static PostComment parsePostComment(JSONObject json) throws JSONException {
+        if (json == null) {
+            return null;
+        } else {
+            PostComment postComment = new PostComment();
+            postComment.id = json.getInt("id");
+            postComment.name = json.getString("name");
+            postComment.description = json.getString("description");
+            postComment.postId = json.getLong("postId");
+            postComment.creator = parseUser(json.getJSONObject("creator"));
+            postComment.dateCreated = parseDate(json.getString("dateCreated"));
+            return postComment;
         }
     }
 }
