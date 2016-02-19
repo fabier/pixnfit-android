@@ -10,55 +10,59 @@ import android.widget.ImageView;
 import com.pixnfit.R;
 import com.pixnfit.common.Image;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Collections;
 import java.util.Map;
 import java.util.WeakHashMap;
 
 /**
  * Created by fabier on 18/02/16.
  */
-public class BitmapWorkerTask extends AsyncTask<Image, Void, Bitmap> {
+public class BitmapWorkerTask extends AsyncTask<String, Void, Bitmap> {
 
     private static final String TAG = BitmapWorkerTask.class.getSimpleName();
 
-    private static final Map<Image, Bitmap> BITMAP_CACHE = new WeakHashMap<Image, Bitmap>();
+    private static final Map<URL, Bitmap> BITMAP_CACHE = new WeakHashMap<URL, Bitmap>();
 
     private final WeakReference<ImageView> imageViewReference;
-    private Image image;
+//    private Image image;
+    String imageUrl;
+    private int width;
+    private int height;
 
-    public BitmapWorkerTask(ImageView imageView) {
+    public BitmapWorkerTask(ImageView imageView, int width, int height) {
         // Use a WeakReference to ensure the ImageView can be garbage collected
-        imageViewReference = new WeakReference<ImageView>(imageView);
+        this.imageViewReference = new WeakReference<ImageView>(imageView);
+        this.width = width;
+        this.height = height;
     }
 
     // Decode image in background.
     @Override
-    protected Bitmap doInBackground(Image... images) {
-        image = images[0];
-        if (!BITMAP_CACHE.containsKey(image)) {
-            try {
-                Bitmap bitmap = getBitmapFromUrl(image.imageUrl);
-                BITMAP_CACHE.put(image, bitmap);
-            } catch (IOException e) {
-                Log.e(TAG, "getBitmapFromUrl: failed", e);
+    protected Bitmap doInBackground(String... imagesUrls) {
+        try {
+            imageUrl = imagesUrls[0];
+            URL url = new URL(imageUrl);
+            url = new URL(Uri.parse(url.toString()).buildUpon().clearQuery().appendQueryParameter("width", Integer.toString(width)).appendQueryParameter("height", Integer.toString(height)).build().toString());
+            if (!BITMAP_CACHE.containsKey(url)) {
+                try {
+                    Bitmap bitmap = getBitmapFromUrl(url);
+                    BITMAP_CACHE.put(url, bitmap);
+                } catch (IOException e) {
+                    Log.e(TAG, "getBitmapFromUrl: failed", e);
+                }
             }
+            return BITMAP_CACHE.get(url);
+        } catch (IOException e) {
+            Log.e(TAG, "doInBackground: failed", e);
+            return null;
         }
-        return BITMAP_CACHE.get(image);
     }
 
-    public static Bitmap getBitmapFromUrl(String sUrl) throws IOException {
-        URL url = new URL(sUrl);
-        String urlQuery = url.getQuery();
-        if (StringUtils.isBlank(urlQuery)) {
-            url = new URL(Uri.parse(url.toString()).buildUpon().appendQueryParameter("width", "128").appendQueryParameter("height", "128").build().toString());
-        }
+    public static Bitmap getBitmapFromUrl(URL url) throws IOException {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.connect();
         InputStream input = connection.getInputStream();
@@ -71,7 +75,7 @@ public class BitmapWorkerTask extends AsyncTask<Image, Void, Bitmap> {
         if (imageViewReference != null && bitmap != null) {
             final ImageView imageView = imageViewReference.get();
             if (imageView != null) {
-                if (imageView.getTag(R.id.postImageView_tagImageId).equals(image)) {
+                if (imageView.getTag(R.id.tagImageUrl).equals(imageUrl)) {
                     // C'est cette image qu'on souhaite afficher dans cette imageView,
                     // donc on applique le bitmap
                     imageView.setImageBitmap(bitmap);
