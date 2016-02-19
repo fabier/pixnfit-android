@@ -11,7 +11,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 
 /**
  * Created by fabier on 16/02/16.
@@ -37,9 +36,18 @@ public abstract class WsAsyncTask<Params, Progress, Result> extends AsyncTask<Pa
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestProperty("Authorization", authorization);
         connection.setRequestProperty("Accept", "application/json");
+        connection.setConnectTimeout(10000);
+        connection.setReadTimeout(10000);
         if (method != null) {
             connection.setRequestMethod(method);
         }
+
+        if ("POST".equals(method) || "PUT".equals(method) || "DELETE".equals(method)) {
+            connection.setDoOutput(true);
+            connection.setUseCaches(false);
+            connection.setRequestProperty("Content-Type", "application/json");
+        }
+
         return connection;
     }
 

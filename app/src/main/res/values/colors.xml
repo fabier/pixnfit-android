@@ -7,4 +7,7 @@
     <color name="red">#FF0000</color>
     <color name="transparent">#00000000</color>
     <color name="white">#FFF</color>
+    <color name="grey">#BBB</color>
+    <color name="green">#2D882D</color>
+    <color name="orange">#FF7400</color>
 </resources>
