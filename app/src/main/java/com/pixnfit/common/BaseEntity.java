@@ -1,9 +1,11 @@
 package com.pixnfit.common;
 
+import java.io.Serializable;
+
 /**
  * Created by fabier on 16/02/16.
  */
-public class BaseEntity {
+public class BaseEntity implements Serializable {
     public long id;
 
     @Override
