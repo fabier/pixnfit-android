@@ -37,16 +37,9 @@ public class GetPostAsyncTask extends WsAsyncTask<Void, Post, List<Post>> {
             int responseCode = connection.getResponseCode();
             if (responseCode == 200) {
                 // Listing successful
-                Log.e(TAG, "/posts/help: success");
-                InputStream inputStream = connection.getInputStream();
-
-                BufferedReader rd = new BufferedReader(new InputStreamReader(inputStream));
-                String line = "";
-                StringBuilder stringBuilder = new StringBuilder();
-                while ((line = rd.readLine()) != null) {
-                    stringBuilder.append(line);
-                }
-                JSONArray array = new JSONArray(stringBuilder.toString());
+                Log.i(TAG, "/posts/help: success");
+                String dataAsJSON = readConnection(connection);
+                JSONArray array = new JSONArray(dataAsJSON);
                 for (int i = 0; i < array.length(); i++) {
                     Post post = JSONWsParser.parsePost(array.getJSONObject(i));
                     publishProgress(post);
