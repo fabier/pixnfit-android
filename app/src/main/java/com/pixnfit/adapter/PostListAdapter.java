@@ -36,7 +36,7 @@ public class PostListAdapter extends BaseAdapter {
         return getPost(position);
     }
 
-    private Post getPost(int position) {
+    public Post getPost(int position) {
         return posts == null ? null : posts.get(position);
     }
 
@@ -66,17 +66,17 @@ public class PostListAdapter extends BaseAdapter {
             Post post = getPost(position);
             if (post.images != null && post.images.size() > 0) {
                 Image image = post.images.get(0);
-                imageView.setTag(R.id.postImageView_tagImageId, image);
-                loadBitmap(image, imageView);
+                imageView.setTag(R.id.tagImageUrl, image.imageUrl);
+                loadBitmap(image.imageUrl, imageView);
             }
         }
 
         return view;
     }
 
-    public void loadBitmap(Image image, ImageView imageView) {
-        BitmapWorkerTask task = new BitmapWorkerTask(imageView);
-        task.execute(image);
+    public void loadBitmap(String imageUrl, ImageView imageView) {
+        BitmapWorkerTask task = new BitmapWorkerTask(imageView, 128, 128);
+        task.execute(imageUrl);
     }
 
     public void setPosts(List<Post> posts) {
