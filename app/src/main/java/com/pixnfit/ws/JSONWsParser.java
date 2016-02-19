@@ -81,7 +81,7 @@ public class JSONWsParser {
             User user = new User();
             user.id = json.getInt("id");
             user.username = json.getString("username");
-            user.imageUrl = json.getString("imageUrl");
+            user.image = parseImage(json.optJSONObject("image"));
             return user;
         }
     }

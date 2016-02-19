@@ -153,9 +153,9 @@ public class PostCommentsListAdapter extends BaseAdapter {
                     postCommentHolder.postCommentAuthorNameTextView.setText(postComment.creator.username);
                     postCommentHolder.postCommentDateTextView.setText(new SimpleDateFormat(", dd MMM yyyy, HH:mm", Locale.ENGLISH).format(postComment.dateCreated));
                     postCommentHolder.postCommentDescriptionTextView.setText(postComment.description);
-                    if (postComment.creator != null && postComment.creator.imageUrl != null) {
-                        postCommentHolder.postCommentAuthorImageView.setTag(R.id.tagImageUrl, postComment.creator.imageUrl);
-                        loadImageIntoView(postComment.creator.imageUrl, postCommentHolder.postCommentAuthorImageView);
+                    if (postComment.creator != null && postComment.creator.image != null) {
+                        postCommentHolder.postCommentAuthorImageView.setTag(R.id.tagImageUrl, postComment.creator.image.imageUrl);
+                        loadImageIntoView(postComment.creator.image.imageUrl, postCommentHolder.postCommentAuthorImageView);
                     } else {
                         postCommentHolder.postCommentAuthorImageView.setTag(R.id.tagImageUrl, null);
                         postCommentHolder.postCommentAuthorImageView.setImageResource(R.drawable.profile);

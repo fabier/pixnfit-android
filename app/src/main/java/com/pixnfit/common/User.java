@@ -5,5 +5,5 @@ package com.pixnfit.common;
  */
 public class User extends BaseEntity {
     public String username;
-    public String imageUrl;
+    public Image image;
 }
