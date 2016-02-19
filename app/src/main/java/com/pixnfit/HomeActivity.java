@@ -1,5 +1,6 @@
 package com.pixnfit;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -14,7 +15,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.Toast;
 
 import com.pixnfit.adapter.PostListAdapter;
 import com.pixnfit.common.Post;
@@ -125,6 +125,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Toast.makeText(this, "" + position, Toast.LENGTH_SHORT).show();
+        Post post = postListAdapter.getPost(position);
+        Intent intent = new Intent(this, PostActivity.class);
+        intent.putExtra("post", post);
+        startActivity(intent);
     }
 }
