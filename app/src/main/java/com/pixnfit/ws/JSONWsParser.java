@@ -39,12 +39,12 @@ public class JSONWsParser {
             post.id = json.getInt("id");
             post.name = json.getString("name");
             post.description = json.optString("description");
-            post.creator = parseUser(json.getJSONObject("creator"));
-            post.images = parseImageList(json.getJSONArray("images"));
-            post.postType = parsePostType(json.getJSONObject("postType"));
-            post.visibility = parseVisibility(json.getJSONObject("visibility"));
-            post.state = parseState(json.getJSONObject("state"));
-            post.dateCreated = parseDate(json.getString("dateCreated"));
+            post.creator = parseUser(json.optJSONObject("creator"));
+            post.images = parseImageList(json.optJSONArray("images"));
+            post.postType = parsePostType(json.optJSONObject("postType"));
+            post.visibility = parseVisibility(json.optJSONObject("visibility"));
+            post.state = parseState(json.optJSONObject("state"));
+            post.dateCreated = parseDate(json.optString("dateCreated"));
             return post;
         }
     }
