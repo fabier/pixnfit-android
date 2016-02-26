@@ -36,21 +36,21 @@ public class GetPostAsyncTask extends WsAsyncTask<Void, Post, List<Post>> {
             int responseCode = connection.getResponseCode();
             if (responseCode == 200) {
                 // Listing successful
-                Log.i(TAG, "/posts/help: success");
+                Log.i(TAG, "GET /posts/help: success");
                 String dataAsJSON = readConnection(connection);
                 JSONArray array = new JSONArray(dataAsJSON);
                 return JSONWsParser.parsePostList(array);
             } else {
                 // Error
-                Log.e(TAG, "/posts/help: failed");
+                Log.e(TAG, "GET /posts/help: failed");
                 return null;
             }
         } catch (IOException e) {
             // writing exception to log
-            Log.e(TAG, "/posts/help: IOException", e);
+            Log.e(TAG, "GET /posts/help: IOException", e);
             return null;
         } catch (JSONException e) {
-            Log.e(TAG, "/posts/help: JSONException", e);
+            Log.e(TAG, "GET /posts/help: JSONException", e);
             return null;
         }
     }

@@ -46,18 +46,19 @@ public class SubmitPostVoteAsyncTask extends WsAsyncTask<Void, Void, Boolean> {
             int responseCode = connection.getResponseCode();
             if (responseCode == 200) {
                 // Value updated !
+                Log.i(TAG, "POST /posts/:id/votes: success");
                 return true;
             } else {
                 // Error
-                Log.e(TAG, "/posts/help: failed");
+                Log.e(TAG, "POST /posts/:id/votes: failed");
                 return false;
             }
         } catch (IOException e) {
             // writing exception to log
-            Log.e(TAG, "/posts/help: IOException", e);
+            Log.e(TAG, "POST /posts/:id/votes: IOException", e);
             return false;
         } catch (JSONException e) {
-            Log.e(TAG, "/posts/help: JSONException", e);
+            Log.e(TAG, "POST /posts/:id/votes: JSONException", e);
             return false;
         }
     }

@@ -36,21 +36,21 @@ public class GetPostMeAsyncTask extends WsAsyncTask<Post, Void, PostMe> {
             int responseCode = connection.getResponseCode();
             if (responseCode == 200) {
                 // Listing successful
-                Log.i(TAG, "/posts/:id/me: success");
+                Log.i(TAG, "GET /posts/:id/me: success");
                 String dataAsJSON = readConnection(connection);
                 JSONObject jsonObject = new JSONObject(dataAsJSON);
                 return JSONWsParser.parsePostMe(jsonObject);
             } else {
                 // Error
-                Log.e(TAG, "/posts/:id/me: failed");
+                Log.e(TAG, "GET /posts/:id/me: failed");
                 return null;
             }
         } catch (IOException e) {
             // writing exception to log
-            Log.e(TAG, "/posts/:id/me: IOException", e);
+            Log.e(TAG, "GET /posts/:id/me: IOException", e);
             return null;
         } catch (JSONException e) {
-            Log.e(TAG, "/posts/:id/me: JSONException", e);
+            Log.e(TAG, "GET /posts/:id/me: JSONException", e);
             return null;
         }
     }
