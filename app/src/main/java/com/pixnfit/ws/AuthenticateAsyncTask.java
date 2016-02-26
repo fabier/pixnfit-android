@@ -1,9 +1,6 @@
 package com.pixnfit.ws;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.os.AsyncTask;
-import android.util.Base64;
 import android.util.Log;
 
 import org.json.JSONException;
@@ -14,7 +11,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.URL;
 
 /**
  * Created by fabier on 16/02/16.
@@ -22,9 +18,23 @@ import java.net.URL;
 public class AuthenticateAsyncTask extends WsAsyncTask<Void, Void, JSONObject> {
 
     private static final String TAG = AuthenticateAsyncTask.class.getSimpleName();
+    private String login;
+    private String password;
 
-    public AuthenticateAsyncTask(Context context) {
+    public AuthenticateAsyncTask(Context context, String login, String password) {
         super(context);
+        this.login = login;
+        this.password = password;
+    }
+
+    @Override
+    protected String getLogin() {
+        return this.login;
+    }
+
+    @Override
+    protected String getPassword() {
+        return this.password;
     }
 
     @Override

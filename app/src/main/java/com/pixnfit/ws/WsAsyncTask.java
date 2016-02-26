@@ -17,14 +17,30 @@ import java.net.URL;
  */
 public abstract class WsAsyncTask<Params, Progress, Result> extends AsyncTask<Params, Progress, Result> implements WsConstants {
 
-    private final String authorization;
+    private Context context;
 
     public WsAsyncTask(Context context) {
+        this.context = context;
+    }
+
+    protected String getLogin() {
         SharedPreferences sharedPreferences = context.getSharedPreferences("pixnfit", Context.MODE_PRIVATE);
-        String login = sharedPreferences.getString("login", "");
-        String password = sharedPreferences.getString("password", "");
-        String base64BasicAuth = Base64.encodeToString(new String(login + ":" + password).getBytes(), Base64.DEFAULT);
-        this.authorization = "Basic " + base64BasicAuth;
+        return sharedPreferences.getString("login", "");
+    }
+
+    protected String getPassword() {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("pixnfit", Context.MODE_PRIVATE);
+        return sharedPreferences.getString("password", "");
+    }
+
+    private String getBasicAuthString() {
+        String login = getLogin();
+        String password = getPassword();
+        return Base64.encodeToString(("" + login + ":" + password).getBytes(), Base64.DEFAULT);
+    }
+
+    private String getAuthorization() {
+        return "Basic " + getBasicAuthString();
     }
 
     protected HttpURLConnection initConnection(String path) throws IOException {
@@ -34,7 +50,7 @@ public abstract class WsAsyncTask<Params, Progress, Result> extends AsyncTask<Pa
     protected HttpURLConnection initConnection(String path, String method) throws IOException {
         URL url = new URL(BASE_URL + path);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setRequestProperty("Authorization", authorization);
+        connection.setRequestProperty("Authorization", getAuthorization());
         connection.setRequestProperty("Accept", "application/json");
         connection.setConnectTimeout(10000);
         connection.setReadTimeout(10000);

@@ -50,15 +50,15 @@ public class LoginActivity extends Activity implements View.OnClickListener {
             case R.id.loginButton:
                 final String login = loginEditText.getText().toString();
                 final String password = passwordEditText.getText().toString();
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("login", login);
-                editor.putString("password", password);
-                editor.commit();
                 AuthenticateAsyncTask authenticateAsyncTask = new AuthenticateAsyncTask(this) {
                     @Override
                     protected void onPostExecute(JSONObject result) {
                         if (result != null) {
                             // Store credentials for next launch
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putString("login", login);
+                            editor.putString("password", password);
+                            editor.commit();
                             Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                             startActivity(intent);
                         } else {
