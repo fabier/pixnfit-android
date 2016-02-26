@@ -86,7 +86,7 @@ public class PostActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.fabLike:
                 new SubmitPostVoteAsyncTask(this, post, true).execute();
                 Snackbar.make(v, "Thank you for your vote !", Snackbar.LENGTH_LONG).show();
-                dislikeFloatingActionButton.setBackgroundTintList(getResources().getColorStateList(R.color.grey));
+                setHasVoted(true);
                 break;
             case R.id.fabDislike:
                 new SubmitPostVoteAsyncTask(this, post, false).execute();
