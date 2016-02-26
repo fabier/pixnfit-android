@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Base64;
+import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,6 +17,8 @@ import java.net.URL;
  * Created by fabier on 16/02/16.
  */
 public abstract class WsAsyncTask<Params, Progress, Result> extends AsyncTask<Params, Progress, Result> implements WsConstants {
+
+    public static final String TAG = WsAsyncTask.class.getSimpleName();
 
     private Context context;
 
@@ -49,6 +52,7 @@ public abstract class WsAsyncTask<Params, Progress, Result> extends AsyncTask<Pa
 
     protected HttpURLConnection initConnection(String path, String method) throws IOException {
         URL url = new URL(BASE_URL + path);
+        Log.i(TAG, method + " " + url.toString());
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestProperty("Authorization", getAuthorization());
         connection.setRequestProperty("Accept", "application/json");
