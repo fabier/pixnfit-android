@@ -47,15 +47,8 @@ public class AuthenticateAsyncTask extends WsAsyncTask<Void, Void, JSONObject> {
             if (responseCode == 200) {
                 // Authentication successful
                 Log.e(TAG, "/auth: success");
-                InputStream inputStream = connection.getInputStream();
-
-                BufferedReader rd = new BufferedReader(new InputStreamReader(inputStream));
-                String line = "";
-                StringBuilder stringBuilder = new StringBuilder();
-                while ((line = rd.readLine()) != null) {
-                    stringBuilder.append(line);
-                }
-                return new JSONObject(stringBuilder.toString());
+                String dataAsJSON = readConnection(connection);
+                return new JSONObject(dataAsJSON);
             } else {
                 // Error
                 Log.e(TAG, "/auth: failed");
