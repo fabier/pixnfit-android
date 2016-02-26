@@ -13,6 +13,7 @@ import com.pixnfit.common.User;
 import com.pixnfit.common.Visibility;
 import com.pixnfit.common.VoteReason;
 
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -53,7 +54,7 @@ public class JSONWsParser {
      * http://stackoverflow.com/questions/4032967/json-date-to-java-date
      */
     public static Date parseDate(String date) {
-        if (date == null) {
+        if (StringUtils.isBlank(date)) {
             return null;
         } else {
             // NOTE: SimpleDateFormat uses GMT[-+]hh:mm for the TZ which breaks
