@@ -29,7 +29,6 @@ public class GetPostAsyncTask extends WsAsyncTask<Void, Post, List<Post>> {
 
     @Override
     protected List<Post> doInBackground(Void... params) {
-        List<Post> posts = new ArrayList<>();
         try {
             HttpURLConnection connection = initConnection("/posts/help?max=64");
             connection.connect();
@@ -40,11 +39,7 @@ public class GetPostAsyncTask extends WsAsyncTask<Void, Post, List<Post>> {
                 Log.i(TAG, "/posts/help: success");
                 String dataAsJSON = readConnection(connection);
                 JSONArray array = new JSONArray(dataAsJSON);
-                for (int i = 0; i < array.length(); i++) {
-                    Post post = JSONWsParser.parsePost(array.getJSONObject(i));
-                    publishProgress(post);
-                    posts.add(post);
-                }
+                return JSONWsParser.parsePostList(array);
             } else {
                 // Error
                 Log.e(TAG, "/posts/help: failed");
@@ -58,6 +53,5 @@ public class GetPostAsyncTask extends WsAsyncTask<Void, Post, List<Post>> {
             Log.e(TAG, "/posts/help: JSONException", e);
             return null;
         }
-        return posts;
     }
 }

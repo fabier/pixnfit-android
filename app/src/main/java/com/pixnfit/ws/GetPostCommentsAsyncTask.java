@@ -29,7 +29,6 @@ public class GetPostCommentsAsyncTask extends WsAsyncTask<Post, PostComment, Lis
     @Override
     protected List<PostComment> doInBackground(Post... posts) {
         Post post = posts[0];
-        List<PostComment> postComments = new ArrayList<>();
         try {
             String url = String.format(Locale.ENGLISH, "/posts/%d/comments", post.id);
             HttpURLConnection connection = initConnection(url);
@@ -41,11 +40,7 @@ public class GetPostCommentsAsyncTask extends WsAsyncTask<Post, PostComment, Lis
                 Log.i(TAG, "/posts/:id/comments: success");
                 String dataAsJSON = readConnection(connection);
                 JSONArray array = new JSONArray(dataAsJSON);
-                for (int i = 0; i < array.length(); i++) {
-                    PostComment postComment = JSONWsParser.parsePostComment(array.getJSONObject(i));
-                    publishProgress(postComment);
-                    postComments.add(postComment);
-                }
+                return JSONWsParser.parsePostCommentList(array);
             } else {
                 // Error
                 Log.e(TAG, "/posts/:id/comments: failed");
@@ -59,6 +54,5 @@ public class GetPostCommentsAsyncTask extends WsAsyncTask<Post, PostComment, Lis
             Log.e(TAG, "/posts/help: JSONException", e);
             return null;
         }
-        return postComments;
     }
 }
