@@ -12,6 +12,8 @@ import com.pixnfit.common.Image;
 import com.pixnfit.common.Post;
 
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 /**
  * Created by fabier on 16/02/16.
@@ -21,6 +23,7 @@ public class PostListAdapter extends BaseAdapter {
 
     private Context context;
     private List<Post> posts;
+    private Executor imageThreadExecutor = Executors.newFixedThreadPool(8);
 
     public PostListAdapter(Context context) {
         this.context = context;
@@ -76,7 +79,7 @@ public class PostListAdapter extends BaseAdapter {
 
     public void loadBitmap(String imageUrl, ImageView imageView) {
         BitmapWorkerTask task = new BitmapWorkerTask(imageView, 128, 128);
-        task.execute(imageUrl);
+        task.executeOnExecutor(imageThreadExecutor, imageUrl);
     }
 
     public void setPosts(List<Post> posts) {
