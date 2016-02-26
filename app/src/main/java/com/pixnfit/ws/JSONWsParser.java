@@ -166,8 +166,8 @@ public class JSONWsParser {
             return null;
         } else {
             PostMe postMe = new PostMe();
-            postMe.vote = parsePostVote(json.getJSONObject("vote"));
-            postMe.comments = parsePostCommentList(json.getJSONArray("comments"));
+            postMe.vote = parsePostVote(json.optJSONObject("vote"));
+            postMe.comments = parsePostCommentList(json.optJSONArray("comments"));
             return postMe;
         }
     }
@@ -179,7 +179,7 @@ public class JSONWsParser {
             PostVote postVote = new PostVote();
             postVote.id = json.getInt("id");
             postVote.vote = json.getBoolean("vote");
-            postVote.voteReason = parseVoteReason(json.getJSONObject("voteReason"));
+            postVote.voteReason = parseVoteReason(json.optJSONObject("voteReason"));
             postVote.post = parsePost(json.getJSONObject("post"));
             postVote.creator = parseUser(json.getJSONObject("creator"));
             postVote.dateCreated = parseDate(json.getString("dateCreated"));
