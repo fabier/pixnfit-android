@@ -1,6 +1,5 @@
 package com.pixnfit;
 
-import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -14,7 +13,9 @@ import android.widget.TextView;
 import com.pixnfit.adapter.PostCommentsListAdapter;
 import com.pixnfit.common.Post;
 import com.pixnfit.common.PostComment;
+import com.pixnfit.common.PostMe;
 import com.pixnfit.ws.GetPostCommentsAsyncTask;
+import com.pixnfit.ws.GetPostMeAsyncTask;
 import com.pixnfit.ws.SubmitPostVoteAsyncTask;
 
 import java.util.List;
@@ -45,9 +46,7 @@ public class PostActivity extends AppCompatActivity implements View.OnClickListe
         postCommentsListView.setAdapter(postCommentsListAdapter);
 
         likeFloatingActionButton = (FloatingActionButton) findViewById(R.id.fabLike);
-        likeFloatingActionButton.setOnClickListener(this);
         dislikeFloatingActionButton = (FloatingActionButton) findViewById(R.id.fabDislike);
-        dislikeFloatingActionButton.setOnClickListener(this);
     }
 
     @Override
@@ -64,7 +63,21 @@ public class PostActivity extends AppCompatActivity implements View.OnClickListe
                 }
             };
             getPostCommentsAsyncTask.execute(post);
+
+            GetPostMeAsyncTask getPostMeAsyncTask = new GetPostMeAsyncTask(this) {
+                @Override
+                protected void onPostExecute(PostMe postMe) {
+                    if (postMe != null && postMe.vote != null) {
+                        setHasVoted(postMe.vote.vote);
+                    } else {
+                        setHasVoted(null);
+                    }
+                }
+            };
+            getPostMeAsyncTask.execute(post);
         }
+        likeFloatingActionButton.setVisibility(View.GONE);
+        dislikeFloatingActionButton.setVisibility(View.GONE);
     }
 
     @Override
@@ -74,18 +87,39 @@ public class PostActivity extends AppCompatActivity implements View.OnClickListe
                 new SubmitPostVoteAsyncTask(this, post, true).execute();
                 Snackbar.make(v, "Thank you for your vote !", Snackbar.LENGTH_LONG).show();
                 dislikeFloatingActionButton.setBackgroundTintList(getResources().getColorStateList(R.color.grey));
-//                likeFloatingActionButton.setOnClickListener(null);
-//                dislikeFloatingActionButton.setOnClickListener(null);
                 break;
             case R.id.fabDislike:
                 new SubmitPostVoteAsyncTask(this, post, false).execute();
                 Snackbar.make(v, "Thank you for your vote !", Snackbar.LENGTH_LONG).show();
-                likeFloatingActionButton.setBackgroundTintList(getResources().getColorStateList(R.color.grey));
-//                likeFloatingActionButton.setOnClickListener(null);
-//                dislikeFloatingActionButton.setOnClickListener(null);
+                setHasVoted(false);
                 break;
             default:
                 break;
         }
+    }
+
+    private void setHasVoted(Boolean vote) {
+        if (vote == null) {
+            // L'utilisateur n'a pas voté
+            likeFloatingActionButton.setBackgroundTintList(getResources().getColorStateList(R.color.green));
+            dislikeFloatingActionButton.setBackgroundTintList(getResources().getColorStateList(R.color.orange));
+            likeFloatingActionButton.setOnClickListener(this);
+            dislikeFloatingActionButton.setOnClickListener(this);
+        } else {
+            // L'utilisateur a voté...
+            if (vote) {
+                // ... positivement
+                likeFloatingActionButton.setBackgroundTintList(getResources().getColorStateList(R.color.green));
+                dislikeFloatingActionButton.setBackgroundTintList(getResources().getColorStateList(R.color.grey));
+            } else {
+                // ... négativement
+                likeFloatingActionButton.setBackgroundTintList(getResources().getColorStateList(R.color.grey));
+                dislikeFloatingActionButton.setBackgroundTintList(getResources().getColorStateList(R.color.orange));
+            }
+            likeFloatingActionButton.setOnClickListener(null);
+            dislikeFloatingActionButton.setOnClickListener(null);
+        }
+        likeFloatingActionButton.setVisibility(View.VISIBLE);
+        dislikeFloatingActionButton.setVisibility(View.VISIBLE);
     }
 }
