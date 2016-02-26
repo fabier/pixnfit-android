@@ -5,10 +5,13 @@ import android.util.Log;
 import com.pixnfit.common.Image;
 import com.pixnfit.common.Post;
 import com.pixnfit.common.PostComment;
+import com.pixnfit.common.PostMe;
 import com.pixnfit.common.PostType;
+import com.pixnfit.common.PostVote;
 import com.pixnfit.common.State;
 import com.pixnfit.common.User;
 import com.pixnfit.common.Visibility;
+import com.pixnfit.common.VoteReason;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -155,6 +158,69 @@ public class JSONWsParser {
             postComment.creator = parseUser(json.getJSONObject("creator"));
             postComment.dateCreated = parseDate(json.getString("dateCreated"));
             return postComment;
+        }
+    }
+
+    public static PostMe parsePostMe(JSONObject json) throws JSONException {
+        if (json == null) {
+            return null;
+        } else {
+            PostMe postMe = new PostMe();
+            postMe.vote = parsePostVote(json.getJSONObject("vote"));
+            postMe.comments = parsePostCommentList(json.getJSONArray("comments"));
+            return postMe;
+        }
+    }
+
+    public static PostVote parsePostVote(JSONObject json) throws JSONException {
+        if (json == null) {
+            return null;
+        } else {
+            PostVote postVote = new PostVote();
+            postVote.id = json.getInt("id");
+            postVote.vote = json.getBoolean("vote");
+            postVote.voteReason = parseVoteReason(json.getJSONObject("voteReason"));
+            postVote.post = parsePost(json.getJSONObject("post"));
+            postVote.creator = parseUser(json.getJSONObject("creator"));
+            postVote.dateCreated = parseDate(json.getString("dateCreated"));
+            return postVote;
+        }
+    }
+
+    public static VoteReason parseVoteReason(JSONObject json) throws JSONException {
+        if (json == null) {
+            return null;
+        } else {
+            VoteReason voteReason = new VoteReason();
+            voteReason.id = json.getLong("id");
+            voteReason.name = json.getString("name");
+            return voteReason;
+        }
+    }
+
+    public static List<PostComment> parsePostCommentList(JSONArray array) throws JSONException {
+        if (array == null) {
+            return null;
+        } else {
+            List<PostComment> postComments = new ArrayList<>();
+            for (int i = 0; i < array.length(); i++) {
+                PostComment postComment = JSONWsParser.parsePostComment(array.getJSONObject(i));
+                postComments.add(postComment);
+            }
+            return postComments;
+        }
+    }
+
+    public static List<Post> parsePostList(JSONArray array) throws JSONException {
+        if (array == null) {
+            return null;
+        } else {
+            List<Post> posts = new ArrayList<>();
+            for (int i = 0; i < array.length(); i++) {
+                Post post = JSONWsParser.parsePost(array.getJSONObject(i));
+                posts.add(post);
+            }
+            return posts;
         }
     }
 }
