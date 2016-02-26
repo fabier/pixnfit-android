@@ -50,7 +50,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
             case R.id.loginButton:
                 final String login = loginEditText.getText().toString();
                 final String password = passwordEditText.getText().toString();
-                AuthenticateAsyncTask authenticateAsyncTask = new AuthenticateAsyncTask(this) {
+                AuthenticateAsyncTask authenticateAsyncTask = new AuthenticateAsyncTask(this, login, password) {
                     @Override
                     protected void onPostExecute(JSONObject result) {
                         if (result != null) {
