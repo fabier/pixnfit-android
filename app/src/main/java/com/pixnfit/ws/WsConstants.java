@@ -5,7 +5,10 @@ package com.pixnfit.ws;
  */
 public interface WsConstants {
 
-    public static final String HOSTNAME = "pixnfit.com"; //"192.168.1.128"; // "linuxfabier"; // "192.168.1.128";
-//    public static String BASE_URL = "http://" + HOSTNAME + ":8080/pixnfit/api/v1";
-    public static String BASE_URL = "http://" + HOSTNAME + "/api/v1";
+    // Switch permettant de configurer pour la prod ou pour le dev local
+    boolean devMode = true;
+
+    // Production Configuration
+    String HOSTNAME = devMode ? "192.168.1.128" : "pixnfit.com";
+    String BASE_URL = devMode ? "http://" + HOSTNAME + ":8080/pixnfit/api/v1" : "http://" + HOSTNAME + "/api/v1";
 }
