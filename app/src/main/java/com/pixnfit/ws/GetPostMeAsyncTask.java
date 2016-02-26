@@ -36,13 +36,13 @@ public class GetPostMeAsyncTask extends WsAsyncTask<Post, Void, PostMe> {
             int responseCode = connection.getResponseCode();
             if (responseCode == 200) {
                 // Listing successful
-                Log.i(TAG, "GET /posts/:id/me: success");
+                Log.i(TAG, "GET /posts/:id/me: success, HTTP " + responseCode);
                 String dataAsJSON = readConnection(connection);
                 JSONObject jsonObject = new JSONObject(dataAsJSON);
                 return JSONWsParser.parsePostMe(jsonObject);
             } else {
                 // Error
-                Log.e(TAG, "GET /posts/:id/me: failed");
+                Log.e(TAG, "GET /posts/:id/me: failed, error HTTP " + responseCode);
                 return null;
             }
         } catch (IOException e) {

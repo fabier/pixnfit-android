@@ -37,13 +37,13 @@ public class GetPostCommentsAsyncTask extends WsAsyncTask<Post, PostComment, Lis
             int responseCode = connection.getResponseCode();
             if (responseCode == 200) {
                 // Listing successful
-                Log.i(TAG, "GET /posts/:id/comments: success");
+                Log.i(TAG, "GET /posts/:id/comments: success, HTTP " + responseCode);
                 String dataAsJSON = readConnection(connection);
                 JSONArray array = new JSONArray(dataAsJSON);
                 return JSONWsParser.parsePostCommentList(array);
             } else {
                 // Error
-                Log.e(TAG, "GET /posts/:id/comments: failed");
+                Log.e(TAG, "GET /posts/:id/comments: failed, error HTTP " + responseCode);
                 return null;
             }
         } catch (IOException e) {

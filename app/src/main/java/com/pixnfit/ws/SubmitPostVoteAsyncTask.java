@@ -44,13 +44,13 @@ public class SubmitPostVoteAsyncTask extends WsAsyncTask<Void, Void, Boolean> {
             wr.close();
 
             int responseCode = connection.getResponseCode();
-            if (responseCode == 200) {
+            if (responseCode == 201) {
                 // Value updated !
-                Log.i(TAG, "POST /posts/:id/votes: success");
+                Log.i(TAG, "POST /posts/:id/votes: success, HTTP " + responseCode);
                 return true;
             } else {
                 // Error
-                Log.e(TAG, "POST /posts/:id/votes: failed");
+                Log.e(TAG, "POST /posts/:id/votes: failed, error HTTP " + responseCode);
                 return false;
             }
         } catch (IOException e) {

@@ -46,12 +46,12 @@ public class AuthenticateAsyncTask extends WsAsyncTask<Void, Void, JSONObject> {
             int responseCode = connection.getResponseCode();
             if (responseCode == 200) {
                 // Authentication successful
-                Log.i(TAG, "POST /auth: success");
+                Log.i(TAG, "POST /auth: success, HTTP " + responseCode);
                 String dataAsJSON = readConnection(connection);
                 return new JSONObject(dataAsJSON);
             } else {
                 // Error
-                Log.e(TAG, "POST /auth: failed");
+                Log.e(TAG, "POST /auth: failed, error HTTP " + responseCode);
                 return null;
             }
         } catch (IOException e) {
