@@ -51,6 +51,7 @@ public abstract class WsAsyncTask<Params, Progress, Result> extends AsyncTask<Pa
     }
 
     protected HttpURLConnection initConnection(String path, String method) throws IOException {
+        method = method == null ? "GET" : method;
         URL url = new URL(BASE_URL + path);
         Log.i(TAG, method + " " + url.toString());
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
