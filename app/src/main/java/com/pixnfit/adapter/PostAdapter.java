@@ -107,7 +107,7 @@ public class PostAdapter extends BaseAdapter implements View.OnClickListener {
         switch (getItemViewType(position)) {
             case VIEWTYPE_POSTHEADER:
                 if (convertView == null) {
-                    LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                    LayoutInflater inflater = LayoutInflater.from(context);
                     view = inflater.inflate(R.layout.item_header_post, null);
                     postHeaderHolder = new PostHeaderHolder();
                     postHeaderHolder.postImageView = (ImageView) view.findViewById(R.id.postImageView);
@@ -259,7 +259,7 @@ public class PostAdapter extends BaseAdapter implements View.OnClickListener {
         if (isFavorite) {
             heartFloatingActionButton.setBackgroundTintList(context.getResources().getColorStateList(R.color.red));
         } else {
-            heartFloatingActionButton.setBackgroundTintList(context.getResources().getColorStateList(R.color.grey));
+            heartFloatingActionButton.setBackgroundTintList(context.getResources().getColorStateList(R.color.black));
         }
 
         postHeaderHolder.heartFloatingActionButton.setVisibility(View.VISIBLE);
