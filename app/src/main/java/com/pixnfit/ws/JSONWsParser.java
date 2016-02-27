@@ -155,7 +155,7 @@ public class JSONWsParser {
             postComment.id = json.getInt("id");
             postComment.name = json.getString("name");
             postComment.description = json.getString("description");
-            postComment.postId = json.getLong("postId");
+            postComment.post = parsePost(json.getJSONObject("post"));
             postComment.creator = parseUser(json.getJSONObject("creator"));
             postComment.dateCreated = parseDate(json.getString("dateCreated"));
             return postComment;
@@ -167,6 +167,9 @@ public class JSONWsParser {
             return null;
         } else {
             PostMe postMe = new PostMe();
+            postMe.isCreator = json.getBoolean("isCreator");
+            postMe.isFavorite = json.getBoolean("isFavorite");
+            postMe.isFollowingUser = json.getBoolean("isFollowingUser");
             postMe.vote = parsePostVote(json.optJSONObject("vote"));
             postMe.comments = parsePostCommentList(json.optJSONArray("comments"));
             return postMe;

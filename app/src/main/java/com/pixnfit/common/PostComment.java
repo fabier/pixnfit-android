@@ -8,7 +8,7 @@ import java.util.Date;
 public class PostComment extends BaseEntity {
     public String name;
     public String description;
-    public long postId;
     public User creator;
     public Date dateCreated;
+    public Post post;
 }
