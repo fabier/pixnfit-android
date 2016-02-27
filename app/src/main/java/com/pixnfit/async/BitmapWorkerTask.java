@@ -24,7 +24,7 @@ public class BitmapWorkerTask extends AsyncTask<String, Void, Bitmap> {
 
     private static final String TAG = BitmapWorkerTask.class.getSimpleName();
 
-    private static final Map<URL, Bitmap> BITMAP_CACHE = new LRUCache<>(32);
+    private static final Map<URL, Bitmap> BITMAP_CACHE = new LRUCache<>(16);
 
     private final WeakReference<ImageView> imageViewReference;
 
