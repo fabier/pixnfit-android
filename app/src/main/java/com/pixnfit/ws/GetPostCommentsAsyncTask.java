@@ -11,7 +11,6 @@ import org.json.JSONException;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
