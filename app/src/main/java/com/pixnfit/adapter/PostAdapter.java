@@ -25,9 +25,9 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
-public class PostCommentsListAdapter extends BaseAdapter implements View.OnClickListener {
+public class PostAdapter extends BaseAdapter implements View.OnClickListener {
 
-    private static final String TAG = PostCommentsListAdapter.class.getSimpleName();
+    private static final String TAG = PostAdapter.class.getSimpleName();
     private static final int VIEWTYPE_POSTHEADER = 0;
     private static final int VIEWTYPE_POSTCOMMENT = 1;
 
@@ -36,7 +36,7 @@ public class PostCommentsListAdapter extends BaseAdapter implements View.OnClick
     private Post post;
     private PostHeaderHolder postHeaderHolder;
 
-    public PostCommentsListAdapter(Context context) {
+    public PostAdapter(Context context) {
         this.context = context;
     }
 
@@ -207,9 +207,9 @@ public class PostCommentsListAdapter extends BaseAdapter implements View.OnClick
                 BitmapWorkerTask bitmapWorkerTask = new BitmapWorkerTask(postHeaderHolder.postImageView, 512, 512);
                 bitmapWorkerTask.execute(image.imageUrl);
 
-                postHeaderHolder.likeFloatingActionButton.setOnClickListener(PostCommentsListAdapter.this);
+                postHeaderHolder.likeFloatingActionButton.setOnClickListener(PostAdapter.this);
                 postHeaderHolder.likeFloatingActionButton.setVisibility(View.VISIBLE);
-                postHeaderHolder.dislikeFloatingActionButton.setOnClickListener(PostCommentsListAdapter.this);
+                postHeaderHolder.dislikeFloatingActionButton.setOnClickListener(PostAdapter.this);
                 postHeaderHolder.dislikeFloatingActionButton.setVisibility(View.VISIBLE);
             }
         };
