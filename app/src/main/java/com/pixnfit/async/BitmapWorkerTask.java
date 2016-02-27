@@ -1,4 +1,4 @@
-package com.pixnfit.adapter;
+package com.pixnfit.async;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -8,7 +8,6 @@ import android.util.Log;
 import android.widget.ImageView;
 
 import com.pixnfit.R;
-import com.pixnfit.common.Image;
 
 import java.io.IOException;
 import java.io.InputStream;
