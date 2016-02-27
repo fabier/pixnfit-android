@@ -18,26 +18,36 @@
             android:src="@drawable/camera_transparent" />
 
         <android.support.design.widget.FloatingActionButton xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/fabDislike"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignBottom="@id/postImageView"
+            android:layout_margin="@dimen/fab_margin"
+            android:src="@drawable/dislike_white"
+            app:backgroundTint="@color/orange" />
+
+        <android.support.design.widget.FloatingActionButton xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/fabLike"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/postImageView"
             android:layout_alignParentRight="true"
-            android:layout_gravity="bottom|end"
+            android:layout_above="@+id/fabDislike"
             android:layout_margin="@dimen/fab_margin"
             android:src="@drawable/like_white"
             app:backgroundTint="@color/green" />
 
         <android.support.design.widget.FloatingActionButton xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/fabDislike"
+            android:id="@+id/fabHeart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_above="@+id/fabLike"
             android:layout_alignBottom="@id/postImageView"
             android:layout_alignParentLeft="true"
-            android:layout_gravity="bottom|end"
             android:layout_margin="@dimen/fab_margin"
-            android:src="@drawable/dislike_white"
-            app:backgroundTint="@color/orange" />
+            android:src="@drawable/heart_full"
+            android:tint="@color/white"
+            app:backgroundTint="@color/red" />
     </RelativeLayout>
 
     <LinearLayout
@@ -46,17 +56,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/imageViewLayout"
         android:orientation="horizontal"
-        android:weightSum="10">
-
-        <ImageButton
-            android:id="@+id/postButtonHeart"
-            android:layout_width="0dp"
-            android:layout_height="64dp"
-            android:layout_weight="1"
-            android:background="@color/background_floating_material_light"
-            android:padding="5dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/heart_empty" />
+        android:weightSum="9">
 
         <ImageButton
             android:id="@+id/postButtonComments"
