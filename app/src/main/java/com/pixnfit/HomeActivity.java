@@ -14,6 +14,7 @@ import com.pixnfit.adapter.PostListAdapter;
 import com.pixnfit.common.Post;
 import com.pixnfit.ws.GetPostAsyncTask;
 
+import java.io.Serializable;
 import java.util.List;
 
 public class HomeActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
@@ -55,7 +56,8 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Post post = postListAdapter.getPost(position);
         Intent intent = new Intent(this, PostActivity.class);
-        intent.putExtra("post", post);
+        intent.putExtra("posts", (Serializable) postListAdapter.getPosts());
+        intent.putExtra("position", position);
         startActivity(intent);
     }
 }

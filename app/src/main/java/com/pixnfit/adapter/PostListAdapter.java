@@ -44,6 +44,10 @@ public class PostListAdapter extends BaseAdapter {
         return posts == null ? null : posts.get(position);
     }
 
+    public List<Post> getPosts() {
+        return posts;
+    }
+
     @Override
     public long getItemId(int position) {
         Post post = getPost(position);

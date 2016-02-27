@@ -1,57 +1,60 @@
 package com.pixnfit;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.ViewPager;
 
-import com.pixnfit.adapter.PostAdapter;
+import com.pixnfit.adapter.PostPagerAdapter;
 import com.pixnfit.common.Post;
-import com.pixnfit.common.PostComment;
-import com.pixnfit.ws.GetPostCommentsAsyncTask;
+import com.pixnfit.common.User;
 
 import java.util.List;
 
-public class PostActivity extends AppCompatActivity  {
+/**
+ * Created by fabier on 27/02/16.
+ */
+public class PostActivity extends FragmentActivity {
 
-    ImageView postImageView;
-    ImageButton postButtonHeart;
-    ImageButton postButtonComments;
-    ImageButton postButtonShare;
-    ImageButton postButtonHanger;
-    ImageButton postButtonMoreOptions;
-    TextView postTitleTextView;
-    TextView postTitleViewCountTextView;
-    PostAdapter postCommentsListAdapter;
-
-    Post post;
+    private ViewPager viewPager;
+    private PostPagerAdapter postPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
 
-        ListView postCommentsListView = (ListView) findViewById(R.id.postCommentsListView);
-        postCommentsListAdapter = new PostAdapter(this);
-        postCommentsListView.setAdapter(postCommentsListAdapter);
+        // Instantiate a ViewPager and a PagerAdapter.
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        postPagerAdapter = new PostPagerAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(postPagerAdapter);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        post = (Post) getIntent().getSerializableExtra("post");
-        if (post != null) {
-            postCommentsListAdapter.setPost(post);
-            GetPostCommentsAsyncTask getPostCommentsAsyncTask = new GetPostCommentsAsyncTask(this) {
-                @Override
-                protected void onPostExecute(List<PostComment> postComments) {
-                    postCommentsListAdapter.setPostComments(postComments);
-                    postCommentsListAdapter.notifyDataSetChanged();
-                }
-            };
-            getPostCommentsAsyncTask.execute(post);
+        Intent intent = getIntent();
+        intent.setExtrasClassLoader(Post.class.getClassLoader());
+        intent.setExtrasClassLoader(User.class.getClassLoader());
+        List<Post> posts = (List<Post>) intent.getSerializableExtra("posts");
+        int position = intent.getIntExtra("position", 0);
+
+        postPagerAdapter.setPosts(posts);
+        postPagerAdapter.notifyDataSetChanged();
+
+        viewPager.setCurrentItem(position);
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        if (viewPager.getCurrentItem() == 0) {
+            // If the user is currently looking at the first step, allow the system to handle the
+            // Back button. This calls finish() on this activity and pops the back stack.
+            super.onBackPressed();
+        } else {
+            // Otherwise, select the previous step.
+            viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
         }
     }
 }
