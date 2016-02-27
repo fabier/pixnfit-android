@@ -4,19 +4,47 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.pixnfit.ui.SquareImageView
-        android:id="@+id/postImageView"
+    <RelativeLayout
+        android:id="@+id/imageViewLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:src="@drawable/camera_transparent" />
+        android:layout_height="wrap_content">
+
+        <com.pixnfit.ui.SquareImageView
+            android:id="@+id/postImageView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/camera_transparent" />
+
+        <android.support.design.widget.FloatingActionButton xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/fabLike"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/postImageView"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/fab_margin"
+            android:src="@drawable/like_white"
+            app:backgroundTint="@color/green" />
+
+        <android.support.design.widget.FloatingActionButton xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/fabDislike"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/postImageView"
+            android:layout_alignParentLeft="true"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/fab_margin"
+            android:src="@drawable/dislike_white"
+            app:backgroundTint="@color/orange" />
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/buttonPanel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/postImageView"
+        android:layout_below="@+id/imageViewLayout"
         android:orientation="horizontal"
         android:weightSum="10">
 

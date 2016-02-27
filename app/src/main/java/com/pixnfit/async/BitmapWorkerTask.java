@@ -8,6 +8,7 @@ import android.util.Log;
 import android.widget.ImageView;
 
 import com.pixnfit.R;
+import com.pixnfit.utils.LRUCache;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,7 +16,6 @@ import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Map;
-import java.util.WeakHashMap;
 
 /**
  * Created by fabier on 18/02/16.
@@ -24,11 +24,11 @@ public class BitmapWorkerTask extends AsyncTask<String, Void, Bitmap> {
 
     private static final String TAG = BitmapWorkerTask.class.getSimpleName();
 
-    private static final Map<URL, Bitmap> BITMAP_CACHE = new WeakHashMap<URL, Bitmap>();
+    private static final Map<URL, Bitmap> BITMAP_CACHE = new LRUCache<>(32);
 
     private final WeakReference<ImageView> imageViewReference;
-//    private Image image;
-    String imageUrl;
+
+    private String imageUrl;
     private int width;
     private int height;
 

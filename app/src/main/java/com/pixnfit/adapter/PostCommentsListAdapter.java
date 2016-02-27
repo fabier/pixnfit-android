@@ -2,6 +2,8 @@ package com.pixnfit.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,15 +13,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.pixnfit.R;
+import com.pixnfit.async.BitmapWorkerTask;
 import com.pixnfit.common.Image;
 import com.pixnfit.common.Post;
 import com.pixnfit.common.PostComment;
+import com.pixnfit.common.PostMe;
+import com.pixnfit.ws.GetPostMeAsyncTask;
+import com.pixnfit.ws.SubmitPostVoteAsyncTask;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
-public class PostCommentsListAdapter extends BaseAdapter {
+public class PostCommentsListAdapter extends BaseAdapter implements View.OnClickListener {
 
     private static final String TAG = PostCommentsListAdapter.class.getSimpleName();
     private static final int VIEWTYPE_POSTHEADER = 0;
@@ -28,6 +34,7 @@ public class PostCommentsListAdapter extends BaseAdapter {
     private List<PostComment> postComments;
     private Context context;
     private Post post;
+    private PostHeaderHolder postHeaderHolder;
 
     public PostCommentsListAdapter(Context context) {
         this.context = context;
@@ -97,7 +104,6 @@ public class PostCommentsListAdapter extends BaseAdapter {
         View view;
         switch (getItemViewType(position)) {
             case VIEWTYPE_POSTHEADER:
-                PostHeaderHolder postHeaderHolder;
                 if (convertView == null) {
                     LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                     view = inflater.inflate(R.layout.item_header_post, null);
@@ -110,23 +116,27 @@ public class PostCommentsListAdapter extends BaseAdapter {
                     postHeaderHolder.postButtonMoreOptions = (ImageButton) view.findViewById(R.id.postButtonMoreOptions);
                     postHeaderHolder.postTitleTextView = (TextView) view.findViewById(R.id.postTitleTextView);
                     postHeaderHolder.postTitleViewCountTextView = (TextView) view.findViewById(R.id.postTitleViewCountTextView);
-                    view.setTag(postHeaderHolder);
+
+                    postHeaderHolder.likeFloatingActionButton = (FloatingActionButton) view.findViewById(R.id.fabLike);
+                    postHeaderHolder.dislikeFloatingActionButton = (FloatingActionButton) view.findViewById(R.id.fabDislike);
+
+                    postHeaderHolder.likeFloatingActionButton.setVisibility(View.GONE);
+                    postHeaderHolder.dislikeFloatingActionButton.setVisibility(View.GONE);
+
+                    if (post != null) {
+                        postHeaderHolder.postTitleTextView.setText(post.name);
+                        postHeaderHolder.postTitleViewCountTextView.setText(post.viewCount + " views");
+                        if (post.images != null && post.images.size() > 0) {
+                            Image image = post.images.get(0);
+                            loadPostUserInfo();
+                            loadImageIntoView(image, postHeaderHolder);
+                        } else {
+                            postHeaderHolder.postImageView.setTag(R.id.tagImageUrl, null);
+                            postHeaderHolder.postImageView.setImageResource(R.drawable.camera_transparent);
+                        }
+                    }
                 } else {
                     view = convertView;
-                    postHeaderHolder = (PostHeaderHolder) view.getTag();
-                }
-
-                if (postHeaderHolder != null && post != null) {
-                    postHeaderHolder.postTitleTextView.setText(post.name);
-                    postHeaderHolder.postTitleViewCountTextView.setText(post.viewCount + " views");
-                    if (post.images != null && post.images.size() > 0) {
-                        Image image = post.images.get(0);
-                        postHeaderHolder.postImageView.setTag(R.id.tagImageUrl, image.imageUrl);
-                        loadImageIntoView(image.imageUrl, postHeaderHolder.postImageView);
-                    } else {
-                        postHeaderHolder.postImageView.setTag(R.id.tagImageUrl, null);
-                        postHeaderHolder.postImageView.setImageResource(R.drawable.camera_transparent);
-                    }
                 }
                 break;
             case VIEWTYPE_POSTCOMMENT:
@@ -154,8 +164,7 @@ public class PostCommentsListAdapter extends BaseAdapter {
                     postCommentHolder.postCommentDateTextView.setText(new SimpleDateFormat(", dd MMM yyyy, HH:mm", Locale.ENGLISH).format(postComment.dateCreated));
                     postCommentHolder.postCommentDescriptionTextView.setText(postComment.description);
                     if (postComment.creator != null && postComment.creator.image != null) {
-                        postCommentHolder.postCommentAuthorImageView.setTag(R.id.tagImageUrl, postComment.creator.image.imageUrl);
-                        loadImageIntoView(postComment.creator.image.imageUrl, postCommentHolder.postCommentAuthorImageView);
+                        loadPostCommentAuthorImageView(postComment, postCommentHolder);
                     } else {
                         postCommentHolder.postCommentAuthorImageView.setTag(R.id.tagImageUrl, null);
                         postCommentHolder.postCommentAuthorImageView.setImageResource(R.drawable.profile);
@@ -169,16 +178,87 @@ public class PostCommentsListAdapter extends BaseAdapter {
         return view;
     }
 
-    private void loadImageIntoView(final String imageUrl, final ImageView postImageView) {
-        BitmapWorkerTask bitmapWorkerTask = new BitmapWorkerTask(postImageView, 128, 128) {
+    private void loadPostUserInfo() {
+        GetPostMeAsyncTask getPostMeAsyncTask = new GetPostMeAsyncTask(context) {
+            @Override
+            protected void onPostExecute(PostMe postMe) {
+                if (postMe != null && postMe.vote != null) {
+                    setHasVoted(postMe.vote.vote);
+                } else {
+                    setHasVoted(null);
+                }
+            }
+        };
+        getPostMeAsyncTask.execute(post);
+    }
+
+    private void loadPostCommentAuthorImageView(PostComment postComment, PostCommentHolder postCommentHolder) {
+        postCommentHolder.postCommentAuthorImageView.setTag(R.id.tagImageUrl, postComment.creator.image.imageUrl);
+        BitmapWorkerTask bitmapWorkerTask = new BitmapWorkerTask(postCommentHolder.postCommentAuthorImageView, 32, 32);
+        bitmapWorkerTask.execute(postComment.creator.image.imageUrl);
+    }
+
+    private void loadImageIntoView(final Image image, final PostHeaderHolder postHeaderHolder) {
+        postHeaderHolder.postImageView.setTag(R.id.tagImageUrl, image.imageUrl);
+        BitmapWorkerTask bitmapWorkerTask = new BitmapWorkerTask(postHeaderHolder.postImageView, 128, 128) {
             @Override
             protected void onPostExecute(Bitmap bitmap) {
                 super.onPostExecute(bitmap);
-                BitmapWorkerTask bitmapWorkerTask = new BitmapWorkerTask(postImageView, 512, 512);
-                bitmapWorkerTask.execute(imageUrl);
+                BitmapWorkerTask bitmapWorkerTask = new BitmapWorkerTask(postHeaderHolder.postImageView, 512, 512);
+                bitmapWorkerTask.execute(image.imageUrl);
+
+                postHeaderHolder.likeFloatingActionButton.setOnClickListener(PostCommentsListAdapter.this);
+                postHeaderHolder.likeFloatingActionButton.setVisibility(View.VISIBLE);
+                postHeaderHolder.dislikeFloatingActionButton.setOnClickListener(PostCommentsListAdapter.this);
+                postHeaderHolder.dislikeFloatingActionButton.setVisibility(View.VISIBLE);
             }
         };
-        bitmapWorkerTask.execute(imageUrl);
+        bitmapWorkerTask.execute(image.imageUrl);
+    }
+
+    private void setHasVoted(Boolean vote) {
+        FloatingActionButton likeFloatingActionButton = postHeaderHolder.likeFloatingActionButton;
+        FloatingActionButton dislikeFloatingActionButton = postHeaderHolder.dislikeFloatingActionButton;
+        if (vote == null) {
+            // L'utilisateur n'a pas voté
+            likeFloatingActionButton.setBackgroundTintList(context.getResources().getColorStateList(R.color.green));
+            dislikeFloatingActionButton.setBackgroundTintList(context.getResources().getColorStateList(R.color.orange));
+            likeFloatingActionButton.setOnClickListener(this);
+            dislikeFloatingActionButton.setOnClickListener(this);
+        } else {
+            // L'utilisateur a voté...
+            if (vote) {
+                // ... positivement
+                likeFloatingActionButton.setBackgroundTintList(context.getResources().getColorStateList(R.color.green));
+                dislikeFloatingActionButton.setBackgroundTintList(context.getResources().getColorStateList(R.color.grey));
+            } else {
+                // ... négativement
+                likeFloatingActionButton.setBackgroundTintList(context.getResources().getColorStateList(R.color.grey));
+                dislikeFloatingActionButton.setBackgroundTintList(context.getResources().getColorStateList(R.color.orange));
+            }
+            likeFloatingActionButton.setOnClickListener(null);
+            dislikeFloatingActionButton.setOnClickListener(null);
+        }
+        likeFloatingActionButton.setVisibility(View.VISIBLE);
+        dislikeFloatingActionButton.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.fabLike:
+                new SubmitPostVoteAsyncTask(context, post, true).execute();
+                Snackbar.make(v, "Thank you for your vote !", Snackbar.LENGTH_LONG).show();
+                setHasVoted(true);
+                break;
+            case R.id.fabDislike:
+                new SubmitPostVoteAsyncTask(context, post, false).execute();
+                Snackbar.make(v, "Thank you for your vote !", Snackbar.LENGTH_LONG).show();
+                setHasVoted(false);
+                break;
+            default:
+                break;
+        }
     }
 }
 
@@ -198,4 +278,6 @@ class PostHeaderHolder {
     public ImageButton postButtonMoreOptions;
     public TextView postTitleTextView;
     public TextView postTitleViewCountTextView;
+    public FloatingActionButton likeFloatingActionButton;
+    public FloatingActionButton dislikeFloatingActionButton;
 }

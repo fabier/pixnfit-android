@@ -20,7 +20,7 @@ import com.pixnfit.ws.SubmitPostVoteAsyncTask;
 
 import java.util.List;
 
-public class PostActivity extends AppCompatActivity implements View.OnClickListener {
+public class PostActivity extends AppCompatActivity  {
 
     ImageView postImageView;
     ImageButton postButtonHeart;
@@ -31,8 +31,6 @@ public class PostActivity extends AppCompatActivity implements View.OnClickListe
     TextView postTitleTextView;
     TextView postTitleViewCountTextView;
     PostCommentsListAdapter postCommentsListAdapter;
-    FloatingActionButton likeFloatingActionButton;
-    FloatingActionButton dislikeFloatingActionButton;
 
     Post post;
 
@@ -44,9 +42,6 @@ public class PostActivity extends AppCompatActivity implements View.OnClickListe
         ListView postCommentsListView = (ListView) findViewById(R.id.postCommentsListView);
         postCommentsListAdapter = new PostCommentsListAdapter(this);
         postCommentsListView.setAdapter(postCommentsListAdapter);
-
-        likeFloatingActionButton = (FloatingActionButton) findViewById(R.id.fabLike);
-        dislikeFloatingActionButton = (FloatingActionButton) findViewById(R.id.fabDislike);
     }
 
     @Override
@@ -63,63 +58,6 @@ public class PostActivity extends AppCompatActivity implements View.OnClickListe
                 }
             };
             getPostCommentsAsyncTask.execute(post);
-
-            GetPostMeAsyncTask getPostMeAsyncTask = new GetPostMeAsyncTask(this) {
-                @Override
-                protected void onPostExecute(PostMe postMe) {
-                    if (postMe != null && postMe.vote != null) {
-                        setHasVoted(postMe.vote.vote);
-                    } else {
-                        setHasVoted(null);
-                    }
-                }
-            };
-            getPostMeAsyncTask.execute(post);
         }
-        likeFloatingActionButton.setVisibility(View.GONE);
-        dislikeFloatingActionButton.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.fabLike:
-                new SubmitPostVoteAsyncTask(this, post, true).execute();
-                Snackbar.make(v, "Thank you for your vote !", Snackbar.LENGTH_LONG).show();
-                setHasVoted(true);
-                break;
-            case R.id.fabDislike:
-                new SubmitPostVoteAsyncTask(this, post, false).execute();
-                Snackbar.make(v, "Thank you for your vote !", Snackbar.LENGTH_LONG).show();
-                setHasVoted(false);
-                break;
-            default:
-                break;
-        }
-    }
-
-    private void setHasVoted(Boolean vote) {
-        if (vote == null) {
-            // L'utilisateur n'a pas voté
-            likeFloatingActionButton.setBackgroundTintList(getResources().getColorStateList(R.color.green));
-            dislikeFloatingActionButton.setBackgroundTintList(getResources().getColorStateList(R.color.orange));
-            likeFloatingActionButton.setOnClickListener(this);
-            dislikeFloatingActionButton.setOnClickListener(this);
-        } else {
-            // L'utilisateur a voté...
-            if (vote) {
-                // ... positivement
-                likeFloatingActionButton.setBackgroundTintList(getResources().getColorStateList(R.color.green));
-                dislikeFloatingActionButton.setBackgroundTintList(getResources().getColorStateList(R.color.grey));
-            } else {
-                // ... négativement
-                likeFloatingActionButton.setBackgroundTintList(getResources().getColorStateList(R.color.grey));
-                dislikeFloatingActionButton.setBackgroundTintList(getResources().getColorStateList(R.color.orange));
-            }
-            likeFloatingActionButton.setOnClickListener(null);
-            dislikeFloatingActionButton.setOnClickListener(null);
-        }
-        likeFloatingActionButton.setVisibility(View.VISIBLE);
-        dislikeFloatingActionButton.setVisibility(View.VISIBLE);
     }
 }

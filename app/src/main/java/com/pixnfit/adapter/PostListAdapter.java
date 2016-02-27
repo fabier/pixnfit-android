@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 import com.pixnfit.R;
+import com.pixnfit.async.BitmapWorkerTask;
 import com.pixnfit.common.Image;
 import com.pixnfit.common.Post;
 
