@@ -1,5 +1,6 @@
 package com.pixnfit;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.widget.ListView;
 import com.pixnfit.adapter.PostAdapter;
 import com.pixnfit.common.Post;
 import com.pixnfit.common.PostComment;
+import com.pixnfit.utils.ThreadPools;
 import com.pixnfit.ws.GetPostCommentsAsyncTask;
 
 import java.util.List;
@@ -19,40 +21,39 @@ import java.util.List;
  */
 public class PostFragment extends Fragment {
 
-    private Post post;
-    private PostAdapter postCommentsListAdapter;
+    private PostAdapter postAdapter;
 
-    public PostFragment(Post post) {
-        this.post = post;
+    public PostFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_post, container, false);
-
-//        return rootView;
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.fragment_post);
-
-        ListView postCommentsListView = (ListView) rootView.findViewById(R.id.postCommentsListView);
-        postCommentsListAdapter = new PostAdapter(getActivity());
-        postCommentsListView.setAdapter(postCommentsListAdapter);
+        ListView postListView = (ListView) rootView.findViewById(R.id.postListView);
+        postListView.setAdapter(postAdapter);
         return rootView;
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        postAdapter = new PostAdapter(getActivity());
+        postAdapter.setPostImagePlaceHolder((Bitmap) getArguments().getParcelable("postImagePlaceholder"));
+
+        Post post = (Post) getArguments().getSerializable("post");
         if (post != null) {
-            postCommentsListAdapter.setPost(post);
+            postAdapter.setPost(post);
             GetPostCommentsAsyncTask getPostCommentsAsyncTask = new GetPostCommentsAsyncTask(getActivity()) {
                 @Override
                 protected void onPostExecute(List<PostComment> postComments) {
-                    postCommentsListAdapter.setPostComments(postComments);
-                    postCommentsListAdapter.notifyDataSetChanged();
+                    if (!isCancelled()) {
+                        postAdapter.setPostComments(postComments);
+                        postAdapter.notifyDataSetChanged();
+                    }
                 }
             };
-            getPostCommentsAsyncTask.execute(post);
+            getPostCommentsAsyncTask.executeOnExecutor(ThreadPools.METADATA_THREADPOOL, post);
         }
     }
 }

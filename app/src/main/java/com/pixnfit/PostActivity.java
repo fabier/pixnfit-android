@@ -1,6 +1,8 @@
 package com.pixnfit;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
@@ -26,13 +28,10 @@ public class PostActivity extends FragmentActivity {
 
         // Instantiate a ViewPager and a PagerAdapter.
         viewPager = (ViewPager) findViewById(R.id.viewpager);
-        postPagerAdapter = new PostPagerAdapter(getSupportFragmentManager());
+        Bitmap postImagePlaceholder = BitmapFactory.decodeResource(getResources(), R.drawable.camera_transparent);
+        postPagerAdapter = new PostPagerAdapter(getSupportFragmentManager(), postImagePlaceholder);
         viewPager.setAdapter(postPagerAdapter);
-    }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
         Intent intent = getIntent();
         intent.setExtrasClassLoader(Post.class.getClassLoader());
         intent.setExtrasClassLoader(User.class.getClassLoader());
@@ -43,18 +42,5 @@ public class PostActivity extends FragmentActivity {
         postPagerAdapter.notifyDataSetChanged();
 
         viewPager.setCurrentItem(position);
-    }
-
-
-    @Override
-    public void onBackPressed() {
-        if (viewPager.getCurrentItem() == 0) {
-            // If the user is currently looking at the first step, allow the system to handle the
-            // Back button. This calls finish() on this activity and pops the back stack.
-            super.onBackPressed();
-        } else {
-            // Otherwise, select the previous step.
-            viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
-        }
     }
 }

@@ -1,6 +1,9 @@
 package com.pixnfit.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,9 +11,11 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 import com.pixnfit.R;
+import com.pixnfit.async.AsyncDrawable;
 import com.pixnfit.async.BitmapWorkerTask;
 import com.pixnfit.common.Image;
 import com.pixnfit.common.Post;
+import com.pixnfit.utils.ThreadPools;
 
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -24,7 +29,7 @@ public class PostListAdapter extends BaseAdapter {
 
     private Context context;
     private List<Post> posts;
-    private Executor imageThreadExecutor = Executors.newFixedThreadPool(8);
+    private Bitmap postImagePlaceHolder;
 
     public PostListAdapter(Context context) {
         this.context = context;
@@ -68,14 +73,14 @@ public class PostListAdapter extends BaseAdapter {
             imageView = (ImageView) view.findViewById(R.id.postImageView);
         }
 
-        imageView.setImageResource(R.drawable.camera_transparent);
-
         if (imageView != null) {
             Post post = getPost(position);
             if (post.images != null && post.images.size() > 0) {
                 Image image = post.images.get(0);
                 imageView.setTag(R.id.tagImageUrl, image.imageUrl);
                 loadBitmap(image.imageUrl, imageView);
+            } else {
+                imageView.setImageResource(R.drawable.camera_transparent);
             }
         }
 
@@ -83,11 +88,48 @@ public class PostListAdapter extends BaseAdapter {
     }
 
     public void loadBitmap(String imageUrl, ImageView imageView) {
-        BitmapWorkerTask task = new BitmapWorkerTask(imageView, 128, 128);
-        task.executeOnExecutor(imageThreadExecutor, imageUrl);
+        if (cancelPotentialWork(imageUrl, imageView)) {
+            BitmapWorkerTask task = new BitmapWorkerTask(imageView, 128, 128);
+            AsyncDrawable asyncDrawable = new AsyncDrawable(context.getResources(), postImagePlaceHolder, task);
+            imageView.setImageDrawable(asyncDrawable);
+            task.executeOnExecutor(ThreadPools.IMAGELOAD_THREADPOOL, imageUrl);
+        }
+    }
+
+    public boolean cancelPotentialWork(String imageUrl, ImageView imageView) {
+        final BitmapWorkerTask bitmapWorkerTask = getBitmapWorkerTask(imageView);
+
+        if (bitmapWorkerTask != null) {
+            String workerImageUrl = bitmapWorkerTask.getImageURL();
+            // If workerImageUrl is not yet set or it differs from the new imageUrl
+            if (workerImageUrl == null || !workerImageUrl.equals(imageUrl)) {
+                // Cancel previous task
+                bitmapWorkerTask.cancel(true);
+            } else {
+                // The same work is already in progress
+                return false;
+            }
+        }
+        // No task associated with the ImageView, or an existing task was cancelled
+        return true;
+    }
+
+    private BitmapWorkerTask getBitmapWorkerTask(ImageView imageView) {
+        if (imageView != null) {
+            final Drawable drawable = imageView.getDrawable();
+            if (drawable instanceof AsyncDrawable) {
+                final AsyncDrawable asyncDrawable = (AsyncDrawable) drawable;
+                return asyncDrawable.getBitmapWorkerTask();
+            }
+        }
+        return null;
     }
 
     public void setPosts(List<Post> posts) {
         this.posts = posts;
+    }
+
+    public void setPostImagePlaceHolder(Bitmap postImagePlaceHolder) {
+        this.postImagePlaceHolder = postImagePlaceHolder;
     }
 }

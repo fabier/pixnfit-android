@@ -53,7 +53,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                 AuthenticateAsyncTask authenticateAsyncTask = new AuthenticateAsyncTask(this, login, password) {
                     @Override
                     protected void onPostExecute(JSONObject result) {
-                        if (result != null) {
+                        if (!isCancelled() && result != null) {
                             // Store credentials for next launch
                             SharedPreferences.Editor editor = sharedPreferences.edit();
                             editor.putString("login", login);
@@ -69,10 +69,6 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                 };
                 authenticateAsyncTask.execute();
                 break;
-//            case R.id.recoverPasswordButton:
-//                Intent intent = new Intent(this, RecoverPasswordActivity.class);
-//                startActivity(intent);
-//                break;
             default:
                 break;
         }

@@ -2,6 +2,7 @@ package com.pixnfit.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
@@ -13,11 +14,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.pixnfit.R;
+import com.pixnfit.async.AsyncDrawable;
 import com.pixnfit.async.BitmapWorkerTask;
 import com.pixnfit.common.Image;
 import com.pixnfit.common.Post;
 import com.pixnfit.common.PostComment;
 import com.pixnfit.common.PostMe;
+import com.pixnfit.utils.ThreadPools;
 import com.pixnfit.ws.AddPostToFavoriteAsyncTask;
 import com.pixnfit.ws.GetPostMeAsyncTask;
 import com.pixnfit.ws.RemovePostFromFavoriteAsyncTask;
@@ -36,7 +39,11 @@ public class PostAdapter extends BaseAdapter implements View.OnClickListener {
     private List<PostComment> postComments;
     private Context context;
     private Post post;
-    private PostHeaderHolder postHeaderHolder;
+    //    private PostHeaderHolder postHeaderHolder;
+    private Bitmap postImagePlaceHolder;
+    private FloatingActionButton heartFloatingActionButton;
+    private FloatingActionButton likeFloatingActionButton;
+    private FloatingActionButton dislikeFloatingActionButton;
 
     public PostAdapter(Context context) {
         this.context = context;
@@ -94,7 +101,7 @@ public class PostAdapter extends BaseAdapter implements View.OnClickListener {
     @Override
     public long getItemId(int position) {
         if (position == 0) {
-            return post.id;
+            return post == null ? 0 : post.id;
         } else {
             PostComment postComment = getPostComment(position);
             return postComment == null ? 0 : postComment.id;
@@ -109,34 +116,33 @@ public class PostAdapter extends BaseAdapter implements View.OnClickListener {
                 if (convertView == null) {
                     LayoutInflater inflater = LayoutInflater.from(context);
                     view = inflater.inflate(R.layout.item_header_post, null);
-                    postHeaderHolder = new PostHeaderHolder();
-                    postHeaderHolder.postImageView = (ImageView) view.findViewById(R.id.postImageView);
-                    postHeaderHolder.postButtonComments = (ImageButton) view.findViewById(R.id.postButtonComments);
-                    postHeaderHolder.postButtonShare = (ImageButton) view.findViewById(R.id.postButtonShare);
-                    postHeaderHolder.postButtonHanger = (ImageButton) view.findViewById(R.id.postButtonHanger);
-                    postHeaderHolder.postButtonMoreOptions = (ImageButton) view.findViewById(R.id.postButtonMoreOptions);
-                    postHeaderHolder.postTitleTextView = (TextView) view.findViewById(R.id.postTitleTextView);
-                    postHeaderHolder.postTitleViewCountTextView = (TextView) view.findViewById(R.id.postTitleViewCountTextView);
+                    ImageView postImageView = (ImageView) view.findViewById(R.id.postImageView);
+                    ImageButton postButtonComments = (ImageButton) view.findViewById(R.id.postButtonComments);
+                    ImageButton postButtonShare = (ImageButton) view.findViewById(R.id.postButtonShare);
+                    ImageButton postButtonHanger = (ImageButton) view.findViewById(R.id.postButtonHanger);
+                    ImageButton postButtonMoreOptions = (ImageButton) view.findViewById(R.id.postButtonMoreOptions);
+                    TextView postTitleTextView = (TextView) view.findViewById(R.id.postTitleTextView);
+                    TextView postTitleViewCountTextView = (TextView) view.findViewById(R.id.postTitleViewCountTextView);
 
-                    postHeaderHolder.heartFloatingActionButton = (FloatingActionButton) view.findViewById(R.id.fabHeart);
-                    postHeaderHolder.likeFloatingActionButton = (FloatingActionButton) view.findViewById(R.id.fabLike);
-                    postHeaderHolder.dislikeFloatingActionButton = (FloatingActionButton) view.findViewById(R.id.fabDislike);
+                    heartFloatingActionButton = (FloatingActionButton) view.findViewById(R.id.fabHeart);
+                    likeFloatingActionButton = (FloatingActionButton) view.findViewById(R.id.fabLike);
+                    dislikeFloatingActionButton = (FloatingActionButton) view.findViewById(R.id.fabDislike);
 
-                    postHeaderHolder.heartFloatingActionButton.setVisibility(View.GONE);
+                    heartFloatingActionButton.setVisibility(View.GONE);
 
-                    postHeaderHolder.likeFloatingActionButton.setVisibility(View.GONE);
-                    postHeaderHolder.dislikeFloatingActionButton.setVisibility(View.GONE);
+                    likeFloatingActionButton.setVisibility(View.GONE);
+                    dislikeFloatingActionButton.setVisibility(View.GONE);
 
                     if (post != null) {
-                        postHeaderHolder.postTitleTextView.setText(post.name);
-                        postHeaderHolder.postTitleViewCountTextView.setText(post.viewCount + " views");
+                        postTitleTextView.setText(post.name);
+                        postTitleViewCountTextView.setText(post.viewCount + " views");
                         if (post.images != null && post.images.size() > 0) {
                             Image image = post.images.get(0);
                             loadPostUserInfo();
-                            loadImageIntoView(image, postHeaderHolder);
+                            loadImageIntoView(image, postImageView);
                         } else {
-                            postHeaderHolder.postImageView.setTag(R.id.tagImageUrl, null);
-                            postHeaderHolder.postImageView.setImageResource(R.drawable.camera_transparent);
+                            postImageView.setTag(R.id.tagImageUrl, null);
+                            postImageView.setImageResource(R.drawable.camera_transparent);
                         }
                     }
                 } else {
@@ -146,7 +152,7 @@ public class PostAdapter extends BaseAdapter implements View.OnClickListener {
             case VIEWTYPE_POSTCOMMENT:
                 PostCommentHolder postCommentHolder;
                 if (convertView == null) {
-                    LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                    LayoutInflater inflater = LayoutInflater.from(context);
                     view = inflater.inflate(R.layout.item_postcomment, null);
                     postCommentHolder = new PostCommentHolder();
                     postCommentHolder.postCommentAuthorImageView = (ImageView) view.findViewById(R.id.postCommentAuthorImageView);
@@ -186,7 +192,7 @@ public class PostAdapter extends BaseAdapter implements View.OnClickListener {
         GetPostMeAsyncTask getPostMeAsyncTask = new GetPostMeAsyncTask(context) {
             @Override
             protected void onPostExecute(PostMe postMe) {
-                if (postMe != null) {
+                if (!isCancelled() && postMe != null) {
                     if (postMe.vote != null) {
                         setHasVoted(postMe.vote.vote);
                     } else {
@@ -206,27 +212,34 @@ public class PostAdapter extends BaseAdapter implements View.OnClickListener {
         bitmapWorkerTask.execute(postComment.creator.image.imageUrl);
     }
 
-    private void loadImageIntoView(final Image image, final PostHeaderHolder postHeaderHolder) {
-        postHeaderHolder.postImageView.setTag(R.id.tagImageUrl, image.imageUrl);
-        BitmapWorkerTask bitmapWorkerTask = new BitmapWorkerTask(postHeaderHolder.postImageView, 128, 128) {
-            @Override
-            protected void onPostExecute(Bitmap bitmap) {
-                super.onPostExecute(bitmap);
-                BitmapWorkerTask bitmapWorkerTask = new BitmapWorkerTask(postHeaderHolder.postImageView, 512, 512);
-                bitmapWorkerTask.execute(image.imageUrl);
+    private void loadImageIntoView(final Image image, final ImageView postImageView) {
+        final String imageUrl = image.imageUrl;
 
-                postHeaderHolder.likeFloatingActionButton.setOnClickListener(PostAdapter.this);
-                postHeaderHolder.likeFloatingActionButton.setVisibility(View.VISIBLE);
-                postHeaderHolder.dislikeFloatingActionButton.setOnClickListener(PostAdapter.this);
-                postHeaderHolder.dislikeFloatingActionButton.setVisibility(View.VISIBLE);
-            }
-        };
-        bitmapWorkerTask.execute(image.imageUrl);
+        postImageView.setTag(R.id.tagImageUrl, imageUrl);
+
+        if (cancelPotentialWork(imageUrl, postImageView)) {
+            BitmapWorkerTask task = new BitmapWorkerTask(postImageView, 128, 128) {
+                @Override
+                protected void onPostExecute(Bitmap bitmap) {
+                    super.onPostExecute(bitmap);
+                    if (!isCancelled()) {
+                        BitmapWorkerTask bitmapWorkerTask = new BitmapWorkerTask(postImageView, 512, 512);
+                        bitmapWorkerTask.executeOnExecutor(ThreadPools.IMAGELOAD_THREADPOOL, imageUrl);
+
+                        likeFloatingActionButton.setOnClickListener(PostAdapter.this);
+                        likeFloatingActionButton.setVisibility(View.VISIBLE);
+                        dislikeFloatingActionButton.setOnClickListener(PostAdapter.this);
+                        dislikeFloatingActionButton.setVisibility(View.VISIBLE);
+                    }
+                }
+            };
+            AsyncDrawable asyncDrawable = new AsyncDrawable(context.getResources(), postImagePlaceHolder, task);
+            postImageView.setImageDrawable(asyncDrawable);
+            task.executeOnExecutor(ThreadPools.IMAGELOAD_THREADPOOL, imageUrl);
+        }
     }
 
     private void setHasVoted(Boolean vote) {
-        FloatingActionButton likeFloatingActionButton = postHeaderHolder.likeFloatingActionButton;
-        FloatingActionButton dislikeFloatingActionButton = postHeaderHolder.dislikeFloatingActionButton;
         if (vote == null) {
             // L'utilisateur n'a pas voté
             likeFloatingActionButton.setBackgroundTintList(context.getResources().getColorStateList(R.color.green));
@@ -252,9 +265,8 @@ public class PostAdapter extends BaseAdapter implements View.OnClickListener {
     }
 
     private void setIsFavorite(Boolean isFavorite) {
-        FloatingActionButton heartFloatingActionButton = postHeaderHolder.heartFloatingActionButton;
-        postHeaderHolder.heartFloatingActionButton.setTag(R.id.tagPostFavorite, isFavorite);
-        postHeaderHolder.heartFloatingActionButton.setOnClickListener(this);
+        heartFloatingActionButton.setTag(R.id.tagPostFavorite, isFavorite);
+        heartFloatingActionButton.setOnClickListener(this);
 
         if (isFavorite) {
             heartFloatingActionButton.setBackgroundTintList(context.getResources().getColorStateList(R.color.red));
@@ -262,7 +274,36 @@ public class PostAdapter extends BaseAdapter implements View.OnClickListener {
             heartFloatingActionButton.setBackgroundTintList(context.getResources().getColorStateList(R.color.black));
         }
 
-        postHeaderHolder.heartFloatingActionButton.setVisibility(View.VISIBLE);
+        heartFloatingActionButton.setVisibility(View.VISIBLE);
+    }
+
+    private boolean cancelPotentialWork(String imageUrl, ImageView imageView) {
+        final BitmapWorkerTask bitmapWorkerTask = getBitmapWorkerTask(imageView);
+
+        if (bitmapWorkerTask != null) {
+            String workerImageUrl = bitmapWorkerTask.getImageURL();
+            // If workerImageUrl is not yet set or it differs from the new imageUrl
+            if (workerImageUrl == null || !workerImageUrl.equals(imageUrl)) {
+                // Cancel previous task
+                bitmapWorkerTask.cancel(true);
+            } else {
+                // The same work is already in progress
+                return false;
+            }
+        }
+        // No task associated with the ImageView, or an existing task was cancelled
+        return true;
+    }
+
+    private BitmapWorkerTask getBitmapWorkerTask(ImageView imageView) {
+        if (imageView != null) {
+            final Drawable drawable = imageView.getDrawable();
+            if (drawable instanceof AsyncDrawable) {
+                final AsyncDrawable asyncDrawable = (AsyncDrawable) drawable;
+                return asyncDrawable.getBitmapWorkerTask();
+            }
+        }
+        return null;
     }
 
     @Override
@@ -292,6 +333,10 @@ public class PostAdapter extends BaseAdapter implements View.OnClickListener {
                 break;
         }
     }
+
+    public void setPostImagePlaceHolder(Bitmap postImagePlaceHolder) {
+        this.postImagePlaceHolder = postImagePlaceHolder;
+    }
 }
 
 class PostCommentHolder {
@@ -299,17 +344,4 @@ class PostCommentHolder {
     TextView postCommentAuthorNameTextView;
     TextView postCommentDateTextView;
     TextView postCommentDescriptionTextView;
-}
-
-class PostHeaderHolder {
-    public ImageView postImageView;
-    public ImageButton postButtonComments;
-    public ImageButton postButtonShare;
-    public ImageButton postButtonHanger;
-    public ImageButton postButtonMoreOptions;
-    public TextView postTitleTextView;
-    public TextView postTitleViewCountTextView;
-    public FloatingActionButton likeFloatingActionButton;
-    public FloatingActionButton dislikeFloatingActionButton;
-    public FloatingActionButton heartFloatingActionButton;
 }

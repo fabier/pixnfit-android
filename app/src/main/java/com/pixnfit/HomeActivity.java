@@ -1,6 +1,7 @@
 package com.pixnfit;
 
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -39,14 +40,17 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
 
         GridView gridView = (GridView) findViewById(R.id.gridView);
         postListAdapter = new PostListAdapter(this);
+        postListAdapter.setPostImagePlaceHolder(BitmapFactory.decodeResource(getResources(), R.drawable.camera_transparent));
         gridView.setAdapter(postListAdapter);
         gridView.setOnItemClickListener(this);
 
         GetPostAsyncTask getPostAsyncTask = new GetPostAsyncTask(this) {
             @Override
             protected void onPostExecute(List<Post> posts) {
-                postListAdapter.setPosts(posts);
-                postListAdapter.notifyDataSetChanged();
+                if (!isCancelled()) {
+                    postListAdapter.setPosts(posts);
+                    postListAdapter.notifyDataSetChanged();
+                }
             }
         };
         getPostAsyncTask.execute();
@@ -54,7 +58,6 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Post post = postListAdapter.getPost(position);
         Intent intent = new Intent(this, PostActivity.class);
         intent.putExtra("posts", (Serializable) postListAdapter.getPosts());
         intent.putExtra("position", position);
