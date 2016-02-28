@@ -4,18 +4,17 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.v4.util.LruCache;
 import android.util.Log;
 import android.widget.ImageView;
 
 import com.pixnfit.R;
-import com.pixnfit.utils.LRUCache;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Map;
 
 /**
  * Created by fabier on 18/02/16.
@@ -24,17 +23,32 @@ public class BitmapWorkerTask extends AsyncTask<String, Void, Bitmap> {
 
     private static final String TAG = BitmapWorkerTask.class.getSimpleName();
 
-    private static final Map<URL, Bitmap> BITMAP_CACHE = new LRUCache<>(16);
+    private static final int MAX_MEMORY = (int) (Runtime.getRuntime().maxMemory() / 1024);
+    private static final int CACHE_SIZE = MAX_MEMORY / 8;
+
+    private static final LruCache<URL, Bitmap> BITMAP_CACHE = new LruCache<URL, Bitmap>(CACHE_SIZE) {
+        @Override
+        protected int sizeOf(URL key, Bitmap bitmap) {
+            // The cache size will be measured in kilobytes rather than
+            // number of items.
+            return bitmap.getByteCount() / 1024;
+        }
+    };
+
+    public static void clearCache() {
+        BITMAP_CACHE.evictAll();
+    }
 
     private final WeakReference<ImageView> imageViewReference;
 
     private String imageUrl;
     private int width;
     private int height;
+    private String imageURL;
 
     public BitmapWorkerTask(ImageView imageView, int width, int height) {
         // Use a WeakReference to ensure the ImageView can be garbage collected
-        this.imageViewReference = new WeakReference<ImageView>(imageView);
+        this.imageViewReference = new WeakReference<>(imageView);
         this.width = width;
         this.height = height;
     }
@@ -46,12 +60,12 @@ public class BitmapWorkerTask extends AsyncTask<String, Void, Bitmap> {
             imageUrl = imagesUrls[0];
             URL url = new URL(imageUrl);
             url = new URL(Uri.parse(url.toString()).buildUpon().clearQuery().appendQueryParameter("width", Integer.toString(width)).appendQueryParameter("height", Integer.toString(height)).build().toString());
-            if (!BITMAP_CACHE.containsKey(url)) {
-                try {
+            synchronized (BITMAP_CACHE) {
+                if (BITMAP_CACHE.get(url) == null) {
                     Bitmap bitmap = getBitmapFromUrl(url);
-                    BITMAP_CACHE.put(url, bitmap);
-                } catch (IOException e) {
-                    Log.e(TAG, "getBitmapFromUrl: failed", e);
+                    if (bitmap != null) {
+                        BITMAP_CACHE.put(url, bitmap);
+                    }
                 }
             }
             return BITMAP_CACHE.get(url);
@@ -63,6 +77,7 @@ public class BitmapWorkerTask extends AsyncTask<String, Void, Bitmap> {
 
     public static Bitmap getBitmapFromUrl(URL url) throws IOException {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        Log.i(TAG, "GET " + url.toString());
         connection.connect();
         InputStream input = connection.getInputStream();
         return BitmapFactory.decodeStream(input);
@@ -71,7 +86,7 @@ public class BitmapWorkerTask extends AsyncTask<String, Void, Bitmap> {
     // Once complete, see if ImageView is still around and set bitmap.
     @Override
     protected void onPostExecute(Bitmap bitmap) {
-        if (imageViewReference != null && bitmap != null) {
+        if (!isCancelled() && bitmap != null) {
             final ImageView imageView = imageViewReference.get();
             if (imageView != null) {
                 if (imageView.getTag(R.id.tagImageUrl).equals(imageUrl)) {
@@ -82,4 +97,9 @@ public class BitmapWorkerTask extends AsyncTask<String, Void, Bitmap> {
             }
         }
     }
+
+    public String getImageURL() {
+        return imageURL;
+    }
+
 }
