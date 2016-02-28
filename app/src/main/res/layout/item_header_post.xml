@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
     <RelativeLayout
         android:id="@+id/imageViewLayout"
@@ -21,6 +20,7 @@
             android:id="@+id/fabDislike"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_alignBottom="@id/postImageView"
             android:layout_margin="@dimen/fab_margin"
@@ -31,6 +31,7 @@
             android:id="@+id/fabLike"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_above="@+id/fabDislike"
             android:layout_margin="@dimen/fab_margin"
@@ -44,10 +45,9 @@
             android:layout_above="@+id/fabLike"
             android:layout_alignBottom="@id/postImageView"
             android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_margin="@dimen/fab_margin"
-            android:src="@drawable/heart_white"
-            android:tint="@color/white"
-            app:backgroundTint="@color/black" />
+            android:src="@drawable/heart_white" />
     </RelativeLayout>
 
     <LinearLayout
@@ -116,9 +116,6 @@
             android:id="@+id/postTitleTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/imageView"
             android:padding="4dp"
             android:text="Post Title"
             android:textAppearance="?android:attr/textAppearanceLarge" />
@@ -127,9 +124,6 @@
             android:id="@+id/postTitleViewCountTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/imageView"
             android:padding="4dp"
             android:text="250 views"
             android:textAppearance="?android:attr/textAppearanceMedium" />
