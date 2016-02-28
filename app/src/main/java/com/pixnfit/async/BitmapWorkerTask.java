@@ -76,8 +76,9 @@ public class BitmapWorkerTask extends AsyncTask<String, Void, Bitmap> {
     }
 
     public static Bitmap getBitmapFromUrl(URL url) throws IOException {
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         Log.i(TAG, "GET " + url.toString());
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setReadTimeout(10000);
         connection.connect();
         InputStream input = connection.getInputStream();
         return BitmapFactory.decodeStream(input);
