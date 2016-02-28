@@ -6,7 +6,7 @@
     tools:context="com.pixnfit.PostActivity">
 
     <ListView
-        android:id="@+id/postCommentsListView"
+        android:id="@+id/postListView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/bottom_bar"
