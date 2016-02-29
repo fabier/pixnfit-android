@@ -3,10 +3,13 @@ package com.pixnfit;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.pixnfit.ws.AuthenticateAsyncTask;
@@ -21,6 +24,8 @@ public class LoginActivity extends Activity implements View.OnClickListener {
     private EditText loginEditText;
     private EditText passwordEditText;
     private SharedPreferences sharedPreferences;
+    private Button loginButton;
+    private ProgressBar loginProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,13 +34,10 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 
         loginEditText = (EditText) findViewById(R.id.loginEditText);
         passwordEditText = (EditText) findViewById(R.id.passwordEditText);
-        Button loginButton = (Button) findViewById(R.id.loginButton);
-//        Button recoverPasswordButton = (Button) findViewById(R.id.recoverPasswordButton);
-
-//        recoverPasswordButton.setPaintFlags(recoverPasswordButton.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        loginButton = (Button) findViewById(R.id.loginButton);
+        loginProgressBar = (ProgressBar) findViewById(R.id.loginProgressBar);
 
         loginButton.setOnClickListener(this);
-//        recoverPasswordButton.setOnClickListener(this);
 
         sharedPreferences = getSharedPreferences("pixnfit", MODE_PRIVATE);
         String login = getResources().getString(R.string.pixnfit_login);
@@ -48,6 +50,8 @@ public class LoginActivity extends Activity implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.loginButton:
+                loginProgressBar.setVisibility(View.VISIBLE);
+                loginButton.setEnabled(false);
                 final String login = loginEditText.getText().toString();
                 final String password = passwordEditText.getText().toString();
                 AuthenticateAsyncTask authenticateAsyncTask = new AuthenticateAsyncTask(this, login, password) {
@@ -65,6 +69,8 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                             Toast toast = Toast.makeText(getApplicationContext(), "Invalid login/password", Toast.LENGTH_SHORT);
                             toast.show();
                         }
+                        loginButton.setEnabled(true);
+                        loginProgressBar.setVisibility(View.INVISIBLE);
                     }
                 };
                 authenticateAsyncTask.execute();
