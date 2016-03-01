@@ -8,12 +8,8 @@ import com.pixnfit.common.Post;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,28 +25,29 @@ public class GetPostAsyncTask extends WsAsyncTask<Void, Post, List<Post>> {
 
     @Override
     protected List<Post> doInBackground(Void... params) {
+        String url = "/posts/help?max=64";
         try {
-            HttpURLConnection connection = initConnection("/posts/help?max=64");
-            connection.connect();
+            HttpURLConnection httpURLConnection = initConnection(url);
+            httpURLConnection.connect();
 
-            int responseCode = connection.getResponseCode();
+            int responseCode = httpURLConnection.getResponseCode();
             if (responseCode == 200) {
                 // Listing successful
-                Log.i(TAG, "GET /posts/help: success, HTTP " + responseCode);
-                String dataAsJSON = readConnection(connection);
+                Log.i(TAG, "GET " + url + ": success, HTTP " + responseCode);
+                String dataAsJSON = readConnection(httpURLConnection);
                 JSONArray array = new JSONArray(dataAsJSON);
                 return JSONWsParser.parsePostList(array);
             } else {
                 // Error
-                Log.e(TAG, "GET /posts/help: failed, error HTTP " + responseCode);
+                Log.e(TAG, "GET " + url + ": failed, error HTTP " + responseCode);
                 return null;
             }
         } catch (IOException e) {
             // writing exception to log
-            Log.e(TAG, "GET /posts/help: IOException", e);
+            Log.e(TAG, "GET " + url + ": IOException", e);
             return null;
         } catch (JSONException e) {
-            Log.e(TAG, "GET /posts/help: JSONException", e);
+            Log.e(TAG, "GET " + url + ": JSONException", e);
             return null;
         }
     }

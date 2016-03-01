@@ -6,10 +6,7 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 
 /**
@@ -39,27 +36,28 @@ public class AuthenticateAsyncTask extends WsAsyncTask<Void, Void, JSONObject> {
 
     @Override
     protected JSONObject doInBackground(Void... params) {
+        String url = "/auth";
         try {
-            HttpURLConnection connection = initConnection("/auth", "POST");
-            connection.connect();
+            HttpURLConnection httpURLConnection = initConnection(url, "POST");
+            httpURLConnection.connect();
 
-            int responseCode = connection.getResponseCode();
+            int responseCode = httpURLConnection.getResponseCode();
             if (responseCode == 200) {
                 // Authentication successful
-                Log.i(TAG, "POST /auth: success, HTTP " + responseCode);
-                String dataAsJSON = readConnection(connection);
+                Log.i(TAG, "POST " + url + ": success, HTTP " + responseCode);
+                String dataAsJSON = readConnection(httpURLConnection);
                 return new JSONObject(dataAsJSON);
             } else {
                 // Error
-                Log.e(TAG, "POST /auth: failed, error HTTP " + responseCode);
+                Log.e(TAG, "POST " + url + ": failed, error HTTP " + responseCode);
                 return null;
             }
         } catch (IOException e) {
             // writing exception to log
-            Log.e(TAG, "POST /auth: IOException", e);
+            Log.e(TAG, "POST " + url + ": IOException", e);
             return null;
         } catch (JSONException e) {
-            Log.e(TAG, "POST /auth: JSONException", e);
+            Log.e(TAG, "POST " + url + ": JSONException", e);
             return null;
         }
     }

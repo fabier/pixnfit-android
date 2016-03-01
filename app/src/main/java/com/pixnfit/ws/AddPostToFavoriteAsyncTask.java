@@ -25,24 +25,24 @@ public class AddPostToFavoriteAsyncTask extends WsAsyncTask<Void, Void, Boolean>
 
     @Override
     protected Boolean doInBackground(Void... params) {
+        String url = String.format(Locale.ENGLISH, "/posts/%d/favorite", post.id);
         try {
-            String url = String.format(Locale.ENGLISH, "/posts/%d/favorite", post.id);
             HttpURLConnection connection = initConnection(url, "POST");
             connection.connect();
 
             int responseCode = connection.getResponseCode();
             if (responseCode == 201) {
                 // OK
-                Log.i(TAG, "POST /posts/:id/favorite: success, HTTP " + responseCode);
+                Log.i(TAG, "POST " + url + ": success, HTTP " + responseCode);
                 return true;
             } else {
                 // Error
-                Log.e(TAG, "POST /posts/:id/favorite: failed, error HTTP " + responseCode);
+                Log.e(TAG, "POST " + url + ": failed, error HTTP " + responseCode);
                 return false;
             }
         } catch (IOException e) {
             // writing exception to log
-            Log.e(TAG, "POST /posts/:id/favorite: IOException", e);
+            Log.e(TAG, "POST " + url + ": IOException", e);
             return false;
         }
     }

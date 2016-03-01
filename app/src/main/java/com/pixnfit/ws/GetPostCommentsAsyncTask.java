@@ -28,29 +28,29 @@ public class GetPostCommentsAsyncTask extends WsAsyncTask<Post, PostComment, Lis
     @Override
     protected List<PostComment> doInBackground(Post... posts) {
         Post post = posts[0];
+        String url = String.format(Locale.ENGLISH, "/posts/%d/comments", post.id);
         try {
-            String url = String.format(Locale.ENGLISH, "/posts/%d/comments", post.id);
-            HttpURLConnection connection = initConnection(url);
-            connection.connect();
+            HttpURLConnection httpURLConnection = initConnection(url);
+            httpURLConnection.connect();
 
-            int responseCode = connection.getResponseCode();
+            int responseCode = httpURLConnection.getResponseCode();
             if (responseCode == 200) {
                 // Listing successful
-                Log.i(TAG, "GET /posts/:id/comments: success, HTTP " + responseCode);
-                String dataAsJSON = readConnection(connection);
+                Log.i(TAG, "GET " + url + ": success, HTTP " + responseCode);
+                String dataAsJSON = readConnection(httpURLConnection);
                 JSONArray array = new JSONArray(dataAsJSON);
                 return JSONWsParser.parsePostCommentList(array);
             } else {
                 // Error
-                Log.e(TAG, "GET /posts/:id/comments: failed, error HTTP " + responseCode);
+                Log.e(TAG, "GET " + url + ": failed, error HTTP " + responseCode);
                 return null;
             }
         } catch (IOException e) {
             // writing exception to log
-            Log.e(TAG, "GET /posts/help: IOException", e);
+            Log.e(TAG, "GET " + url + ": IOException", e);
             return null;
         } catch (JSONException e) {
-            Log.e(TAG, "GET /posts/help: JSONException", e);
+            Log.e(TAG, "GET " + url + ": JSONException", e);
             return null;
         }
     }

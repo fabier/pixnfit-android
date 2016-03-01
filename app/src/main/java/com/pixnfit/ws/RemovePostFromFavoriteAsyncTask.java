@@ -25,24 +25,24 @@ public class RemovePostFromFavoriteAsyncTask extends WsAsyncTask<Void, Void, Boo
 
     @Override
     protected Boolean doInBackground(Void... params) {
+        String url = String.format(Locale.ENGLISH, "/posts/%d/favorite", post.id);
         try {
-            String url = String.format(Locale.ENGLISH, "/posts/%d/favorite", post.id);
-            HttpURLConnection connection = initConnection(url, "DELETE");
-            connection.connect();
+            HttpURLConnection httpURLConnection = initConnection(url, "DELETE");
+            httpURLConnection.connect();
 
-            int responseCode = connection.getResponseCode();
+            int responseCode = httpURLConnection.getResponseCode();
             if (responseCode == 200) {
                 // OK
-                Log.i(TAG, "DELETE /posts/:id/favorite: success, HTTP " + responseCode);
+                Log.i(TAG, "DELETE " + url + ": success, HTTP " + responseCode);
                 return true;
             } else {
                 // Error
-                Log.e(TAG, "DELETE /posts/:id/favorite: failed, error HTTP " + responseCode);
+                Log.e(TAG, "DELETE " + url + ": failed, error HTTP " + responseCode);
                 return false;
             }
         } catch (IOException e) {
             // writing exception to log
-            Log.e(TAG, "DELETE /posts/:id/favorite: IOException", e);
+            Log.e(TAG, "DELETE " + url + ": IOException", e);
             return false;
         }
     }
