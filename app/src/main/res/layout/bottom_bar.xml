@@ -6,6 +6,7 @@
     android:weightSum="5">
 
     <ImageButton
+        android:id="@+id/homeButtonBar"
         android:layout_width="wrap_content"
         android:layout_height="64dp"
         android:layout_weight="1"
@@ -15,6 +16,7 @@
         android:src="@drawable/home" />
 
     <ImageButton
+        android:id="@+id/followersButtonBar"
         android:layout_width="wrap_content"
         android:layout_height="64dp"
         android:layout_weight="1"
@@ -23,14 +25,18 @@
         android:scaleType="fitCenter"
         android:src="@drawable/followers" />
 
-
-    <View
+    <ImageButton
+        android:id="@+id/cameraButtonBar"
         android:layout_width="wrap_content"
         android:layout_height="64dp"
         android:layout_weight="1"
-        android:background="@color/background_floating_material_light"/>
+        android:background="@color/background_floating_material_light"
+        android:padding="5dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/pix_blue" />
 
     <ImageButton
+        android:id="@+id/inboxButtonBar"
         android:layout_width="wrap_content"
         android:layout_height="64dp"
         android:layout_weight="1"
@@ -40,6 +46,7 @@
         android:src="@drawable/inbox" />
 
     <ImageButton
+        android:id="@+id/profileButtonBar"
         android:layout_width="wrap_content"
         android:layout_height="64dp"
         android:layout_weight="1"
@@ -47,5 +54,4 @@
         android:padding="5dp"
         android:scaleType="fitCenter"
         android:src="@drawable/profile" />
-
 </LinearLayout>

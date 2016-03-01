@@ -3,12 +3,12 @@ package com.pixnfit;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ImageButton;
 
 import com.pixnfit.adapter.PostListAdapter;
 import com.pixnfit.common.Post;
@@ -31,7 +31,7 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabCamera);
+        ImageButton fab = (ImageButton) findViewById(R.id.cameraButtonBar);
         fab.setOnClickListener(this);
 
         GridView gridView = (GridView) findViewById(R.id.gridView);
@@ -63,7 +63,7 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.fabCamera:
+            case R.id.cameraButtonBar:
                 Intent intent = new Intent(this, CreatePostActivity.class);
                 startActivityForResult(intent, REQUESTCODE_CREATE_POST);
                 break;
