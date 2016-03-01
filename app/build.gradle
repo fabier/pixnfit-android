@@ -33,7 +33,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:22.2.1'
     compile 'com.android.support:design:22.2.1'
     compile 'com.android.support:support-v4:22.0.0'
-//    compile 'org.apache.commons:commons-collections4:4.0'
+    compile 'org.apache.commons:commons-collections4:4.0'
     compile 'org.apache.commons:commons-lang3:3.4'
     compile 'commons-io:commons-io:2.4'
     compile 'de.hdodenhof:circleimageview:2.0.0'
