@@ -32,6 +32,7 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
     private PostListAdapter postListAdapter;
     private boolean isLoading = true;
     private EndlessScrollListener endlessScrollListener;
+    private GridView gridView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +44,7 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
         ImageButton fab = (ImageButton) findViewById(R.id.cameraButtonBar);
         fab.setOnClickListener(this);
 
-        GridView gridView = (GridView) findViewById(R.id.gridView);
+        gridView = (GridView) findViewById(R.id.gridView);
         endlessScrollListener = new EndlessScrollListener(4) {
             @Override
             public boolean onLoadMore(int page, int totalItemsCount) {
@@ -87,8 +88,12 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
                 case REQUESTCODE_CREATE_POST:
                     List<Post> posts = (List<Post>) data.getSerializableExtra("posts");
                     if (CollectionUtils.isNotEmpty(posts)) {
+                        // On revient en haut...
+                        gridView.smoothScrollToPosition(0);
+                        // ...et on ajoute le post nouvellement créé
                         postListAdapter.addNewPosts(posts);
                         postListAdapter.notifyDataSetChanged();
+                        // .. puis on affiche ce post en plein écran
                         Intent intent = new Intent(this, PostActivity.class);
                         intent.putExtra("posts", (Serializable) postListAdapter.getPosts());
                         intent.putExtra("position", 0);
