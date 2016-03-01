@@ -1,5 +1,6 @@
 package com.pixnfit;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -140,25 +141,24 @@ public class CreatePostActivity extends AppCompatActivity implements View.OnClic
                                                 protected void onPostExecute(List<Post> posts) {
                                                     super.onPostExecute(posts);
                                                     if (posts != null && !posts.isEmpty()) {
-                                                        Intent intent = new Intent(getApplication(), PostActivity.class);
-                                                        intent.setFlags(Intent.FLAG_ACTIVITY_PREVIOUS_IS_TOP);
-                                                        intent.putExtra("posts", (Serializable) posts);
-                                                        intent.putExtra("position", 0);
-                                                        startActivity(intent);
+                                                        Intent i = new Intent();
+                                                        i.putExtra("posts", (Serializable) posts);
+                                                        setResult(Activity.RESULT_OK, i);
+                                                        finish();
                                                     } else {
-                                                        Snackbar.make(v, "Impossible to create post", Snackbar.LENGTH_LONG);
+                                                        Snackbar.make(v, "Impossible to create post : addImageToPostAsyncTask failed", Snackbar.LENGTH_LONG);
                                                     }
                                                 }
                                             };
                                             addImageToPostAsyncTask.execute();
                                         } else {
-                                            Snackbar.make(v, "Impossible to create post", Snackbar.LENGTH_LONG);
+                                            Snackbar.make(v, "Impossible to create post : createImageAsyncTask failed", Snackbar.LENGTH_LONG);
                                         }
                                     }
                                 };
                                 createImageAsyncTask.execute(imageFile);
                             } else {
-                                Snackbar.make(v, "Impossible to create post", Snackbar.LENGTH_LONG);
+                                Snackbar.make(v, "Impossible to create post : createPostAsyncTask failed", Snackbar.LENGTH_LONG);
                             }
                         }
                     };

@@ -14,11 +14,14 @@ import com.pixnfit.adapter.PostListAdapter;
 import com.pixnfit.common.Post;
 import com.pixnfit.ws.GetPostAsyncTask;
 
+import org.apache.commons.collections4.CollectionUtils;
+
 import java.io.Serializable;
 import java.util.List;
 
 public class HomeActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, View.OnClickListener {
 
+    private static final int REQUESTCODE_CREATE_POST = 1;
     private PostListAdapter postListAdapter;
 
     @Override
@@ -62,10 +65,32 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
         switch (v.getId()) {
             case R.id.fabCamera:
                 Intent intent = new Intent(this, CreatePostActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, REQUESTCODE_CREATE_POST);
                 break;
             default:
                 break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case REQUESTCODE_CREATE_POST:
+                    List<Post> posts = (List<Post>) data.getSerializableExtra("posts");
+                    if (CollectionUtils.isNotEmpty(posts)) {
+                        postListAdapter.addNewPosts(posts);
+                        postListAdapter.notifyDataSetChanged();
+                        Intent intent = new Intent(this, PostActivity.class);
+                        intent.putExtra("posts", (Serializable) postListAdapter.getPosts());
+                        intent.putExtra("position", 0);
+                        startActivity(intent);
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }

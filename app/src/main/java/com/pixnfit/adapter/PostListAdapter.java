@@ -2,7 +2,6 @@ package com.pixnfit.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,9 +16,10 @@ import com.pixnfit.common.Image;
 import com.pixnfit.common.Post;
 import com.pixnfit.utils.ThreadPools;
 
+import org.apache.commons.collections4.CollectionUtils;
+
+import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 /**
  * Created by fabier on 16/02/16.
@@ -131,5 +131,19 @@ public class PostListAdapter extends BaseAdapter {
 
     public void setPostImagePlaceHolder(Bitmap postImagePlaceHolder) {
         this.postImagePlaceHolder = postImagePlaceHolder;
+    }
+
+    public void addNewPosts(List<Post> posts) {
+        if (CollectionUtils.isNotEmpty(posts)) {
+            if (CollectionUtils.isEmpty(this.posts)) {
+                this.posts = posts;
+            } else {
+                // Il faut inverser la liste pour l'avoir dans le même ordre vu qu'on insère les éléments au début...
+                Collections.reverse(posts);
+                for (Post post : posts) {
+                    this.posts.add(0, post);
+                }
+            }
+        }
     }
 }
