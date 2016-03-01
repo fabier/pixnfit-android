@@ -1,6 +1,7 @@
 package com.pixnfit;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -44,6 +45,7 @@ public class CreatePostActivity extends AppCompatActivity implements View.OnClic
     private EditText postTitleEditText;
     private EditText postDescriptionEditText;
     private FloatingActionButton fabCreatePost;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,6 +124,9 @@ public class CreatePostActivity extends AppCompatActivity implements View.OnClic
         switch (v.getId()) {
             case R.id.fabCreatePost:
                 if (imageFile != null) {
+                    // On affiche un dialogue d'attente, le temps d'envoyer l'image sur le réseau...
+                    progressDialog = ProgressDialog.show(this, "Please wait", "Uploading picture...", true);
+
                     Post post = new Post();
                     post.name = postTitleEditText.getText().toString();
                     post.description = postDescriptionEditText.getText().toString();
@@ -144,21 +149,25 @@ public class CreatePostActivity extends AppCompatActivity implements View.OnClic
                                                         Intent i = new Intent();
                                                         i.putExtra("posts", (Serializable) posts);
                                                         setResult(Activity.RESULT_OK, i);
+                                                        progressDialog.dismiss();
                                                         finish();
                                                     } else {
                                                         Snackbar.make(v, "Impossible to create post : addImageToPostAsyncTask failed", Snackbar.LENGTH_LONG);
+                                                        progressDialog.dismiss();
                                                     }
                                                 }
                                             };
                                             addImageToPostAsyncTask.execute();
                                         } else {
                                             Snackbar.make(v, "Impossible to create post : createImageAsyncTask failed", Snackbar.LENGTH_LONG);
+                                            progressDialog.dismiss();
                                         }
                                     }
                                 };
                                 createImageAsyncTask.execute(imageFile);
                             } else {
                                 Snackbar.make(v, "Impossible to create post : createPostAsyncTask failed", Snackbar.LENGTH_LONG);
+                                progressDialog.dismiss();
                             }
                         }
                     };
