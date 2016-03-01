@@ -9,13 +9,5 @@
         android:id="@+id/postListView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/bottom_bar"
         android:layout_alignParentTop="true"></ListView>
-
-    <include
-        android:id="@+id/bottom_bar"
-        layout="@layout/bottom_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true" />
 </RelativeLayout>
