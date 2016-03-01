@@ -10,6 +10,8 @@ import android.widget.ImageView;
 
 import com.pixnfit.R;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
@@ -44,7 +46,6 @@ public class BitmapWorkerTask extends AsyncTask<String, Void, Bitmap> {
     private String imageUrl;
     private int width;
     private int height;
-    private String imageURL;
 
     public BitmapWorkerTask(ImageView imageView, int width, int height) {
         // Use a WeakReference to ensure the ImageView can be garbage collected
@@ -90,7 +91,9 @@ public class BitmapWorkerTask extends AsyncTask<String, Void, Bitmap> {
         if (!isCancelled() && bitmap != null) {
             final ImageView imageView = imageViewReference.get();
             if (imageView != null) {
-                if (imageView.getTag(R.id.tagImageUrl).equals(imageUrl)) {
+                String tagImageUrl = (String) imageView.getTag(R.id.tagImageUrl);
+                String imageUrl = getImageURL();
+                if (StringUtils.equals(imageUrl, tagImageUrl)) {
                     // C'est cette image qu'on souhaite afficher dans cette imageView,
                     // donc on applique le bitmap
                     imageView.setImageBitmap(bitmap);
@@ -100,7 +103,7 @@ public class BitmapWorkerTask extends AsyncTask<String, Void, Bitmap> {
     }
 
     public String getImageURL() {
-        return imageURL;
+        return imageUrl;
     }
 
 }
