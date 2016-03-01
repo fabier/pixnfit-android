@@ -26,6 +26,10 @@ public abstract class WsAsyncTask<Params, Progress, Result> extends AsyncTask<Pa
         this.context = context;
     }
 
+    public Context getContext() {
+        return context;
+    }
+
     protected String getLogin() {
         SharedPreferences sharedPreferences = context.getSharedPreferences("pixnfit", Context.MODE_PRIVATE);
         return sharedPreferences.getString("login", "");
@@ -54,22 +58,22 @@ public abstract class WsAsyncTask<Params, Progress, Result> extends AsyncTask<Pa
         method = method == null ? "GET" : method;
         URL url = new URL(BASE_URL + path);
         Log.i(TAG, method + " " + url.toString());
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setRequestProperty("Authorization", getAuthorization());
-        connection.setRequestProperty("Accept", "application/json");
-        connection.setConnectTimeout(10000);
-        connection.setReadTimeout(10000);
+        HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+        httpURLConnection.setRequestProperty("Authorization", getAuthorization());
+        httpURLConnection.setRequestProperty("Accept", "application/json");
+        httpURLConnection.setConnectTimeout(10000);
+        httpURLConnection.setReadTimeout(10000);
         if (method != null) {
-            connection.setRequestMethod(method);
+            httpURLConnection.setRequestMethod(method);
         }
 
         if ("POST".equals(method) || "PUT".equals(method) || "DELETE".equals(method)) {
-            connection.setDoOutput(true);
-            connection.setUseCaches(false);
-            connection.setRequestProperty("Content-Type", "application/json");
+            httpURLConnection.setDoOutput(true);
+            httpURLConnection.setUseCaches(false);
+            httpURLConnection.setRequestProperty("Content-Type", "application/json");
         }
 
-        return connection;
+        return httpURLConnection;
     }
 
     protected String readConnection(HttpURLConnection connection) throws IOException {
