@@ -216,10 +216,8 @@ public class PostAdapter extends BaseAdapter implements View.OnClickListener {
 
     private void loadImageIntoView(final Image image, final ImageView postImageView) {
         final String imageUrl = image.imageUrl;
-
-        postImageView.setTag(R.id.tagImageUrl, imageUrl);
-
         if (cancelPotentialWork(imageUrl, postImageView)) {
+            postImageView.setTag(R.id.tagImageUrl, imageUrl);
             BitmapWorkerTask task = new BitmapWorkerTask(postImageView, 128, 128) {
                 @Override
                 protected void onPostExecute(Bitmap bitmap) {
