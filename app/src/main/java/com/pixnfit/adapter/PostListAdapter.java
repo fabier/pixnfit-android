@@ -18,6 +18,7 @@ import com.pixnfit.utils.ThreadPools;
 
 import org.apache.commons.collections4.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -77,7 +78,6 @@ public class PostListAdapter extends BaseAdapter {
             Post post = getPost(position);
             if (post.images != null && post.images.size() > 0) {
                 Image image = post.images.get(0);
-                imageView.setTag(R.id.tagImageUrl, image.imageUrl);
                 loadBitmap(image.imageUrl, imageView);
             } else {
                 imageView.setImageResource(R.drawable.camera_transparent);
@@ -89,6 +89,7 @@ public class PostListAdapter extends BaseAdapter {
 
     public void loadBitmap(String imageUrl, ImageView imageView) {
         if (cancelPotentialWork(imageUrl, imageView)) {
+            imageView.setTag(R.id.tagImageUrl, imageUrl);
             BitmapWorkerTask task = new BitmapWorkerTask(imageView, 128, 128);
             AsyncDrawable asyncDrawable = new AsyncDrawable(context.getResources(), postImagePlaceHolder, task);
             imageView.setImageDrawable(asyncDrawable);
@@ -142,6 +143,20 @@ public class PostListAdapter extends BaseAdapter {
                 Collections.reverse(posts);
                 for (Post post : posts) {
                     this.posts.add(0, post);
+                }
+            }
+        }
+    }
+
+    public void addPostsUnique(List<Post> posts) {
+        if (CollectionUtils.isNotEmpty(posts)) {
+            if (this.posts == null) {
+                this.posts = new ArrayList<>(posts);
+            } else {
+                for (Post post : posts) {
+                    if (!this.posts.contains(post)) {
+                        this.posts.add(post);
+                    }
                 }
             }
         }
