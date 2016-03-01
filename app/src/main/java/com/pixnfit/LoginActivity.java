@@ -3,8 +3,6 @@ package com.pixnfit;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -44,6 +42,8 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         String password = getResources().getString(R.string.pixnfit_password);
         loginEditText.setText(sharedPreferences.getString("login", login));
         passwordEditText.setText(sharedPreferences.getString("password", password));
+
+
     }
 
     @Override
@@ -64,6 +64,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                             editor.putString("password", password);
                             editor.commit();
                             Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(intent);
                         } else {
                             Toast toast = Toast.makeText(getApplicationContext(), "Invalid login/password", Toast.LENGTH_SHORT);
