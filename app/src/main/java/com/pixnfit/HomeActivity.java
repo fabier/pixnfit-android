@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -18,7 +17,7 @@ import com.pixnfit.ws.GetPostAsyncTask;
 import java.io.Serializable;
 import java.util.List;
 
-public class HomeActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
+public class HomeActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, View.OnClickListener {
 
     private PostListAdapter postListAdapter;
 
@@ -29,14 +28,8 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabCamera);
+        fab.setOnClickListener(this);
 
         GridView gridView = (GridView) findViewById(R.id.gridView);
         postListAdapter = new PostListAdapter(this);
@@ -62,5 +55,17 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
         intent.putExtra("posts", (Serializable) postListAdapter.getPosts());
         intent.putExtra("position", position);
         startActivity(intent);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.fabCamera:
+                Intent intent = new Intent(this, CreatePostActivity.class);
+                startActivity(intent);
+                break;
+            default:
+                break;
+        }
     }
 }
