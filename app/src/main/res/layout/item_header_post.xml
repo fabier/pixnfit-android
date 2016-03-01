@@ -20,9 +20,9 @@
             android:id="@+id/fabDislike"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/postImageView"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_alignBottom="@id/postImageView"
             android:layout_margin="@dimen/fab_margin"
             android:src="@drawable/dislike_white"
             app:backgroundTint="@color/orange" />
@@ -31,9 +31,9 @@
             android:id="@+id/fabLike"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_above="@+id/fabDislike"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_above="@+id/fabDislike"
             android:layout_margin="@dimen/fab_margin"
             android:src="@drawable/like_white"
             app:backgroundTint="@color/green" />
