@@ -33,7 +33,6 @@ captures/
 
 # Android Studio
 *.iml
-/.idea/workspace.xml
-/.idea/libraries
+/.idea
 .DS_Store
 /app/src/main/res/values/passwords.xml
