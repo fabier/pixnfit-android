@@ -5,6 +5,9 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -12,9 +15,12 @@ import android.widget.ImageButton;
 
 import com.pixnfit.adapter.PostListAdapter;
 import com.pixnfit.common.Post;
+import com.pixnfit.ui.EndlessScrollListener;
+import com.pixnfit.utils.ThreadPools;
 import com.pixnfit.ws.GetPostAsyncTask;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.ListUtils;
 
 import java.io.Serializable;
 import java.util.List;
@@ -22,7 +28,10 @@ import java.util.List;
 public class HomeActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, View.OnClickListener {
 
     private static final int REQUESTCODE_CREATE_POST = 1;
+
     private PostListAdapter postListAdapter;
+    private boolean isLoading = true;
+    private EndlessScrollListener endlessScrollListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,21 +44,19 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
         fab.setOnClickListener(this);
 
         GridView gridView = (GridView) findViewById(R.id.gridView);
+        endlessScrollListener = new EndlessScrollListener(4) {
+            @Override
+            public boolean onLoadMore(int page, int totalItemsCount) {
+                return loadPage(page, totalItemsCount);
+            }
+        };
+        gridView.setOnScrollListener(endlessScrollListener);
         postListAdapter = new PostListAdapter(this);
         postListAdapter.setPostImagePlaceHolder(BitmapFactory.decodeResource(getResources(), R.drawable.camera_transparent));
         gridView.setAdapter(postListAdapter);
         gridView.setOnItemClickListener(this);
 
-        GetPostAsyncTask getPostAsyncTask = new GetPostAsyncTask(this) {
-            @Override
-            protected void onPostExecute(List<Post> posts) {
-                if (!isCancelled()) {
-                    postListAdapter.setPosts(posts);
-                    postListAdapter.notifyDataSetChanged();
-                }
-            }
-        };
-        getPostAsyncTask.execute();
+        refreshPosts();
     }
 
     @Override
@@ -92,5 +99,53 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
                     break;
             }
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_home, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_refresh:
+                // User chose the "Refresh" item
+                refreshPosts();
+                return true;
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+
+        }
+    }
+
+    private void refreshPosts() {
+        isLoading = true;
+        endlessScrollListener.reset();
+        postListAdapter.setPosts(null);
+        loadPage(0, 0);
+    }
+
+    private boolean loadPage(int page, int totalItemsCount) {
+        GetPostAsyncTask getPostAsyncTask = new GetPostAsyncTask(this) {
+            @Override
+            protected void onPostExecute(List<Post> posts) {
+                if (!isCancelled()) {
+                    isLoading = CollectionUtils.isNotEmpty(posts);
+                    if (ListUtils.isEqualList(posts, postListAdapter.getPosts())) {
+                        // Les deux listes sont identiques, on ne change pas la valeur
+                    } else {
+                        postListAdapter.addPostsUnique(posts);
+                        postListAdapter.notifyDataSetChanged();
+                    }
+                }
+            }
+        };
+        getPostAsyncTask.executeOnExecutor(ThreadPools.POST_THREADPOOL, page);
+        return isLoading;
     }
 }

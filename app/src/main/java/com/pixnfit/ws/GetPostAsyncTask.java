@@ -11,21 +11,24 @@ import org.json.JSONException;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by fabier on 16/02/16.
  */
-public class GetPostAsyncTask extends WsAsyncTask<Void, Post, List<Post>> {
+public class GetPostAsyncTask extends WsAsyncTask<Integer, Post, List<Post>> {
 
     private static final String TAG = GetPostAsyncTask.class.getSimpleName();
+
+    private static final int PAGE_SIZE = 32;
 
     public GetPostAsyncTask(Context context) {
         super(context);
     }
 
     @Override
-    protected List<Post> doInBackground(Void... params) {
-        String url = "/posts/help?max=64";
+    protected List<Post> doInBackground(Integer... params) {
+        String url = String.format(Locale.ENGLISH, "/posts/help?max=%d&offset=%d", PAGE_SIZE, params[0] * PAGE_SIZE);
         try {
             HttpURLConnection httpURLConnection = initConnection(url);
             httpURLConnection.connect();
