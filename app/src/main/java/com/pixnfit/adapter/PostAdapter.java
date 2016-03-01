@@ -39,11 +39,7 @@ public class PostAdapter extends BaseAdapter implements View.OnClickListener {
     private List<PostComment> postComments;
     private Context context;
     private Post post;
-    //    private PostHeaderHolder postHeaderHolder;
     private Bitmap postImagePlaceHolder;
-    private FloatingActionButton heartFloatingActionButton;
-    private FloatingActionButton likeFloatingActionButton;
-    private FloatingActionButton dislikeFloatingActionButton;
 
     public PostAdapter(Context context) {
         this.context = context;
@@ -124,29 +120,35 @@ public class PostAdapter extends BaseAdapter implements View.OnClickListener {
                     TextView postTitleTextView = (TextView) view.findViewById(R.id.postTitleTextView);
                     TextView postTitleViewCountTextView = (TextView) view.findViewById(R.id.postTitleViewCountTextView);
 
-                    heartFloatingActionButton = (FloatingActionButton) view.findViewById(R.id.fabHeart);
-                    likeFloatingActionButton = (FloatingActionButton) view.findViewById(R.id.fabLike);
-                    dislikeFloatingActionButton = (FloatingActionButton) view.findViewById(R.id.fabDislike);
+                    PostHeaderHolder postHeaderHolder = new PostHeaderHolder();
+                    postHeaderHolder.heartFloatingActionButton = (FloatingActionButton) view.findViewById(R.id.fabHeart);
+                    postHeaderHolder.likeFloatingActionButton = (FloatingActionButton) view.findViewById(R.id.fabLike);
+                    postHeaderHolder.dislikeFloatingActionButton = (FloatingActionButton) view.findViewById(R.id.fabDislike);
 
-                    heartFloatingActionButton.setVisibility(View.GONE);
-
-                    likeFloatingActionButton.setVisibility(View.GONE);
-                    dislikeFloatingActionButton.setVisibility(View.GONE);
+                    postHeaderHolder.heartFloatingActionButton.setVisibility(View.GONE);
+                    postHeaderHolder.likeFloatingActionButton.setVisibility(View.GONE);
+                    postHeaderHolder.dislikeFloatingActionButton.setVisibility(View.GONE);
 
                     if (post != null) {
                         postTitleTextView.setText(post.name);
                         postTitleViewCountTextView.setText(post.viewCount + " views");
                         if (post.images != null && post.images.size() > 0) {
                             Image image = post.images.get(0);
-                            loadPostUserInfo();
+                            loadPostUserInfo(postHeaderHolder);
                             loadImageIntoView(image, postImageView);
                         } else {
                             postImageView.setTag(R.id.tagImageUrl, null);
                             postImageView.setImageResource(R.drawable.camera_transparent);
                         }
                     }
+
+                    view.setTag(postHeaderHolder);
+                    postHeaderHolder.heartFloatingActionButton.setTag(postHeaderHolder);
+                    postHeaderHolder.likeFloatingActionButton.setTag(postHeaderHolder);
+                    postHeaderHolder.dislikeFloatingActionButton.setTag(postHeaderHolder);
                 } else {
                     view = convertView;
+                    PostHeaderHolder postHeaderHolder = (PostHeaderHolder) view.getTag();
                 }
                 break;
             case VIEWTYPE_POSTCOMMENT:
@@ -188,18 +190,18 @@ public class PostAdapter extends BaseAdapter implements View.OnClickListener {
         return view;
     }
 
-    private void loadPostUserInfo() {
+    private void loadPostUserInfo(final PostHeaderHolder postHeaderHolder) {
         GetPostMeAsyncTask getPostMeAsyncTask = new GetPostMeAsyncTask(context) {
             @Override
             protected void onPostExecute(PostMe postMe) {
                 if (!isCancelled() && postMe != null) {
                     if (postMe.vote != null) {
-                        setHasVoted(postMe.vote.vote);
+                        setHasVoted(postMe.vote.vote, postHeaderHolder);
                     } else {
-                        setHasVoted(null);
+                        setHasVoted(null, postHeaderHolder);
                     }
 
-                    setIsFavorite(postMe.isFavorite);
+                    setIsFavorite(postMe.isFavorite, postHeaderHolder);
                 }
             }
         };
@@ -225,11 +227,6 @@ public class PostAdapter extends BaseAdapter implements View.OnClickListener {
                     if (!isCancelled()) {
                         BitmapWorkerTask bitmapWorkerTask = new BitmapWorkerTask(postImageView, 512, 512);
                         bitmapWorkerTask.executeOnExecutor(ThreadPools.IMAGELOAD_THREADPOOL, imageUrl);
-
-                        likeFloatingActionButton.setOnClickListener(PostAdapter.this);
-                        likeFloatingActionButton.setVisibility(View.VISIBLE);
-                        dislikeFloatingActionButton.setOnClickListener(PostAdapter.this);
-                        dislikeFloatingActionButton.setVisibility(View.VISIBLE);
                     }
                 }
             };
@@ -239,7 +236,9 @@ public class PostAdapter extends BaseAdapter implements View.OnClickListener {
         }
     }
 
-    private void setHasVoted(Boolean vote) {
+    private void setHasVoted(Boolean vote, PostHeaderHolder postHeaderHolder) {
+        FloatingActionButton likeFloatingActionButton = postHeaderHolder.likeFloatingActionButton;
+        FloatingActionButton dislikeFloatingActionButton = postHeaderHolder.dislikeFloatingActionButton;
         if (vote == null) {
             // L'utilisateur n'a pas voté
             likeFloatingActionButton.setBackgroundTintList(context.getResources().getColorStateList(R.color.green));
@@ -264,7 +263,8 @@ public class PostAdapter extends BaseAdapter implements View.OnClickListener {
         dislikeFloatingActionButton.setVisibility(View.VISIBLE);
     }
 
-    private void setIsFavorite(Boolean isFavorite) {
+    private void setIsFavorite(Boolean isFavorite, PostHeaderHolder postHeaderHolder) {
+        FloatingActionButton heartFloatingActionButton = postHeaderHolder.heartFloatingActionButton;
         heartFloatingActionButton.setTag(R.id.tagPostFavorite, isFavorite);
         heartFloatingActionButton.setOnClickListener(this);
 
@@ -312,23 +312,23 @@ public class PostAdapter extends BaseAdapter implements View.OnClickListener {
             case R.id.fabLike:
                 new SubmitPostVoteAsyncTask(context, post, true).execute();
                 Snackbar.make(v, "Thank you for your vote !", Snackbar.LENGTH_LONG).show();
-                setHasVoted(true);
+                setHasVoted(true, (PostHeaderHolder) v.getTag());
                 break;
             case R.id.fabDislike:
                 new SubmitPostVoteAsyncTask(context, post, false).execute();
                 Snackbar.make(v, "Thank you for your vote !", Snackbar.LENGTH_LONG).show();
-                setHasVoted(false);
+                setHasVoted(false, (PostHeaderHolder) v.getTag());
                 break;
             case R.id.fabHeart:
                 Boolean isFavorite = (Boolean) v.getTag(R.id.tagPostFavorite);
                 if (isFavorite) {
                     new RemovePostFromFavoriteAsyncTask(context, post).execute();
-                    Snackbar.make(v, "Post has been remove from favorites !", Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(v, "Post has been removed from favorites !", Snackbar.LENGTH_LONG).show();
                 } else {
                     new AddPostToFavoriteAsyncTask(context, post).execute();
                     Snackbar.make(v, "Post has been added to favorites !", Snackbar.LENGTH_LONG).show();
                 }
-                setIsFavorite(!isFavorite);
+                setIsFavorite(!isFavorite, (PostHeaderHolder) v.getTag());
             default:
                 break;
         }
@@ -344,4 +344,10 @@ class PostCommentHolder {
     TextView postCommentAuthorNameTextView;
     TextView postCommentDateTextView;
     TextView postCommentDescriptionTextView;
+}
+
+class PostHeaderHolder {
+    public FloatingActionButton heartFloatingActionButton;
+    public FloatingActionButton likeFloatingActionButton;
+    public FloatingActionButton dislikeFloatingActionButton;
 }
