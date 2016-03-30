@@ -1,14 +1,18 @@
 package com.pixnfit.adapter;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -22,11 +26,13 @@ import com.pixnfit.common.PostComment;
 import com.pixnfit.common.PostMe;
 import com.pixnfit.utils.ThreadPools;
 import com.pixnfit.ws.AddPostToFavoriteAsyncTask;
+import com.pixnfit.ws.CreatePostCommentAsyncTask;
 import com.pixnfit.ws.GetPostMeAsyncTask;
 import com.pixnfit.ws.RemovePostFromFavoriteAsyncTask;
 import com.pixnfit.ws.SubmitPostVoteAsyncTask;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -43,6 +49,10 @@ public class PostAdapter extends BaseAdapter implements View.OnClickListener {
 
     public PostAdapter(Context context) {
         this.context = context;
+    }
+
+    public Context getContext() {
+        return context;
     }
 
     public Post getPost() {
@@ -114,6 +124,7 @@ public class PostAdapter extends BaseAdapter implements View.OnClickListener {
                     view = inflater.inflate(R.layout.item_header_post, null);
                     ImageView postImageView = (ImageView) view.findViewById(R.id.postImageView);
                     ImageButton postButtonComments = (ImageButton) view.findViewById(R.id.postButtonComments);
+                    postButtonComments.setOnClickListener(this);
                     ImageButton postButtonShare = (ImageButton) view.findViewById(R.id.postButtonShare);
                     ImageButton postButtonHanger = (ImageButton) view.findViewById(R.id.postButtonHanger);
                     ImageButton postButtonMoreOptions = (ImageButton) view.findViewById(R.id.postButtonMoreOptions);
@@ -327,9 +338,58 @@ public class PostAdapter extends BaseAdapter implements View.OnClickListener {
                     Snackbar.make(v, "Post has been added to favorites !", Snackbar.LENGTH_LONG).show();
                 }
                 setIsFavorite(!isFavorite, (PostHeaderHolder) v.getTag());
+                break;
+            case R.id.postButtonComments:
+                displayInputCommentDialog(v);
+                break;
             default:
                 break;
         }
+    }
+
+    private void displayInputCommentDialog(final View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+        builder.setTitle("Add a comment");
+
+        // Set up the input
+        final EditText input = new EditText(view.getContext());
+        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_SHORT_MESSAGE);
+        builder.setView(input);
+
+        // Set up the buttons
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                new CreatePostCommentAsyncTask(context, post) {
+                    @Override
+                    protected void onPostExecute(PostComment postComment) {
+                        super.onPostExecute(postComment);
+                        addFirstToPostComments(postComment);
+                        notifyDataSetChanged();
+                        Snackbar.make(view, "Comment posted !", Snackbar.LENGTH_LONG).show();
+                    }
+                }.execute(
+                        input.getText().toString()
+                );
+
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+    }
+
+    private void addFirstToPostComments(PostComment postComment) {
+        if (postComments == null) {
+            postComments = new ArrayList<>();
+        }
+        postComments.add(0, postComment);
     }
 
     public void setPostImagePlaceHolder(Bitmap postImagePlaceHolder) {

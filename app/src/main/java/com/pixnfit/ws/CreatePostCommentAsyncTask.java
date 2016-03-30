@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.pixnfit.common.Post;
+import com.pixnfit.common.PostComment;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,26 +16,27 @@ import java.net.HttpURLConnection;
 /**
  * Created by fabier on 19/02/16.
  */
-public class CreatePostAsyncTask extends WsAsyncTask<Post, Post, Post> {
+public class CreatePostCommentAsyncTask extends WsAsyncTask<String, PostComment, PostComment> {
 
-    private static final String TAG = CreatePostAsyncTask.class.getSimpleName();
+    private static final String TAG = CreatePostCommentAsyncTask.class.getSimpleName();
+    private Post post;
 
-    public CreatePostAsyncTask(Context context) {
+    public CreatePostCommentAsyncTask(Context context, Post post) {
         super(context);
+        this.post = post;
     }
 
     @Override
-    protected Post doInBackground(Post... posts) {
-        Post post = posts[0];
-        String url = "/posts";
+    protected PostComment doInBackground(String... params) {
+        String comment = params[0];
+        String url = String.format("/posts/%d/comments", post.id);
         try {
             HttpURLConnection httpURLConnection = initConnection(url, "POST");
             httpURLConnection.connect();
 
             OutputStreamWriter wr = new OutputStreamWriter(httpURLConnection.getOutputStream());
             JSONObject json = new JSONObject();
-            json.put("name", post.name);
-            json.put("description", post.description);
+            json.put("description", comment);
             wr.write(json.toString());
             wr.close();
 
@@ -44,7 +46,7 @@ public class CreatePostAsyncTask extends WsAsyncTask<Post, Post, Post> {
                 Log.i(TAG, "POST " + url + ": success, HTTP " + responseCode);
                 String dataAsJSON = readConnection(httpURLConnection);
                 JSONObject object = new JSONObject(dataAsJSON);
-                return JSONWsParser.parsePost(object);
+                return JSONWsParser.parsePostComment(object);
             } else {
                 // Error
                 Log.e(TAG, "POST " + url + ": failed, error HTTP " + responseCode);
