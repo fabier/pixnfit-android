@@ -20,7 +20,7 @@ public class GetPostAsyncTask extends WsAsyncTask<Integer, Post, List<Post>> {
 
     private static final String TAG = GetPostAsyncTask.class.getSimpleName();
 
-    private static final int PAGE_SIZE = 32;
+    private static final int PAGE_SIZE = 40;
 
     public GetPostAsyncTask(Context context) {
         super(context);
