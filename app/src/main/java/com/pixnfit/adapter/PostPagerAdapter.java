@@ -9,13 +9,8 @@ import android.util.LruCache;
 
 import com.pixnfit.PostFragment;
 import com.pixnfit.common.Post;
-import com.pixnfit.utils.LRUCache;
 
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.WeakHashMap;
 
 /**
  * Created by fabier on 27/02/16.
@@ -54,5 +49,13 @@ public class PostPagerAdapter extends FragmentPagerAdapter {
     @Override
     public int getCount() {
         return this.posts == null ? 0 : this.posts.size();
+    }
+
+    public void addFirstToPosts(List<Post> posts) {
+        if (this.posts == null) {
+            this.posts = posts;
+        } else {
+            this.posts.addAll(0, posts);
+        }
     }
 }

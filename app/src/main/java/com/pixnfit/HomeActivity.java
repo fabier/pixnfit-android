@@ -41,8 +41,8 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        ImageButton fab = (ImageButton) findViewById(R.id.cameraButtonBar);
-        fab.setOnClickListener(this);
+        ImageButton cameraButton = (ImageButton) findViewById(R.id.cameraButtonBar);
+        cameraButton.setOnClickListener(this);
 
         gridView = (GridView) findViewById(R.id.gridView);
         endlessScrollListener = new EndlessScrollListener(4) {
