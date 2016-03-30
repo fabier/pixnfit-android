@@ -129,6 +129,7 @@ public class PostAdapter extends BaseAdapter implements View.OnClickListener {
                     ImageButton postButtonHanger = (ImageButton) view.findViewById(R.id.postButtonHanger);
                     ImageButton postButtonMoreOptions = (ImageButton) view.findViewById(R.id.postButtonMoreOptions);
                     TextView postTitleTextView = (TextView) view.findViewById(R.id.postTitleTextView);
+                    TextView postAuthorTextView = (TextView) view.findViewById(R.id.postAuthorTextView);
                     TextView postTitleViewCountTextView = (TextView) view.findViewById(R.id.postTitleViewCountTextView);
 
                     PostHeaderHolder postHeaderHolder = new PostHeaderHolder();
@@ -140,8 +141,16 @@ public class PostAdapter extends BaseAdapter implements View.OnClickListener {
                     postHeaderHolder.likeFloatingActionButton.setVisibility(View.GONE);
                     postHeaderHolder.dislikeFloatingActionButton.setVisibility(View.GONE);
 
+                    postHeaderHolder.postAuthorImageView = (ImageView) view.findViewById(R.id.postAuthorImageView);
+
                     if (post != null) {
                         postTitleTextView.setText(post.name);
+
+                        if (post.creator != null) {
+                            postAuthorTextView.setText(post.creator.username);
+                        } else {
+                            postAuthorTextView.setVisibility(View.GONE);
+                        }
                         postTitleViewCountTextView.setText(post.viewCount + " views");
                         if (post.images != null && post.images.size() > 0) {
                             Image image = post.images.get(0);
@@ -150,6 +159,13 @@ public class PostAdapter extends BaseAdapter implements View.OnClickListener {
                         } else {
                             postImageView.setTag(R.id.tagImageUrl, null);
                             postImageView.setImageResource(R.drawable.camera_transparent);
+                        }
+
+                        if (post.creator != null && post.creator.image != null) {
+                            loadPostAuthorImageView(post, postHeaderHolder);
+                        } else {
+                            postHeaderHolder.postAuthorImageView.setTag(R.id.tagImageUrl, null);
+                            postHeaderHolder.postAuthorImageView.setImageResource(R.drawable.profile);
                         }
                     }
 
@@ -223,6 +239,12 @@ public class PostAdapter extends BaseAdapter implements View.OnClickListener {
         postCommentHolder.postCommentAuthorImageView.setTag(R.id.tagImageUrl, postComment.creator.image.imageUrl);
         BitmapWorkerTask bitmapWorkerTask = new BitmapWorkerTask(postCommentHolder.postCommentAuthorImageView, 32, 32);
         bitmapWorkerTask.execute(postComment.creator.image.imageUrl);
+    }
+
+    private void loadPostAuthorImageView(Post post, PostHeaderHolder postHeaderHolder) {
+        postHeaderHolder.postAuthorImageView.setTag(R.id.tagImageUrl, post.creator.image.imageUrl);
+        BitmapWorkerTask bitmapWorkerTask = new BitmapWorkerTask(postHeaderHolder.postAuthorImageView, 64, 64);
+        bitmapWorkerTask.execute(post.creator.image.imageUrl);
     }
 
     private void loadImageIntoView(final Image image, final ImageView postImageView) {
@@ -408,4 +430,5 @@ class PostHeaderHolder {
     public FloatingActionButton heartFloatingActionButton;
     public FloatingActionButton likeFloatingActionButton;
     public FloatingActionButton dislikeFloatingActionButton;
+    public ImageView postAuthorImageView;
 }
