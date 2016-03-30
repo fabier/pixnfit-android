@@ -8,7 +8,7 @@
     <ImageButton
         android:id="@+id/homeButtonBar"
         android:layout_width="wrap_content"
-        android:layout_height="64dp"
+        android:layout_height="48dp"
         android:layout_weight="1"
         android:background="@color/background_floating_material_light"
         android:padding="5dp"
@@ -18,7 +18,7 @@
     <ImageButton
         android:id="@+id/followersButtonBar"
         android:layout_width="wrap_content"
-        android:layout_height="64dp"
+        android:layout_height="48dp"
         android:layout_weight="1"
         android:background="@color/background_floating_material_light"
         android:padding="5dp"
@@ -28,7 +28,7 @@
     <ImageButton
         android:id="@+id/cameraButtonBar"
         android:layout_width="wrap_content"
-        android:layout_height="64dp"
+        android:layout_height="48dp"
         android:layout_weight="1"
         android:background="@color/background_floating_material_light"
         android:padding="5dp"
@@ -38,7 +38,7 @@
     <ImageButton
         android:id="@+id/inboxButtonBar"
         android:layout_width="wrap_content"
-        android:layout_height="64dp"
+        android:layout_height="48dp"
         android:layout_weight="1"
         android:background="@color/background_floating_material_light"
         android:padding="5dp"
@@ -48,7 +48,7 @@
     <ImageButton
         android:id="@+id/profileButtonBar"
         android:layout_width="wrap_content"
-        android:layout_height="64dp"
+        android:layout_height="48dp"
         android:layout_weight="1"
         android:background="@color/background_floating_material_light"
         android:padding="5dp"
