@@ -13,6 +13,7 @@ import com.pixnfit.async.BitmapWorkerTask;
 import com.pixnfit.common.User;
 import com.pixnfit.utils.ThreadPools;
 import com.pixnfit.ws.GetMeAsyncTask;
+import com.pixnfit.ws.GetUserAsyncTask;
 
 /**
  * Created by fabier on 31/03/16.
@@ -75,13 +76,21 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
-
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onStart() {
+        super.onStart();
         User user = (User) getIntent().getSerializableExtra("user");
         if (user != null) {
-            setUser(user);
+            GetUserAsyncTask getUserAsyncTask = new GetUserAsyncTask(getApplication()) {
+                @Override
+                protected void onPostExecute(User user) {
+                    super.onPostExecute(user);
+                    if (!isCancelled()) {
+                        setUser(user);
+                    }
+                }
+            };
+            getUserAsyncTask.executeOnExecutor(ThreadPools.METADATA_THREADPOOL, user);
         } else {
             GetMeAsyncTask getMeAsyncTask = new GetMeAsyncTask(getApplication()) {
                 @Override
@@ -96,21 +105,28 @@ public class ProfileActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
     protected void setUser(User user) {
         this.user = user;
 
         loadProfileImageView(user, this.profileImageView);
 
         if (this.user == null) {
+            this.getSupportActionBar().setTitle("User");
             this.profileRankingTextView.setText("");
             this.profilePicturesTextView.setText("");
             this.profileFollowersTextView.setText("");
             this.profileFollowingTextView.setText("");
         } else {
-            this.profileRankingTextView.setText(user.points);
-            this.profilePicturesTextView.setText(user.postCount);
-            this.profileFollowersTextView.setText(user.followersCount);
-            this.profileFollowingTextView.setText(user.followedCount);
+            this.getSupportActionBar().setTitle(user.username);
+            this.profileRankingTextView.setText(Integer.toString(user.points));
+            this.profilePicturesTextView.setText(Integer.toString(user.postCount));
+            this.profileFollowersTextView.setText(Integer.toString(user.followersCount));
+            this.profileFollowingTextView.setText(Integer.toString(user.followedCount));
         }
 
         this.profilePagerAdapter.setUser(user);
@@ -118,8 +134,13 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void loadProfileImageView(User user, ImageView profileImageView) {
-        profileImageView.setTag(R.id.tagImageUrl, user.image.imageUrl);
-        BitmapWorkerTask bitmapWorkerTask = new BitmapWorkerTask(profileImageView, 64, 64);
-        bitmapWorkerTask.execute(user.image.imageUrl);
+        if (user == null || user.image == null) {
+            profileImageView.setTag(R.id.tagImageUrl, null);
+            profileImageView.setImageResource(R.drawable.profile);
+        } else {
+            profileImageView.setTag(R.id.tagImageUrl, user.image.imageUrl);
+            BitmapWorkerTask bitmapWorkerTask = new BitmapWorkerTask(profileImageView, 64, 64);
+            bitmapWorkerTask.execute(user.image.imageUrl);
+        }
     }
 }
