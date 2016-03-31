@@ -1,13 +1,16 @@
 package com.pixnfit.fragment;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.pixnfit.ProfileActivity;
 import com.pixnfit.R;
 import com.pixnfit.adapter.PostAdapter;
 import com.pixnfit.common.Post;
@@ -20,7 +23,7 @@ import java.util.List;
 /**
  * Created by fabier on 27/02/16.
  */
-public class PostFragment extends Fragment {
+public class PostFragment extends Fragment implements AdapterView.OnItemClickListener {
 
     private PostAdapter postAdapter;
 
@@ -31,6 +34,7 @@ public class PostFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_post, container, false);
         ListView postListView = (ListView) rootView.findViewById(R.id.postListView);
+        postListView.setOnItemClickListener(this);
         postListView.setAdapter(postAdapter);
         return rootView;
     }
@@ -56,6 +60,16 @@ public class PostFragment extends Fragment {
                 }
             };
             getPostCommentsAsyncTask.executeOnExecutor(ThreadPools.METADATA_THREADPOOL, post);
+        }
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        PostComment postComment = this.postAdapter.getPostComment(position);
+        if (postComment != null) {
+            Intent profileIntent = new Intent(getActivity(), ProfileActivity.class);
+            profileIntent.putExtra("user", postComment.creator);
+            startActivity(profileIntent);
         }
     }
 }
