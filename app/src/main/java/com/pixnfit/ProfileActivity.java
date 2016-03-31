@@ -117,13 +117,13 @@ public class ProfileActivity extends AppCompatActivity {
 
         if (this.user == null) {
             this.getSupportActionBar().setTitle("User");
-            this.profileRankingTextView.setText("");
-            this.profilePicturesTextView.setText("");
-            this.profileFollowersTextView.setText("");
-            this.profileFollowingTextView.setText("");
+            this.profileRankingTextView.setText("0 pts");
+            this.profilePicturesTextView.setText("0");
+            this.profileFollowersTextView.setText("0");
+            this.profileFollowingTextView.setText("0");
         } else {
             this.getSupportActionBar().setTitle(user.username);
-            this.profileRankingTextView.setText(Integer.toString(user.points));
+            this.profileRankingTextView.setText(Integer.toString(user.points) + " pts");
             this.profilePicturesTextView.setText(Integer.toString(user.postCount));
             this.profileFollowersTextView.setText(Integer.toString(user.followersCount));
             this.profileFollowingTextView.setText(Integer.toString(user.followedCount));
