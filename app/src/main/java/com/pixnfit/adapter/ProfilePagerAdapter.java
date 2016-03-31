@@ -4,6 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.pixnfit.common.User;
 import com.pixnfit.fragment.ProfileAboutFragment;
 import com.pixnfit.fragment.ProfilePixFragment;
 
@@ -11,6 +12,8 @@ import com.pixnfit.fragment.ProfilePixFragment;
  * Created by fabier on 31/03/16.
  */
 public class ProfilePagerAdapter extends FragmentPagerAdapter {
+    private User user;
+
     public ProfilePagerAdapter(FragmentManager fm) {
         super(fm);
     }
@@ -42,5 +45,9 @@ public class ProfilePagerAdapter extends FragmentPagerAdapter {
             default:
                 return "???";
         }
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
