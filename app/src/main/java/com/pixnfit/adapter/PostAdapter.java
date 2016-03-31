@@ -128,7 +128,6 @@ public class PostAdapter extends BaseAdapter implements View.OnClickListener {
                     ImageButton postButtonShare = (ImageButton) view.findViewById(R.id.postButtonShare);
                     ImageButton postButtonHanger = (ImageButton) view.findViewById(R.id.postButtonHanger);
                     ImageButton postButtonMoreOptions = (ImageButton) view.findViewById(R.id.postButtonMoreOptions);
-                    TextView postTitleTextView = (TextView) view.findViewById(R.id.postTitleTextView);
                     TextView postAuthorTextView = (TextView) view.findViewById(R.id.postAuthorTextView);
                     TextView postTitleViewCountTextView = (TextView) view.findViewById(R.id.postTitleViewCountTextView);
 
@@ -144,8 +143,6 @@ public class PostAdapter extends BaseAdapter implements View.OnClickListener {
                     postHeaderHolder.postAuthorImageView = (ImageView) view.findViewById(R.id.postAuthorImageView);
 
                     if (post != null) {
-                        postTitleTextView.setText(post.name);
-
                         if (post.creator != null) {
                             postAuthorTextView.setText(post.creator.username);
                         } else {
@@ -182,7 +179,7 @@ public class PostAdapter extends BaseAdapter implements View.OnClickListener {
                 PostCommentHolder postCommentHolder;
                 if (convertView == null) {
                     LayoutInflater inflater = LayoutInflater.from(context);
-                    view = inflater.inflate(R.layout.item_postcomment, null);
+                    view = inflater.inflate(R.layout.item_post_comment, null);
                     postCommentHolder = new PostCommentHolder();
                     postCommentHolder.postCommentAuthorImageView = (ImageView) view.findViewById(R.id.postCommentAuthorImageView);
                     postCommentHolder.postCommentAuthorNameTextView = (TextView) view.findViewById(R.id.postCommentAuthorNameTextView);

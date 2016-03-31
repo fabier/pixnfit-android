@@ -123,20 +123,21 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
             android:orientation="vertical"
             android:paddingLeft="4dp"
             android:paddingRight="4dp">
 
-            <TextView
-                android:id="@+id/postTitleTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingLeft="4dp"
-                android:paddingRight="4dp"
-                android:textSize="18dp"
-                android:textColor="@color/black"
-                android:text="Post Title" />
+            <!--<TextView-->
+            <!--android:id="@+id/postTitleTextView"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:paddingLeft="4dp"-->
+            <!--android:paddingRight="4dp"-->
+            <!--android:textSize="18dp"-->
+            <!--android:textColor="@color/black"-->
+            <!--android:text="Post Title" />-->
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -165,8 +166,8 @@
                 android:layout_height="wrap_content"
                 android:paddingLeft="4dp"
                 android:paddingRight="4dp"
-                android:textColor="@color/grey"
-                android:text="250 views"/>
+                android:text="250 views"
+                android:textColor="@color/grey" />
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>
