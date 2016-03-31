@@ -121,7 +121,7 @@ public class PostAdapter extends BaseAdapter implements View.OnClickListener {
             case VIEWTYPE_POSTHEADER:
                 if (convertView == null) {
                     LayoutInflater inflater = LayoutInflater.from(context);
-                    view = inflater.inflate(R.layout.item_header_post, null);
+                    view = inflater.inflate(R.layout.item_post_header, null);
                     ImageView postImageView = (ImageView) view.findViewById(R.id.postImageView);
                     ImageButton postButtonComments = (ImageButton) view.findViewById(R.id.postButtonComments);
                     postButtonComments.setOnClickListener(this);
@@ -237,7 +237,7 @@ public class PostAdapter extends BaseAdapter implements View.OnClickListener {
 
     private void loadPostCommentAuthorImageView(PostComment postComment, PostCommentHolder postCommentHolder) {
         postCommentHolder.postCommentAuthorImageView.setTag(R.id.tagImageUrl, postComment.creator.image.imageUrl);
-        BitmapWorkerTask bitmapWorkerTask = new BitmapWorkerTask(postCommentHolder.postCommentAuthorImageView, 32, 32);
+        BitmapWorkerTask bitmapWorkerTask = new BitmapWorkerTask(postCommentHolder.postCommentAuthorImageView, 64, 64);
         bitmapWorkerTask.execute(postComment.creator.image.imageUrl);
     }
 

@@ -7,8 +7,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.util.LruCache;
 
-import com.pixnfit.PostFragment;
 import com.pixnfit.common.Post;
+import com.pixnfit.fragment.PostFragment;
 
 import java.util.List;
 
@@ -56,6 +56,24 @@ public class PostPagerAdapter extends FragmentPagerAdapter {
             this.posts = posts;
         } else {
             this.posts.addAll(0, posts);
+        }
+    }
+
+    @Override
+    public CharSequence getPageTitle(int position) {
+        Post post = getPost(position);
+        if (post != null) {
+            return post.name;
+        } else {
+            return "???";
+        }
+    }
+
+    Post getPost(int position) {
+        if (posts != null && position < posts.size()) {
+            return posts.get(position);
+        } else {
+            return null;
         }
     }
 }

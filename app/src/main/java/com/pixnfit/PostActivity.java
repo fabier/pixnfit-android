@@ -4,8 +4,10 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageButton;
 
@@ -20,7 +22,7 @@ import java.util.List;
 /**
  * Created by fabier on 27/02/16.
  */
-public class PostActivity extends FragmentActivity implements View.OnClickListener {
+public class PostActivity extends AppCompatActivity implements View.OnClickListener, ViewPager.OnPageChangeListener {
 
     private static final int REQUESTCODE_CREATE_POST = 1;
 
@@ -33,10 +35,14 @@ public class PostActivity extends FragmentActivity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         // Instantiate a ViewPager and a PagerAdapter.
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         Bitmap postImagePlaceholder = BitmapFactory.decodeResource(getResources(), R.drawable.camera_transparent);
         postPagerAdapter = new PostPagerAdapter(getSupportFragmentManager(), postImagePlaceholder);
+        viewPager.addOnPageChangeListener(this);
         viewPager.setAdapter(postPagerAdapter);
 
         Intent intent = getIntent();
@@ -58,8 +64,8 @@ public class PostActivity extends FragmentActivity implements View.OnClickListen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.cameraButtonBar:
-                Intent intent = new Intent(this, CreatePostActivity.class);
-                startActivityForResult(intent, REQUESTCODE_CREATE_POST);
+                Intent createPostIntent = new Intent(this, CreatePostActivity.class);
+                startActivityForResult(createPostIntent, REQUESTCODE_CREATE_POST);
                 break;
             default:
                 break;
@@ -85,5 +91,24 @@ public class PostActivity extends FragmentActivity implements View.OnClickListen
                     break;
             }
         }
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        CharSequence title = this.postPagerAdapter.getPageTitle(position);
+        ActionBar supportActionBar = getSupportActionBar();
+        if (supportActionBar != null) {
+            supportActionBar.setTitle(title);
+        }
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
     }
 }

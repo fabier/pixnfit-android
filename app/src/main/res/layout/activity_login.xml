@@ -28,13 +28,6 @@
             android:gravity="center"
             android:orientation="vertical">
 
-            <!--<TextView-->
-            <!--android:id="@+id/loginTextView"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="Login"-->
-            <!--android:textSize="24dp" />-->
-
             <EditText
                 android:id="@+id/loginEditText"
                 android:layout_width="300dp"
@@ -52,14 +45,6 @@
             android:layout_margin="10dp"
             android:gravity="center"
             android:orientation="vertical">
-
-            <!--<TextView-->
-            <!--android:id="@+id/passwordTextView"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginTop="10dp"-->
-            <!--android:text="Password"-->
-            <!--android:textSize="24dp" />-->
 
             <EditText
                 android:id="@+id/passwordEditText"

@@ -38,11 +38,14 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         ImageButton cameraButton = (ImageButton) findViewById(R.id.cameraButtonBar);
         cameraButton.setOnClickListener(this);
+        ImageButton profileButtonBar = (ImageButton) findViewById(R.id.profileButtonBar);
+        profileButtonBar.setOnClickListener(this);
 
         gridView = (GridView) findViewById(R.id.gridView);
         endlessScrollListener = new EndlessScrollListener(4) {
@@ -72,8 +75,12 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.cameraButtonBar:
-                Intent intent = new Intent(this, CreatePostActivity.class);
-                startActivityForResult(intent, REQUESTCODE_CREATE_POST);
+                Intent createPostIntent = new Intent(this, CreatePostActivity.class);
+                startActivityForResult(createPostIntent, REQUESTCODE_CREATE_POST);
+                break;
+            case R.id.profileButtonBar:
+                Intent profileIntent = new Intent(this, ProfileActivity.class);
+                startActivity(profileIntent);
                 break;
             default:
                 break;

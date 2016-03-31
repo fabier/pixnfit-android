@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.pixnfit.HomeActivity"
-    tools:showIn="@layout/app_bar_main">
+    tools:showIn="@layout/activity_home">
 
     <TextView
         android:id="@+id/textView"
@@ -26,9 +26,9 @@
         android:layout_below="@+id/textView"
         android:horizontalSpacing="5dp"
         android:numColumns="4"
+        android:padding="5dp"
         android:stretchMode="columnWidth"
         android:verticalSpacing="5dp">
-
     </GridView>
 
     <include
@@ -36,7 +36,6 @@
         layout="@layout/bottom_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentBottom="true" />
 
 </RelativeLayout>

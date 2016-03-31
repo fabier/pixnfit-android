@@ -1,4 +1,4 @@
-package com.pixnfit;
+package com.pixnfit.fragment;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.pixnfit.R;
 import com.pixnfit.adapter.PostAdapter;
 import com.pixnfit.common.Post;
 import com.pixnfit.common.PostComment;
