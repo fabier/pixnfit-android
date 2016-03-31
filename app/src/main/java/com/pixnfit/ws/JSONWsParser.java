@@ -2,7 +2,11 @@ package com.pixnfit.ws;
 
 import android.util.Log;
 
+import com.pixnfit.common.BodyType;
+import com.pixnfit.common.Country;
+import com.pixnfit.common.Gender;
 import com.pixnfit.common.Image;
+import com.pixnfit.common.Language;
 import com.pixnfit.common.Post;
 import com.pixnfit.common.PostComment;
 import com.pixnfit.common.PostMe;
@@ -86,6 +90,18 @@ public class JSONWsParser {
             user.id = json.getInt("id");
             user.username = json.getString("username");
             user.image = parseImage(json.optJSONObject("image"));
+            user.description = json.optString("description");
+            user.bodyType = parseBodyType(json.optJSONObject("bodyType"));
+            user.gender = parseGender(json.optJSONObject("gender"));
+            user.birthdate = parseDate(json.optString("birthdate"));
+            user.height = json.optInt("height");
+            user.weight = json.optInt("weight");
+            user.country = parseCountry(json.optJSONObject("country"));
+            user.language = parseLanguage(json.optJSONObject("language"));
+            user.points = json.optInt("points");
+            user.postCount = json.optInt("postCount");
+            user.followersCount = json.optInt("followersCount");
+            user.followedCount = json.optInt("followedCount");
             return user;
         }
     }
@@ -111,39 +127,6 @@ public class JSONWsParser {
             image.id = json.getInt("id");
             image.imageUrl = json.getString("imageUrl");
             return image;
-        }
-    }
-
-    public static PostType parsePostType(JSONObject json) throws JSONException {
-        if (json == null) {
-            return null;
-        } else {
-            PostType postType = new PostType();
-            postType.id = json.getInt("id");
-            postType.name = json.getString("name");
-            return postType;
-        }
-    }
-
-    public static Visibility parseVisibility(JSONObject json) throws JSONException {
-        if (json == null) {
-            return null;
-        } else {
-            Visibility visibility = new Visibility();
-            visibility.id = json.getInt("id");
-            visibility.name = json.getString("name");
-            return visibility;
-        }
-    }
-
-    public static State parseState(JSONObject json) throws JSONException {
-        if (json == null) {
-            return null;
-        } else {
-            State state = new State();
-            state.id = json.getInt("id");
-            state.name = json.getString("name");
-            return state;
         }
     }
 
@@ -225,6 +208,88 @@ public class JSONWsParser {
                 posts.add(post);
             }
             return posts;
+        }
+    }
+
+
+    // #####################
+    // # SIMPLE DATA TYPES #
+    // #####################
+
+    public static PostType parsePostType(JSONObject json) throws JSONException {
+        if (json == null) {
+            return null;
+        } else {
+            PostType postType = new PostType();
+            postType.id = json.getInt("id");
+            postType.name = json.getString("name");
+            return postType;
+        }
+    }
+
+    public static Visibility parseVisibility(JSONObject json) throws JSONException {
+        if (json == null) {
+            return null;
+        } else {
+            Visibility visibility = new Visibility();
+            visibility.id = json.getInt("id");
+            visibility.name = json.getString("name");
+            return visibility;
+        }
+    }
+
+    public static BodyType parseBodyType(JSONObject json) throws JSONException {
+        if (json == null) {
+            return null;
+        } else {
+            BodyType bodyType = new BodyType();
+            bodyType.id = json.getInt("id");
+            bodyType.name = json.getString("name");
+            return bodyType;
+        }
+    }
+
+    public static Language parseLanguage(JSONObject json) throws JSONException {
+        if (json == null) {
+            return null;
+        } else {
+            Language language = new Language();
+            language.id = json.getInt("id");
+            language.name = json.getString("name");
+            return language;
+        }
+    }
+
+    public static Gender parseGender(JSONObject json) throws JSONException {
+        if (json == null) {
+            return null;
+        } else {
+            Gender gender = new Gender();
+            gender.id = json.getInt("id");
+            gender.name = json.getString("name");
+            return gender;
+        }
+    }
+
+    public static Country parseCountry(JSONObject json) throws JSONException {
+        if (json == null) {
+            return null;
+        } else {
+            Country country = new Country();
+            country.id = json.getInt("id");
+            country.name = json.getString("name");
+            return country;
+        }
+    }
+
+    public static State parseState(JSONObject json) throws JSONException {
+        if (json == null) {
+            return null;
+        } else {
+            State state = new State();
+            state.id = json.getInt("id");
+            state.name = json.getString("name");
+            return state;
         }
     }
 }
