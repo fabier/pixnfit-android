@@ -12,19 +12,23 @@ import com.pixnfit.fragment.ProfilePixFragment;
  * Created by fabier on 31/03/16.
  */
 public class ProfilePagerAdapter extends FragmentPagerAdapter {
+    private final ProfileAboutFragment profileAboutFragment;
+    private final ProfilePixFragment profilePixFragment;
     private User user;
 
     public ProfilePagerAdapter(FragmentManager fm) {
         super(fm);
+        this.profileAboutFragment = new ProfileAboutFragment();
+        this.profilePixFragment = new ProfilePixFragment();
     }
 
     @Override
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return new ProfileAboutFragment();
+                return profileAboutFragment;
             case 1:
-                return new ProfilePixFragment();
+                return profilePixFragment;
             default:
                 return null;
         }
@@ -49,5 +53,7 @@ public class ProfilePagerAdapter extends FragmentPagerAdapter {
 
     public void setUser(User user) {
         this.user = user;
+        profileAboutFragment.setUser(user);
+        profilePixFragment.setUser(user);
     }
 }

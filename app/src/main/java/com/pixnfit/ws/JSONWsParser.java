@@ -43,8 +43,8 @@ public class JSONWsParser {
         } else {
             Post post = new Post();
             post.id = json.getInt("id");
-            post.name = json.getString("name");
-            post.description = json.optString("description");
+            post.name = parseString(json.getString("name"));
+            post.description = parseString(json.optString("description"));
             post.creator = parseUser(json.optJSONObject("creator"));
             post.images = parseImageList(json.optJSONArray("images"));
             post.postType = parsePostType(json.optJSONObject("postType"));
@@ -52,6 +52,14 @@ public class JSONWsParser {
             post.state = parseState(json.optJSONObject("state"));
             post.dateCreated = parseDate(json.optString("dateCreated"));
             return post;
+        }
+    }
+
+    public static String parseString(String string) {
+        if ("null".equals(string)) {
+            return null;
+        } else {
+            return string;
         }
     }
 
@@ -89,9 +97,9 @@ public class JSONWsParser {
         } else {
             User user = new User();
             user.id = json.getInt("id");
-            user.username = json.getString("username");
+            user.username = parseString(json.getString("username"));
             user.image = parseImage(json.optJSONObject("image"));
-            user.description = json.optString("description");
+            user.description = parseString(json.optString("description"));
             user.bodyType = parseBodyType(json.optJSONObject("bodyType"));
             user.gender = parseGender(json.optJSONObject("gender"));
             user.birthdate = parseDate(json.optString("birthdate"));
@@ -127,7 +135,7 @@ public class JSONWsParser {
         } else {
             Image image = new Image();
             image.id = json.getInt("id");
-            image.imageUrl = json.getString("imageUrl");
+            image.imageUrl = parseString(json.getString("imageUrl"));
             return image;
         }
     }
@@ -138,8 +146,8 @@ public class JSONWsParser {
         } else {
             PostComment postComment = new PostComment();
             postComment.id = json.getInt("id");
-            postComment.name = json.getString("name");
-            postComment.description = json.getString("description");
+            postComment.name = parseString(json.getString("name"));
+            postComment.description = parseString(json.getString("description"));
             postComment.post = parsePost(json.getJSONObject("post"));
             postComment.creator = parseUser(json.getJSONObject("creator"));
             postComment.dateCreated = parseDate(json.getString("dateCreated"));
@@ -182,7 +190,7 @@ public class JSONWsParser {
         } else {
             VoteReason voteReason = new VoteReason();
             voteReason.id = json.getLong("id");
-            voteReason.name = json.getString("name");
+            voteReason.name = parseString(json.getString("name"));
             return voteReason;
         }
     }
@@ -224,7 +232,7 @@ public class JSONWsParser {
         } else {
             PostType postType = new PostType();
             postType.id = json.getInt("id");
-            postType.name = json.getString("name");
+            postType.name = parseString(json.getString("name"));
             return postType;
         }
     }
@@ -235,7 +243,7 @@ public class JSONWsParser {
         } else {
             Visibility visibility = new Visibility();
             visibility.id = json.getInt("id");
-            visibility.name = json.getString("name");
+            visibility.name = parseString(json.getString("name"));
             return visibility;
         }
     }
@@ -246,7 +254,7 @@ public class JSONWsParser {
         } else {
             BodyType bodyType = new BodyType();
             bodyType.id = json.getInt("id");
-            bodyType.name = json.getString("name");
+            bodyType.name = parseString(json.getString("name"));
             return bodyType;
         }
     }
@@ -257,7 +265,7 @@ public class JSONWsParser {
         } else {
             Language language = new Language();
             language.id = json.getInt("id");
-            language.name = json.getString("name");
+            language.name = parseString(json.getString("name"));
             return language;
         }
     }
@@ -268,7 +276,7 @@ public class JSONWsParser {
         } else {
             Gender gender = new Gender();
             gender.id = json.getInt("id");
-            gender.name = json.getString("name");
+            gender.name = parseString(json.getString("name"));
             return gender;
         }
     }
@@ -279,7 +287,7 @@ public class JSONWsParser {
         } else {
             Country country = new Country();
             country.id = json.getInt("id");
-            country.name = json.getString("name");
+            country.name = parseString(json.getString("name"));
             return country;
         }
     }
@@ -290,7 +298,7 @@ public class JSONWsParser {
         } else {
             State state = new State();
             state.id = json.getInt("id");
-            state.name = json.getString("name");
+            state.name = parseString(json.getString("name"));
             return state;
         }
     }
@@ -301,7 +309,7 @@ public class JSONWsParser {
         } else {
             FashionStyle fashionStyle = new FashionStyle();
             fashionStyle.id = json.getInt("id");
-            fashionStyle.name = json.getString("name");
+            fashionStyle.name = parseString(json.getString("name"));
             return fashionStyle;
         }
     }

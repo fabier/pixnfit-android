@@ -1,5 +1,6 @@
 package com.pixnfit.fragment;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,8 @@ import android.widget.TextView;
 import com.pixnfit.R;
 import com.pixnfit.common.FashionStyle;
 import com.pixnfit.common.User;
+
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Created by fabier on 31/03/16.
@@ -37,23 +40,42 @@ public class ProfileAboutFragment extends Fragment {
         updateView();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateView();
+    }
+
     private void updateView() {
         if (user == null) {
-            profileAboutDescriptionTextView.setText("");
-            profileAboutCountryTextView.setText("");
-            profileAboutStylesTextView.setText("");
+            profileAboutDescriptionTextView.setTypeface(null, Typeface.ITALIC);
+            profileAboutDescriptionTextView.setText("This user hasn't a description yet");
+            profileAboutCountryTextView.setTypeface(null, Typeface.ITALIC);
+            profileAboutCountryTextView.setText("No country selected yet");
+            profileAboutStylesTextView.setTypeface(null, Typeface.ITALIC);
+            profileAboutStylesTextView.setText("No styles selected yet");
         } else {
-            profileAboutDescriptionTextView.setText(user.description);
+            if (StringUtils.isBlank(user.description)) {
+                profileAboutDescriptionTextView.setTypeface(null, Typeface.ITALIC);
+                profileAboutDescriptionTextView.setText("This user hasn't a description yet");
+            } else {
+                profileAboutDescriptionTextView.setTypeface(null, Typeface.NORMAL);
+                profileAboutDescriptionTextView.setText(user.description);
+            }
 
             if (user.country == null) {
-                profileAboutCountryTextView.setText("UNKNOWN");
+                profileAboutCountryTextView.setTypeface(null, Typeface.ITALIC);
+                profileAboutCountryTextView.setText("No country selected yet");
             } else {
+                profileAboutCountryTextView.setTypeface(null, Typeface.NORMAL);
                 profileAboutCountryTextView.setText(user.country.name);
             }
 
             if (user.fashionStyles == null) {
-                profileAboutStylesTextView.setText("UNKNOWN");
+                profileAboutStylesTextView.setTypeface(null, Typeface.ITALIC);
+                profileAboutStylesTextView.setText("No styles selected yet");
             } else {
+                profileAboutStylesTextView.setTypeface(null, Typeface.NORMAL);
                 StringBuilder sb = new StringBuilder();
                 for (FashionStyle fashionStyle : user.fashionStyles) {
                     sb.append(fashionStyle.name);
