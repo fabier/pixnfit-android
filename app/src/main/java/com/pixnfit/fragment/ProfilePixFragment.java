@@ -8,16 +8,24 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.pixnfit.R;
+import com.pixnfit.common.User;
 
 /**
  * Created by fabier on 31/03/16.
  */
 public class ProfilePixFragment extends Fragment {
 
+    private User user;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_profile_pix, container, false);
         return rootView;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+        updateView();
     }
 }

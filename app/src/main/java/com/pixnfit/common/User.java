@@ -1,6 +1,7 @@
 package com.pixnfit.common;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by fabier on 16/02/16.
@@ -16,6 +17,7 @@ public class User extends BaseEntity {
     public Integer weight;
     public Country country;
     public Language language;
+    public List<FashionStyle> fashionStyles;
     public Integer points;
     public Integer postCount;
     public Integer followersCount;

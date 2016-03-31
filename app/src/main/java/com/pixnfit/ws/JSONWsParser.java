@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.pixnfit.common.BodyType;
 import com.pixnfit.common.Country;
+import com.pixnfit.common.FashionStyle;
 import com.pixnfit.common.Gender;
 import com.pixnfit.common.Image;
 import com.pixnfit.common.Language;
@@ -98,6 +99,7 @@ public class JSONWsParser {
             user.weight = json.optInt("weight");
             user.country = parseCountry(json.optJSONObject("country"));
             user.language = parseLanguage(json.optJSONObject("language"));
+            user.fashionStyles = parseFashionStyleList(json.optJSONArray("fashionStyles"));
             user.points = json.optInt("points");
             user.postCount = json.optInt("postCount");
             user.followersCount = json.optInt("followersCount");
@@ -290,6 +292,30 @@ public class JSONWsParser {
             state.id = json.getInt("id");
             state.name = json.getString("name");
             return state;
+        }
+    }
+
+    public static FashionStyle parseFashionStyle(JSONObject json) throws JSONException {
+        if (json == null) {
+            return null;
+        } else {
+            FashionStyle fashionStyle = new FashionStyle();
+            fashionStyle.id = json.getInt("id");
+            fashionStyle.name = json.getString("name");
+            return fashionStyle;
+        }
+    }
+
+    public static List<FashionStyle> parseFashionStyleList(JSONArray array) throws JSONException {
+        if (array == null) {
+            return null;
+        } else {
+            List<FashionStyle> fashionStyles = new ArrayList<>();
+            for (int i = 0; i < array.length(); i++) {
+                FashionStyle fashionStyle = JSONWsParser.parseFashionStyle(array.getJSONObject(i));
+                fashionStyles.add(fashionStyle);
+            }
+            return fashionStyles;
         }
     }
 }

@@ -113,4 +113,7 @@
     </string>
     <string name="title_activity_grid">GridActivity</string>
     <string name="theyneedyourhelp">They need your help !</string>
+    <string name="lorem">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam convallis viverra elit, sed ultrices lectus scelerisque eu. Pellentesque hendrerit elementum est, non sollicitudin augue pellentesque vel. Sed nec eros in diam bibendum blandit. Vestibulum diam augue, gravida vel commodo vitae, auctor ut erat. Nullam sit amet dignissim lorem. Morbi blandit pulvinar purus in hendrerit. Nulla imperdiet id lectus at pellentesque.
+    </string>
 </resources>
