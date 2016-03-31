@@ -2,6 +2,7 @@ package com.pixnfit.adapter;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.support.design.widget.FloatingActionButton;
@@ -17,6 +18,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.pixnfit.ProfileActivity;
 import com.pixnfit.R;
 import com.pixnfit.async.AsyncDrawable;
 import com.pixnfit.async.BitmapWorkerTask;
@@ -128,6 +130,9 @@ public class PostAdapter extends BaseAdapter implements View.OnClickListener {
                     ImageButton postButtonShare = (ImageButton) view.findViewById(R.id.postButtonShare);
                     ImageButton postButtonHanger = (ImageButton) view.findViewById(R.id.postButtonHanger);
                     ImageButton postButtonMoreOptions = (ImageButton) view.findViewById(R.id.postButtonMoreOptions);
+
+                    View authorLayout = view.findViewById(R.id.postTitleLayout);
+                    authorLayout.setOnClickListener(this);
                     TextView postAuthorTextView = (TextView) view.findViewById(R.id.postAuthorTextView);
                     TextView postTitleViewCountTextView = (TextView) view.findViewById(R.id.postTitleViewCountTextView);
 
@@ -361,6 +366,14 @@ public class PostAdapter extends BaseAdapter implements View.OnClickListener {
                 break;
             case R.id.postButtonComments:
                 displayInputCommentDialog(v);
+                break;
+            case R.id.postTitleLayout:
+                Post post = getPost();
+                if (post != null && post.creator != null) {
+                    Intent profileIntent = new Intent(getContext(), ProfileActivity.class);
+                    profileIntent.putExtra("user", post.creator);
+                    getContext().startActivity(profileIntent);
+                }
                 break;
             default:
                 break;
