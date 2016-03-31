@@ -218,6 +218,7 @@ public class PostAdapter extends BaseAdapter implements View.OnClickListener {
         GetPostMeAsyncTask getPostMeAsyncTask = new GetPostMeAsyncTask(context) {
             @Override
             protected void onPostExecute(PostMe postMe) {
+                super.onPostExecute(postMe);
                 if (!isCancelled() && postMe != null) {
                     if (postMe.vote != null) {
                         setHasVoted(postMe.vote.vote, postHeaderHolder);
@@ -384,9 +385,11 @@ public class PostAdapter extends BaseAdapter implements View.OnClickListener {
                     @Override
                     protected void onPostExecute(PostComment postComment) {
                         super.onPostExecute(postComment);
-                        addFirstToPostComments(postComment);
-                        notifyDataSetChanged();
-                        Snackbar.make(view, "Comment posted !", Snackbar.LENGTH_LONG).show();
+                        if (!isCancelled()) {
+                            addFirstToPostComments(postComment);
+                            notifyDataSetChanged();
+                            Snackbar.make(view, "Comment posted !", Snackbar.LENGTH_LONG).show();
+                        }
                     }
                 }.execute(
                         input.getText().toString()

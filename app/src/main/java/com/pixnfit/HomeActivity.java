@@ -146,6 +146,7 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
         GetPostAsyncTask getPostAsyncTask = new GetPostAsyncTask(this) {
             @Override
             protected void onPostExecute(List<Post> posts) {
+                super.onPostExecute(posts);
                 if (!isCancelled()) {
                     isLoading = CollectionUtils.isNotEmpty(posts);
                     if (ListUtils.isEqualList(posts, postListAdapter.getPosts())) {

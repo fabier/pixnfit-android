@@ -57,6 +57,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                 AuthenticateAsyncTask authenticateAsyncTask = new AuthenticateAsyncTask(this, login, password) {
                     @Override
                     protected void onPostExecute(JSONObject result) {
+                        super.onPostExecute(result);
                         if (!isCancelled() && result != null) {
                             // Store credentials for next launch
                             SharedPreferences.Editor editor = sharedPreferences.edit();

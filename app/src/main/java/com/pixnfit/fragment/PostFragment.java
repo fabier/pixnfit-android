@@ -48,6 +48,7 @@ public class PostFragment extends Fragment {
             GetPostCommentsAsyncTask getPostCommentsAsyncTask = new GetPostCommentsAsyncTask(getActivity()) {
                 @Override
                 protected void onPostExecute(List<PostComment> postComments) {
+                    super.onPostExecute(postComments);
                     if (!isCancelled()) {
                         postAdapter.setPostComments(postComments);
                         postAdapter.notifyDataSetChanged();

@@ -88,6 +88,7 @@ public class BitmapWorkerTask extends AsyncTask<String, Void, Bitmap> {
     // Once complete, see if ImageView is still around and set bitmap.
     @Override
     protected void onPostExecute(Bitmap bitmap) {
+        super.onPostExecute(bitmap);
         if (!isCancelled() && bitmap != null) {
             final ImageView imageView = imageViewReference.get();
             if (imageView != null) {
