@@ -58,7 +58,7 @@ public class JSONWsParser {
      * http://stackoverflow.com/questions/4032967/json-date-to-java-date
      */
     public static Date parseDate(String date) {
-        if (StringUtils.isBlank(date)) {
+        if (StringUtils.isBlank(date) || "null".equals(date)) {
             return null;
         } else {
             // NOTE: SimpleDateFormat uses GMT[-+]hh:mm for the TZ which breaks
