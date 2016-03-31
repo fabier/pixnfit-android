@@ -34,7 +34,7 @@
             android:textSize="12dp" />
 
         <TextView
-            android:id="@+id/profileRankingValue"
+            android:id="@+id/profileRankingTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="4dp"
@@ -61,7 +61,7 @@
             android:textSize="12dp" />
 
         <TextView
-            android:id="@+id/profilePicturesValue"
+            android:id="@+id/profilePicturesTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="4dp"
@@ -88,7 +88,7 @@
             android:textSize="12dp" />
 
         <TextView
-            android:id="@+id/profileFollowersValue"
+            android:id="@+id/profileFollowersTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="4dp"
@@ -115,7 +115,7 @@
             android:textSize="12dp" />
 
         <TextView
-            android:id="@+id/profileFollowingValue"
+            android:id="@+id/profileFollowingTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="4dp"
