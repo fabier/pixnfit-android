@@ -24,7 +24,7 @@ public class GetMeAsyncTask extends WsAsyncTask<Void, User, User> {
 
     @Override
     protected User doInBackground(Void... params) {
-        String url = "/users/me";
+        String url = "/me";
         try {
             HttpURLConnection httpURLConnection = initConnection(url);
             httpURLConnection.connect();
