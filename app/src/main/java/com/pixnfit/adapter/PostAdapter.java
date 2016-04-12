@@ -123,7 +123,7 @@ public class PostAdapter extends BaseAdapter implements View.OnClickListener {
             case VIEWTYPE_POSTHEADER:
                 if (convertView == null) {
                     LayoutInflater inflater = LayoutInflater.from(context);
-                    view = inflater.inflate(R.layout.item_post_header, null);
+                    view = inflater.inflate(R.layout.list_item_post_header, null);
                     ImageView postImageView = (ImageView) view.findViewById(R.id.postImageView);
                     ImageButton postButtonComments = (ImageButton) view.findViewById(R.id.postButtonComments);
                     postButtonComments.setOnClickListener(this);
@@ -184,7 +184,7 @@ public class PostAdapter extends BaseAdapter implements View.OnClickListener {
                 PostCommentHolder postCommentHolder;
                 if (convertView == null) {
                     LayoutInflater inflater = LayoutInflater.from(context);
-                    view = inflater.inflate(R.layout.item_post_comment, null);
+                    view = inflater.inflate(R.layout.list_item_post_comment, null);
                     postCommentHolder = new PostCommentHolder();
                     postCommentHolder.postCommentAuthorImageView = (ImageView) view.findViewById(R.id.postCommentAuthorImageView);
                     postCommentHolder.postCommentAuthorNameTextView = (TextView) view.findViewById(R.id.postCommentAuthorNameTextView);
