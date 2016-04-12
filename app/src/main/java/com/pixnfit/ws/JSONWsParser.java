@@ -221,6 +221,19 @@ public class JSONWsParser {
         }
     }
 
+    public static List<User> parseUserList(JSONArray array) throws JSONException {
+        if (array == null) {
+            return null;
+        } else {
+            List<User> users = new ArrayList<>();
+            for (int i = 0; i < array.length(); i++) {
+                User user = JSONWsParser.parseUser(array.getJSONObject(i));
+                users.add(user);
+            }
+            return users;
+        }
+    }
+
 
     // #####################
     // # SIMPLE DATA TYPES #

@@ -6,7 +6,7 @@ package com.pixnfit.ws;
 public interface WsConstants {
 
     // Switch permettant de configurer pour la prod ou pour le dev local
-    boolean DEV_MODE = false;
+    boolean DEV_MODE = true;
     boolean AT_HOME = true;
     String LASERRE = "192.168.78.204";
     String HOME = "192.168.1.128";

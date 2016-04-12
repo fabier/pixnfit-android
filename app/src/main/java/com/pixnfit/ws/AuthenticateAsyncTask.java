@@ -1,20 +1,19 @@
 package com.pixnfit.ws;
 
 import android.content.Context;
-import android.util.Log;
+
+import com.pixnfit.ws.tasks.WsPostAsyncTask;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
+import javax.net.ssl.HttpsURLConnection;
 
 /**
  * Created by fabier on 16/02/16.
  */
-public class AuthenticateAsyncTask extends WsAsyncTask<Void, Void, JSONObject> {
+public class AuthenticateAsyncTask extends WsPostAsyncTask<Void, Void, JSONObject> {
 
-    private static final String TAG = AuthenticateAsyncTask.class.getSimpleName();
     private String login;
     private String password;
 
@@ -35,31 +34,22 @@ public class AuthenticateAsyncTask extends WsAsyncTask<Void, Void, JSONObject> {
     }
 
     @Override
-    protected JSONObject doInBackground(Void... params) {
-        String url = "/auth";
-        try {
-            HttpURLConnection httpURLConnection = initConnection(url, "POST");
-            httpURLConnection.connect();
+    protected String getUrl(Void... params) {
+        return "/auth";
+    }
 
-            int responseCode = httpURLConnection.getResponseCode();
-            if (responseCode == 200) {
-                // Authentication successful
-                Log.i(TAG, "POST " + url + ": success, HTTP " + responseCode);
-                String dataAsJSON = readConnection(httpURLConnection);
-                return new JSONObject(dataAsJSON);
-            } else {
-                // Error
-                Log.e(TAG, "POST " + url + ": failed, error HTTP " + responseCode);
-                return null;
-            }
-        } catch (IOException e) {
-            // writing exception to log
-            Log.e(TAG, "POST " + url + ": IOException", e);
-            return null;
-        } catch (JSONException e) {
-            Log.e(TAG, "POST " + url + ": JSONException", e);
-            return null;
-        }
+    @Override
+    protected int getExpectedHTTPResponseCode() {
+        return HttpsURLConnection.HTTP_OK;
+    }
+
+    @Override
+    protected JSONObject toResult(String dataAsJSON) throws JSONException {
+        return new JSONObject(dataAsJSON);
+    }
+
+    @Override
+    protected void writeToHTTP(JSONObject jsonObject, Void... params) throws JSONException {
     }
 }
 

@@ -2,7 +2,6 @@ package com.pixnfit.ws;
 
 import android.content.Context;
 
-import com.pixnfit.common.Post;
 import com.pixnfit.common.User;
 import com.pixnfit.ws.tasks.WsGetAsyncTask;
 
@@ -15,21 +14,21 @@ import java.util.Locale;
 /**
  * Created by fabier on 16/02/16.
  */
-public class GetUserPostAsyncTask extends WsGetAsyncTask<User, Post, List<Post>> {
+public class GetUserFollowingAsyncTask extends WsGetAsyncTask<User, User, List<User>> {
 
-    public GetUserPostAsyncTask(Context context) {
+    public GetUserFollowingAsyncTask(Context context) {
         super(context);
     }
 
     @Override
     protected String getUrl(User... params) {
         User user = params[0];
-        return String.format(Locale.ENGLISH, "/users/%d/posts", user.id);
+        return String.format(Locale.ENGLISH, "/users/%d/followedUsers", user.id);
     }
 
     @Override
-    protected List<Post> toResult(String dataAsJSON) throws JSONException {
+    protected List<User> toResult(String dataAsJSON) throws JSONException {
         JSONArray array = new JSONArray(dataAsJSON);
-        return JSONWsParser.parsePostList(array);
+        return JSONWsParser.parseUserList(array);
     }
 }

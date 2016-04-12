@@ -1,20 +1,19 @@
 package com.pixnfit.ws;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.pixnfit.common.Post;
+import com.pixnfit.ws.tasks.WsPostAsyncTask;
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Locale;
 
 /**
  * Created by fabier on 19/02/16.
  */
-public class AddPostToFavoriteAsyncTask extends WsAsyncTask<Void, Void, Boolean> {
-
-    private static final String TAG = AddPostToFavoriteAsyncTask.class.getSimpleName();
+public class AddPostToFavoriteAsyncTask extends WsPostAsyncTask<Void, Void, Boolean> {
 
     private Post post;
 
@@ -24,26 +23,16 @@ public class AddPostToFavoriteAsyncTask extends WsAsyncTask<Void, Void, Boolean>
     }
 
     @Override
-    protected Boolean doInBackground(Void... params) {
-        String url = String.format(Locale.ENGLISH, "/posts/%d/favorite", post.id);
-        try {
-            HttpURLConnection connection = initConnection(url, "POST");
-            connection.connect();
+    protected String getUrl(Void... params) {
+        return String.format(Locale.ENGLISH, "/posts/%d/favorite", post.id);
+    }
 
-            int responseCode = connection.getResponseCode();
-            if (responseCode == 201) {
-                // OK
-                Log.i(TAG, "POST " + url + ": success, HTTP " + responseCode);
-                return true;
-            } else {
-                // Error
-                Log.e(TAG, "POST " + url + ": failed, error HTTP " + responseCode);
-                return false;
-            }
-        } catch (IOException e) {
-            // writing exception to log
-            Log.e(TAG, "POST " + url + ": IOException", e);
-            return false;
-        }
+    @Override
+    protected Boolean toResult(String dataAsJSON) throws JSONException {
+        return dataAsJSON != null;
+    }
+
+    @Override
+    protected void writeToHTTP(JSONObject jsonObject, Void... params) {
     }
 }
