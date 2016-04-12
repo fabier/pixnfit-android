@@ -10,11 +10,10 @@ import android.view.ViewGroup;
 import android.widget.GridView;
 
 import com.pixnfit.R;
-import com.pixnfit.adapter.PostListAdapter;
-import com.pixnfit.common.Post;
+import com.pixnfit.adapter.UserListAdapter;
 import com.pixnfit.common.User;
 import com.pixnfit.utils.ThreadPools;
-import com.pixnfit.ws.GetUserPostAsyncTask;
+import com.pixnfit.ws.GetUserFollowersAsyncTask;
 
 import org.apache.commons.collections4.ListUtils;
 
@@ -23,11 +22,11 @@ import java.util.List;
 /**
  * Created by fabier on 31/03/16.
  */
-public class ProfilePixFragment extends Fragment {
+public class ProfileFollowersFragment extends Fragment {
 
     private User user;
     private GridView gridView;
-    private PostListAdapter postListAdapter;
+    private UserListAdapter userListAdapter;
 
     @Nullable
     @Override
@@ -35,26 +34,26 @@ public class ProfilePixFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_profile_pix, container, false);
 
         gridView = (GridView) rootView.findViewById(R.id.gridView);
-        postListAdapter = new PostListAdapter(getActivity());
-        postListAdapter.setPostImagePlaceHolder(BitmapFactory.decodeResource(getResources(), R.drawable.camera_transparent));
-        gridView.setAdapter(postListAdapter);
+        userListAdapter = new UserListAdapter(getActivity());
+        userListAdapter.setUserImagePlaceHolder(BitmapFactory.decodeResource(getResources(), R.drawable.profile));
+        gridView.setAdapter(userListAdapter);
 
         return rootView;
     }
 
-    private void refreshPosts() {
-        if (postListAdapter != null) {
-            postListAdapter.setPosts(null);
-            GetUserPostAsyncTask getUserPostAsyncTask = new GetUserPostAsyncTask(getActivity()) {
+    private void refreshFollowers() {
+        if (userListAdapter != null) {
+            userListAdapter.setUsers(null);
+            GetUserFollowersAsyncTask getUserPostAsyncTask = new GetUserFollowersAsyncTask(getActivity()) {
                 @Override
-                protected void onPostExecute(List<Post> posts) {
-                    super.onPostExecute(posts);
+                protected void onPostExecute(List<User> users) {
+                    super.onPostExecute(users);
                     if (!isCancelled()) {
-                        if (ListUtils.isEqualList(posts, postListAdapter.getPosts())) {
+                        if (ListUtils.isEqualList(users, userListAdapter.getUsers())) {
                             // Les deux listes sont identiques, on ne change pas la valeur
                         } else {
-                            postListAdapter.addPostsUnique(posts);
-                            postListAdapter.notifyDataSetChanged();
+                            userListAdapter.addUsersUnique(users);
+                            userListAdapter.notifyDataSetChanged();
                         }
                     }
                 }
@@ -77,7 +76,7 @@ public class ProfilePixFragment extends Fragment {
     private void updateView() {
         if (user == null) {
         } else {
-            refreshPosts();
+            refreshFollowers();
         }
     }
 

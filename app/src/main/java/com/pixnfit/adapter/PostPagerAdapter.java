@@ -10,6 +10,7 @@ import android.util.LruCache;
 import com.pixnfit.common.Post;
 import com.pixnfit.fragment.PostFragment;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -49,6 +50,11 @@ public class PostPagerAdapter extends FragmentPagerAdapter {
     @Override
     public int getCount() {
         return this.posts == null ? 0 : this.posts.size();
+    }
+
+
+    public void addFirstToPosts(Post post) {
+        addFirstToPosts(Collections.singletonList(post));
     }
 
     public void addFirstToPosts(List<Post> posts) {

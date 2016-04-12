@@ -15,8 +15,6 @@ import com.pixnfit.adapter.PostPagerAdapter;
 import com.pixnfit.common.Post;
 import com.pixnfit.common.User;
 
-import org.apache.commons.collections4.CollectionUtils;
-
 import java.util.List;
 
 /**
@@ -80,10 +78,10 @@ public class PostActivity extends AppCompatActivity implements View.OnClickListe
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case REQUESTCODE_CREATE_POST:
-                    List<Post> posts = (List<Post>) data.getSerializableExtra("posts");
-                    if (CollectionUtils.isNotEmpty(posts)) {
+                    Post post = (Post) data.getSerializableExtra("post");
+                    if (post != null) {
                         // ...et on ajoute le post nouvellement créé
-                        postPagerAdapter.addFirstToPosts(posts);
+                        postPagerAdapter.addFirstToPosts(post);
                         postPagerAdapter.notifyDataSetChanged();
                         // ... on affiche ce post en plein écran
                         viewPager.setCurrentItem(0);

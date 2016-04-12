@@ -53,10 +53,12 @@ public class ProfileActivity extends AppCompatActivity {
         profileViewPager.setAdapter(profilePagerAdapter);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        tabLayout.addTab(tabLayout.newTab().setText("ABOUT"));
-        tabLayout.addTab(tabLayout.newTab().setText("PIX"));
+
+        for (int index = 0; index < profilePagerAdapter.getCount(); index++) {
+            tabLayout.addTab(tabLayout.newTab().setText(profilePagerAdapter.getPageTitle(index)));
+        }
         tabLayout.setTabGravity(TabLayout.GRAVITY_CENTER);
-        tabLayout.setTabMode(TabLayout.MODE_FIXED);
+        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
 
         profileViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
