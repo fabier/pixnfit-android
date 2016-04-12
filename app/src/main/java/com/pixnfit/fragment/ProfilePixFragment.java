@@ -16,7 +16,7 @@ import com.pixnfit.adapter.PostListAdapter;
 import com.pixnfit.common.Post;
 import com.pixnfit.common.User;
 import com.pixnfit.utils.ThreadPools;
-import com.pixnfit.ws.GetUserPostAsyncTask;
+import com.pixnfit.ws.GetUserHelpPostAsyncTask;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.ListUtils;
@@ -66,7 +66,7 @@ public class ProfilePixFragment extends Fragment {
             pleaseWaitLayout.setVisibility(View.VISIBLE);
             noResultsLayout.setVisibility(View.GONE);
 
-            GetUserPostAsyncTask getUserPostAsyncTask = new GetUserPostAsyncTask(getActivity()) {
+            GetUserHelpPostAsyncTask getUserHelpPostAsyncTask = new GetUserHelpPostAsyncTask(getActivity()) {
                 @Override
                 protected void onPostExecute(List<Post> posts) {
                     super.onPostExecute(posts);
@@ -95,7 +95,7 @@ public class ProfilePixFragment extends Fragment {
                     }
                 }
             };
-            getUserPostAsyncTask.executeOnExecutor(ThreadPools.POST_THREADPOOL, getUser());
+            getUserHelpPostAsyncTask.executeOnExecutor(ThreadPools.POST_THREADPOOL, getUser());
         }
     }
 
