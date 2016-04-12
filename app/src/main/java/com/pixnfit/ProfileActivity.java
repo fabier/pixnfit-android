@@ -77,11 +77,7 @@ public class ProfileActivity extends AppCompatActivity {
 
             }
         });
-    }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
         User user = (User) getIntent().getSerializableExtra("user");
         if (user != null) {
             GetUserAsyncTask getUserAsyncTask = new GetUserAsyncTask(getApplication()) {
@@ -108,14 +104,8 @@ public class ProfileActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
     protected void setUser(User user) {
         this.user = user;
-
         loadProfileImageView(user, this.profileImageView);
 
         if (this.user == null) {
@@ -133,7 +123,6 @@ public class ProfileActivity extends AppCompatActivity {
         }
 
         this.profilePagerAdapter.setUser(user);
-        this.profilePagerAdapter.notifyDataSetChanged();
     }
 
     private void loadProfileImageView(User user, ImageView profileImageView) {

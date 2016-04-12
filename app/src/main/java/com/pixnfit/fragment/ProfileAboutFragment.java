@@ -37,16 +37,16 @@ public class ProfileAboutFragment extends Fragment {
 
     public void setUser(User user) {
         this.user = user;
-        updateView();
+        refresh();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        updateView();
+        refresh();
     }
 
-    private void updateView() {
+    private void refresh() {
         if (user == null) {
             profileAboutDescriptionTextView.setTypeface(null, Typeface.ITALIC);
             profileAboutDescriptionTextView.setText("This user hasn't a description yet");

@@ -7,13 +7,14 @@ import android.support.v4.app.FragmentPagerAdapter;
 import com.pixnfit.common.User;
 import com.pixnfit.fragment.ProfileAboutFragment;
 import com.pixnfit.fragment.ProfileFollowersFragment;
-import com.pixnfit.fragment.ProfilePixFragment;
 import com.pixnfit.fragment.ProfileFollowingFragment;
+import com.pixnfit.fragment.ProfilePixFragment;
+import com.pixnfit.provider.UserProvider;
 
 /**
  * Created by fabier on 31/03/16.
  */
-public class ProfilePagerAdapter extends FragmentPagerAdapter {
+public class ProfilePagerAdapter extends FragmentPagerAdapter implements UserProvider {
 
     // All Fragments
     private final ProfileAboutFragment profileAboutFragment;
@@ -70,9 +71,14 @@ public class ProfilePagerAdapter extends FragmentPagerAdapter {
 
     public void setUser(User user) {
         this.user = user;
-        profileAboutFragment.setUser(user);
-        profilePixFragment.setUser(user);
-        profileFollowersFragment.setUser(user);
-        profileFollowingFragment.setUser(user);
+
+        this.profileAboutFragment.setUser(user);
+        this.profilePixFragment.setUser(user);
+        this.profileFollowersFragment.setUser(user);
+        this.profileFollowingFragment.setUser(user);
+    }
+
+    public User getUser() {
+        return user;
     }
 }
