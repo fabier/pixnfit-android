@@ -15,6 +15,7 @@ import com.pixnfit.common.PostType;
 import com.pixnfit.common.PostVote;
 import com.pixnfit.common.State;
 import com.pixnfit.common.User;
+import com.pixnfit.common.UserMe;
 import com.pixnfit.common.Visibility;
 import com.pixnfit.common.VoteReason;
 
@@ -166,6 +167,17 @@ public class JSONWsParser {
             postMe.vote = parsePostVote(json.optJSONObject("vote"));
             postMe.comments = parsePostCommentList(json.optJSONArray("comments"));
             return postMe;
+        }
+    }
+
+    public static UserMe parseUserMe(JSONObject json) throws JSONException {
+        if (json == null) {
+            return null;
+        } else {
+            UserMe userMe = new UserMe();
+            userMe.meFollows = json.optBoolean("meFollows");
+            userMe.meIsFollowed = json.optBoolean("meIsFollowed");
+            return userMe;
         }
     }
 
