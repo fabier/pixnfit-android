@@ -91,6 +91,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         });
 
         User user = (User) getIntent().getSerializableExtra("user");
+
         if (user != null) {
             GetUserAsyncTask getUserAsyncTask = new GetUserAsyncTask(getApplication()) {
                 @Override
@@ -102,6 +103,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 }
             };
             getUserAsyncTask.executeOnExecutor(ThreadPools.METADATA_THREADPOOL, user);
+            loadUserMe(user);
         } else {
             GetMeAsyncTask getMeAsyncTask = new GetMeAsyncTask(getApplication()) {
                 @Override
@@ -143,11 +145,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         }
 
         this.profilePagerAdapter.setUser(user);
-
-        loadUserInfo();
     }
 
-    private void loadUserInfo() {
+    private void loadUserMe(User user) {
         GetUserMeAsyncTask getUserMeAsyncTask = new GetUserMeAsyncTask(this) {
             @Override
             protected void onPostExecute(UserMe userMe) {
