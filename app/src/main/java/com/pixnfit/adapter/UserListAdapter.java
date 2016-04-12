@@ -80,7 +80,7 @@ public class UserListAdapter extends BaseAdapter {
                 Image image = user.image;
                 loadBitmap(image.imageUrl, imageView);
             } else {
-                imageView.setImageResource(R.drawable.camera_transparent);
+                imageView.setImageResource(R.drawable.profile);
             }
         }
 
