@@ -9,12 +9,11 @@ import com.pixnfit.fragment.ProfileAboutFragment;
 import com.pixnfit.fragment.ProfileFollowersFragment;
 import com.pixnfit.fragment.ProfileFollowingFragment;
 import com.pixnfit.fragment.ProfilePixFragment;
-import com.pixnfit.provider.UserProvider;
 
 /**
  * Created by fabier on 31/03/16.
  */
-public class ProfilePagerAdapter extends FragmentPagerAdapter implements UserProvider {
+public class ProfilePagerAdapter extends FragmentPagerAdapter {
 
     // All Fragments
     private final ProfileAboutFragment profileAboutFragment;
