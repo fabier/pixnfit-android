@@ -22,8 +22,8 @@ public class GetUserMeAsyncTask extends WsGetAsyncTask<User, UserMe, UserMe> {
 
     @Override
     protected String getUrl(User... params) {
-        User post = params[0];
-        return String.format(Locale.ENGLISH, "/users/%d/me", post.id);
+        User user = params[0];
+        return String.format(Locale.ENGLISH, "/users/%d/me", user.id);
     }
 
     @Override
