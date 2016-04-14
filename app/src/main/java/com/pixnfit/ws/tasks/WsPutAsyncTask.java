@@ -2,8 +2,6 @@ package com.pixnfit.ws.tasks;
 
 import android.content.Context;
 
-import com.pixnfit.ws.WsAsyncTask;
-
 import java.net.HttpURLConnection;
 
 /**

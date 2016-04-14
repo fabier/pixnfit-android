@@ -1,10 +1,12 @@
-package com.pixnfit.ws;
+package com.pixnfit.ws.tasks;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Base64;
 import android.util.Log;
+
+import com.pixnfit.ws.WsConstants;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -39,7 +41,7 @@ public abstract class WsAsyncTask<Params, Progress, Result> extends AsyncTask<Pa
         return context;
     }
 
-    protected final Result doInBackground(Params... params) {
+    protected Result doInBackground(Params... params) {
         String url = getUrl(params);
         try {
             String method = getHTTPMethod();
@@ -109,7 +111,7 @@ public abstract class WsAsyncTask<Params, Progress, Result> extends AsyncTask<Pa
         return "Basic " + getBasicAuthString();
     }
 
-    private HttpURLConnection initConnection(String path, String method) throws IOException {
+    protected HttpURLConnection initConnection(String path, String method) throws IOException {
         method = method == null ? "GET" : method;
         URL url = new URL(BASE_URL + path);
         Log.i(TAG, method + " " + url.toString());
@@ -137,7 +139,7 @@ public abstract class WsAsyncTask<Params, Progress, Result> extends AsyncTask<Pa
         return 30000;
     }
 
-    private String readConnection(HttpURLConnection connection) throws IOException {
+    protected String readConnection(HttpURLConnection connection) throws IOException {
         InputStream inputStream = connection.getInputStream();
         BufferedReader rd = new BufferedReader(new InputStreamReader(inputStream));
         String line = "";
