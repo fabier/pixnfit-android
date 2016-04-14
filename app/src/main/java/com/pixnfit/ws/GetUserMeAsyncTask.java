@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.pixnfit.common.User;
 import com.pixnfit.common.UserMe;
+import com.pixnfit.utils.JSONWsParser;
 import com.pixnfit.ws.tasks.WsGetAsyncTask;
 
 import org.json.JSONException;

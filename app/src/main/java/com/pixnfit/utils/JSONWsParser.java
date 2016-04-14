@@ -1,4 +1,4 @@
-package com.pixnfit.ws;
+package com.pixnfit.utils;
 
 import android.util.Log;
 

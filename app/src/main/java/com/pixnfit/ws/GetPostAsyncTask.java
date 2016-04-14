@@ -3,6 +3,7 @@ package com.pixnfit.ws;
 import android.content.Context;
 
 import com.pixnfit.common.Post;
+import com.pixnfit.utils.JSONWsParser;
 import com.pixnfit.ws.tasks.WsGetAsyncTask;
 
 import org.json.JSONArray;

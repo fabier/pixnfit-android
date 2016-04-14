@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.pixnfit.common.Post;
 import com.pixnfit.common.PostComment;
+import com.pixnfit.utils.JSONWsParser;
 import com.pixnfit.ws.tasks.WsPostAsyncTask;
 
 import org.json.JSONException;
