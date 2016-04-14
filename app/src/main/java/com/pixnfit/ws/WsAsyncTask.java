@@ -130,11 +130,11 @@ public abstract class WsAsyncTask<Params, Progress, Result> extends AsyncTask<Pa
     }
 
     protected int getConnectTimeout() {
-        return 10000;
+        return 30000;
     }
 
     protected int getReadTimeout() {
-        return 10000;
+        return 30000;
     }
 
     private String readConnection(HttpURLConnection connection) throws IOException {
