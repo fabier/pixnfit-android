@@ -134,44 +134,42 @@ public class CreatePostActivity extends AppCompatActivity implements View.OnClic
                         @Override
                         protected void onPostExecute(final Post post) {
                             super.onPostExecute(post);
-                            if (!isCancelled()) {
-                                if (post != null) {
-                                    CreateImageAsyncTask createImageAsyncTask = new CreateImageAsyncTask(getApplication()) {
-                                        @Override
-                                        protected void onPostExecute(Image image) {
-                                            super.onPostExecute(image);
-                                            if (!isCancelled() && image != null) {
-                                                post.images = Collections.singletonList(image);
-                                                AddImageToPostAsyncTask addImageToPostAsyncTask = new AddImageToPostAsyncTask(getContext(), post) {
-                                                    @Override
-                                                    protected void onPostExecute(Post post) {
-                                                        super.onPostExecute(post);
-                                                        if (!isCancelled()) {
-                                                            if (post != null) {
-                                                                Intent i = new Intent();
-                                                                i.putExtra("posts", (Serializable) post);
-                                                                setResult(Activity.RESULT_OK, i);
-                                                                progressDialog.dismiss();
-                                                                finish();
-                                                            } else {
-                                                                Snackbar.make(v, "Impossible to create post : addImageToPostAsyncTask failed", Snackbar.LENGTH_LONG);
-                                                                progressDialog.dismiss();
-                                                            }
+                            if (!isCancelled() && post != null) {
+                                CreateImageAsyncTask createImageAsyncTask = new CreateImageAsyncTask(getApplication()) {
+                                    @Override
+                                    protected void onPostExecute(Image image) {
+                                        super.onPostExecute(image);
+                                        if (!isCancelled() && image != null) {
+                                            post.images = Collections.singletonList(image);
+                                            AddImageToPostAsyncTask addImageToPostAsyncTask = new AddImageToPostAsyncTask(getContext(), post) {
+                                                @Override
+                                                protected void onPostExecute(Post post) {
+                                                    super.onPostExecute(post);
+                                                    if (!isCancelled()) {
+                                                        if (post != null) {
+                                                            Intent i = new Intent();
+                                                            i.putExtra("posts", (Serializable) post);
+                                                            setResult(Activity.RESULT_OK, i);
+                                                            progressDialog.dismiss();
+                                                            finish();
+                                                        } else {
+                                                            Snackbar.make(v, "Impossible to create post : addImageToPostAsyncTask failed", Snackbar.LENGTH_LONG);
+                                                            progressDialog.dismiss();
                                                         }
                                                     }
-                                                };
-                                                addImageToPostAsyncTask.execute(image);
-                                            } else {
-                                                Snackbar.make(v, "Impossible to create post : createImageAsyncTask failed", Snackbar.LENGTH_LONG);
-                                                progressDialog.dismiss();
-                                            }
+                                                }
+                                            };
+                                            addImageToPostAsyncTask.execute(image);
+                                        } else {
+                                            Snackbar.make(v, "Impossible to create post : createImageAsyncTask failed", Snackbar.LENGTH_LONG);
+                                            progressDialog.dismiss();
                                         }
-                                    };
-                                    createImageAsyncTask.execute(imageFile);
-                                } else {
-                                    Snackbar.make(v, "Impossible to create post : createPostAsyncTask failed", Snackbar.LENGTH_LONG);
-                                    progressDialog.dismiss();
-                                }
+                                    }
+                                };
+                                createImageAsyncTask.execute(imageFile);
+                            } else {
+                                Snackbar.make(v, "Impossible to create post : createPostAsyncTask failed", Snackbar.LENGTH_LONG);
+                                progressDialog.dismiss();
                             }
                         }
                     };
