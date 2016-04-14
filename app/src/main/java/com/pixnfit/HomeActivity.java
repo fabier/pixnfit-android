@@ -93,12 +93,12 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case REQUESTCODE_CREATE_POST:
-                    List<Post> posts = (List<Post>) data.getSerializableExtra("posts");
-                    if (CollectionUtils.isNotEmpty(posts)) {
+                    Post post = (Post) data.getSerializableExtra("post");
+                    if (post != null) {
                         // On revient en haut...
                         gridView.smoothScrollToPosition(0);
                         // ...et on ajoute le post nouvellement créé
-                        postListAdapter.addNewPosts(posts);
+                        postListAdapter.addNewPost(post);
                         postListAdapter.notifyDataSetChanged();
                         // .. puis on affiche ce post en plein écran
                         Intent intent = new Intent(this, PostActivity.class);

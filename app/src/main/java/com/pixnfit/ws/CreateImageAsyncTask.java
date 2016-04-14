@@ -3,7 +3,8 @@ package com.pixnfit.ws;
 import android.content.Context;
 
 import com.pixnfit.common.Image;
-import com.pixnfit.ws.tasks.WsPostAsyncTask;
+import com.pixnfit.utils.JSONWsParser;
+import com.pixnfit.ws.tasks.WsPostFileAsyncTask;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -13,7 +14,7 @@ import java.io.File;
 /**
  * Created by fabier on 19/02/16.
  */
-public class CreateImageAsyncTask extends WsPostAsyncTask<File, Image, Image> {
+public class CreateImageAsyncTask extends WsPostFileAsyncTask<File, Image, Image> {
 
     public CreateImageAsyncTask(Context context) {
         super(context);
@@ -22,6 +23,11 @@ public class CreateImageAsyncTask extends WsPostAsyncTask<File, Image, Image> {
     @Override
     protected String getUrl(File... params) {
         return "/images";
+    }
+
+    @Override
+    protected String getFile(File... params) {
+        return params[0].getAbsolutePath();
     }
 
     @Override

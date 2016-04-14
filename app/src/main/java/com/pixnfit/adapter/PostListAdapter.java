@@ -134,6 +134,10 @@ public class PostListAdapter extends BaseAdapter {
         this.postImagePlaceHolder = postImagePlaceHolder;
     }
 
+    public void addNewPost(Post post) {
+        addNewPosts(Collections.singletonList(post));
+    }
+
     public void addNewPosts(List<Post> posts) {
         if (CollectionUtils.isNotEmpty(posts)) {
             if (CollectionUtils.isEmpty(this.posts)) {

@@ -148,7 +148,7 @@ public class CreatePostActivity extends AppCompatActivity implements View.OnClic
                                                     if (!isCancelled()) {
                                                         if (post != null) {
                                                             Intent i = new Intent();
-                                                            i.putExtra("posts", (Serializable) post);
+                                                            i.putExtra("post", (Serializable) post);
                                                             setResult(Activity.RESULT_OK, i);
                                                             progressDialog.dismiss();
                                                             finish();
