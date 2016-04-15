@@ -23,6 +23,8 @@ import com.pixnfit.ws.GetUserAsyncTask;
 import com.pixnfit.ws.GetUserMeAsyncTask;
 import com.pixnfit.ws.UnfollowUserAsyncTask;
 
+import java.util.Locale;
+
 /**
  * Created by fabier on 31/03/16.
  */
@@ -174,22 +176,40 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     @Override
-    public void onClick(View v) {
+    public void onClick(final View v) {
         switch (v.getId()) {
             case R.id.fabFollow:
                 if (this.follows) {
-                    new UnfollowUserAsyncTask(this, user).execute();
-                    user.followersCount--;
-                    this.profileFollowersTextView.setText(Integer.toString(user.followersCount));
-                    Snackbar.make(v, "You don't follow this user anymore", Snackbar.LENGTH_LONG).show();
-                    setFollows(true);
+                    new UnfollowUserAsyncTask(this, user) {
+                        @Override
+                        protected void onPostExecute(Boolean result) {
+                            super.onPostExecute(result);
+                            if (result != null && result) {
+                                Snackbar.make(v, "You don't follow this user anymore", Snackbar.LENGTH_LONG).show();
+                                user.followersCount--;
+                                profileFollowersTextView.setText(String.format(Locale.ENGLISH, "%d", user.followersCount));
+                                setFollows(!follows);
+                            } else {
+                                Snackbar.make(v, "An error occured", Snackbar.LENGTH_LONG).show();
+                            }
+                        }
+                    }.execute();
                 } else {
-                    new FollowUserAsyncTask(this, user).execute();
-                    user.followersCount++;
-                    this.profileFollowersTextView.setText(Integer.toString(user.followersCount));
-                    Snackbar.make(v, "Now you follow this user", Snackbar.LENGTH_LONG).show();
+                    new FollowUserAsyncTask(this, user) {
+                        @Override
+                        protected void onPostExecute(Boolean result) {
+                            super.onPostExecute(result);
+                            if (result != null && result) {
+                                Snackbar.make(v, "Now you follow this user", Snackbar.LENGTH_LONG).show();
+                                user.followersCount++;
+                                profileFollowersTextView.setText(String.format(Locale.ENGLISH, "%d", user.followersCount));
+                                setFollows(!follows);
+                            } else {
+                                Snackbar.make(v, "An error occured", Snackbar.LENGTH_LONG).show();
+                            }
+                        }
+                    }.execute();
                 }
-                setFollows(!this.follows);
                 break;
             default:
                 break;
