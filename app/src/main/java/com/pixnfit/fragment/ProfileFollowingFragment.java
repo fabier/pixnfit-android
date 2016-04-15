@@ -1,5 +1,6 @@
 package com.pixnfit.fragment;
 
+import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -7,10 +8,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.pixnfit.ProfileActivity;
 import com.pixnfit.R;
 import com.pixnfit.adapter.UserListAdapter;
 import com.pixnfit.common.User;
@@ -25,7 +28,7 @@ import java.util.List;
 /**
  * Created by fabier on 31/03/16.
  */
-public class ProfileFollowingFragment extends Fragment {
+public class ProfileFollowingFragment extends Fragment implements AdapterView.OnItemClickListener {
 
     private User user;
     private GridView gridView;
@@ -52,6 +55,8 @@ public class ProfileFollowingFragment extends Fragment {
         userListAdapter = new UserListAdapter(getActivity());
         userListAdapter.setUserImagePlaceHolder(BitmapFactory.decodeResource(getResources(), R.drawable.profile));
         gridView.setAdapter(userListAdapter);
+
+        gridView.setOnItemClickListener(this);
 
         return rootView;
     }
@@ -111,5 +116,12 @@ public class ProfileFollowingFragment extends Fragment {
 
     public User getUser() {
         return user;
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Intent profileIntent = new Intent(getActivity(), ProfileActivity.class);
+        profileIntent.putExtra("user", userListAdapter.getUser(position));
+        startActivity(profileIntent);
     }
 }
