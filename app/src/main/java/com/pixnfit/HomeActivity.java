@@ -12,6 +12,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.pixnfit.adapter.PostListAdapter;
 import com.pixnfit.common.Post;
@@ -34,10 +36,19 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
     private EndlessScrollListener endlessScrollListener;
     private GridView gridView;
 
+    private RelativeLayout homeLayout;
+    private LinearLayout pleaseWaitLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        homeLayout = (RelativeLayout) findViewById(R.id.homeLayout);
+        pleaseWaitLayout = (LinearLayout) findViewById(R.id.pleaseWaitLayout);
+
+        homeLayout.setVisibility(View.GONE);
+        pleaseWaitLayout.setVisibility(View.VISIBLE);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -136,6 +147,9 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     private void refreshPosts() {
+        homeLayout.setVisibility(View.GONE);
+        pleaseWaitLayout.setVisibility(View.VISIBLE);
+        
         isLoading = true;
         endlessScrollListener.reset();
         postListAdapter.setPosts(null);
@@ -147,6 +161,8 @@ public class HomeActivity extends AppCompatActivity implements AdapterView.OnIte
             @Override
             protected void onPostExecute(List<Post> posts) {
                 super.onPostExecute(posts);
+                homeLayout.setVisibility(View.VISIBLE);
+                pleaseWaitLayout.setVisibility(View.GONE);
                 if (!isCancelled()) {
                     isLoading = CollectionUtils.isNotEmpty(posts);
                     if (ListUtils.isEqualList(posts, postListAdapter.getPosts())) {

@@ -23,4 +23,6 @@
 
     <include layout="@layout/content_home" />
 
+    <include layout="@layout/template_please_wait" />
+
 </android.support.design.widget.CoordinatorLayout>
