@@ -34,18 +34,18 @@ public class UserProfileModel extends AbstractWizardModel {
     @Override
     protected PageList onNewRootPageList() {
         PageList userProfilePageList = new PageList(
-                new UserAccountPage_1(this, "Account"),
-                new UserAccountPage_2(this, "Setup"),
+                new UserAccountPage1NameEmailPassword(this, "Account"),
+                new UserAccountPage2SexBirthdate(this, "Setup"),
                 new MultipleFixedChoicePage(this, "Social style")
                         .setChoices("Casual", "Chic", "Classic", "Hipster", "Rocker", "Sporty", "Urban", "Vintage"),
-                new BranchPage(this, "Social profiles"),
-                new BranchPage(this, "Personal details"),
+                new UserAccountPage4BodyType(this, "Social profiles"),
+                new UserAccountPage5VisibilityHeightWeight(this, "Personal details"),
                 new TextPage(this, "Introduction")
         );
 
         PageList sandwichPageList = new PageList(
-                new BranchPage(this, "Profile")
-                        .addBranch("Name",
+                new BranchPage(this, "Order food")
+                        .addBranch("Sandwich",
                                 new SingleFixedChoicePage(this, "Bread").
                                         setChoices("White", "Wheat", "Rye", "Pretzel", "Ciabatta").setRequired(true),
                                 new MultipleFixedChoicePage(this, "Meats").
