@@ -119,4 +119,18 @@
     <string name="this_user_hasnt_posted_yet">This user hasn\'t posted yet.</string>
     <string name="this_user_doesnt_follow_anyone">This user doesn\'t follow anyone.</string>
     <string name="this_user_hasnt_followers_yet">This user hasn\'t followers yet.</string>
+    <string name="prev">Previous</string>
+    <string name="next">Next</string>
+    <string name="submit_confirm_message">Submit</string>
+    <string name="submit_confirm_button">Confirm</string>
+    <string name="finish">Finish</string>
+    <string name="createAccount">Create</string>
+    <string name="label_confirm_password">Confirm password</string>
+    <string name="label_password">Password</string>
+    <string name="label_email">Email</string>
+    <string name="label_username">Username</string>
+    <string name="hint_username">John Doe</string>
+    <string name="hint_email">john.doe@yahoo.com</string>
+    <string name="label_birthdate">Birthdate</string>
+    <string name="label_genre">Genre</string>
 </resources>
