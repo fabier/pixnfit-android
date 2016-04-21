@@ -41,4 +41,5 @@ dependencies {
     compile 'org.apache.commons:commons-lang3:3.4'
     compile 'commons-io:commons-io:2.4'
     compile 'de.hdodenhof:circleimageview:2.0.0'
+    compile 'com.github.TechFreak:WizardPager:1.0.3'
 }
