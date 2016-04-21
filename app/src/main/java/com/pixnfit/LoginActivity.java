@@ -23,6 +23,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
     private EditText passwordEditText;
     private SharedPreferences sharedPreferences;
     private Button loginButton;
+    private Button createAccountButton;
     private ProgressBar loginProgressBar;
 
     @Override
@@ -33,17 +34,17 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         loginEditText = (EditText) findViewById(R.id.loginEditText);
         passwordEditText = (EditText) findViewById(R.id.passwordEditText);
         loginButton = (Button) findViewById(R.id.loginButton);
+        createAccountButton = (Button) findViewById(R.id.createAccountButton);
         loginProgressBar = (ProgressBar) findViewById(R.id.loginProgressBar);
 
         loginButton.setOnClickListener(this);
+        createAccountButton.setOnClickListener(this);
 
         sharedPreferences = getSharedPreferences("pixnfit", MODE_PRIVATE);
         String login = getResources().getString(R.string.pixnfit_login);
         String password = getResources().getString(R.string.pixnfit_password);
         loginEditText.setText(sharedPreferences.getString("login", login));
         passwordEditText.setText(sharedPreferences.getString("password", password));
-
-
     }
 
     @Override
@@ -76,6 +77,10 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                     }
                 };
                 authenticateAsyncTask.execute();
+                break;
+            case R.id.createAccountButton:
+                Intent createAccountIntent = new Intent(getApplicationContext(), CreateAccountWizardActivity.class);
+                startActivity(createAccountIntent);
                 break;
             default:
                 break;
