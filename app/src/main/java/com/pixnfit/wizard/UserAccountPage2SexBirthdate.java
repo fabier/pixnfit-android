@@ -13,17 +13,17 @@ import java.util.ArrayList;
 /**
  * A page asking for a name and an email.
  */
-public class UserAccountPage_2 extends Page {
+public class UserAccountPage2SexBirthdate extends Page {
     public static final String GENRE_DATA_KEY = "genre";
     public static final String BIRTHDATE_DATA_KEY = "birthdate";
 
-    public UserAccountPage_2(ModelCallbacks callbacks, String title) {
+    public UserAccountPage2SexBirthdate(ModelCallbacks callbacks, String title) {
         super(callbacks, title);
     }
 
     @Override
     public Fragment createFragment() {
-        return UserAccountFragment_2.create(getKey());
+        return UserAccountFragment2SexBirthdate.create(getKey());
     }
 
     @Override

@@ -18,27 +18,27 @@ import com.tech.freak.wizardpager.ui.PageFragmentCallbacks;
 /**
  * Created by TechFreak on 04/09/2014.
  */
-public class UserAccountFragment_1 extends Fragment implements TextWatcher {
+public class UserAccountFragment1NameEmailPassword extends Fragment implements TextWatcher {
     private static final String ARG_KEY = "key";
 
     private PageFragmentCallbacks mCallbacks;
     private String mKey;
-    private UserAccountPage_1 mPage;
+    private UserAccountPage1NameEmailPassword mPage;
     private TextView mNameView;
     private TextView mEmailView;
     private TextView mPasswordView;
     private TextView mPassword2View;
 
-    public static UserAccountFragment_1 create(String key) {
+    public static UserAccountFragment1NameEmailPassword create(String key) {
         Bundle args = new Bundle();
         args.putString(ARG_KEY, key);
 
-        UserAccountFragment_1 fragment = new UserAccountFragment_1();
+        UserAccountFragment1NameEmailPassword fragment = new UserAccountFragment1NameEmailPassword();
         fragment.setArguments(args);
         return fragment;
     }
 
-    public UserAccountFragment_1() {
+    public UserAccountFragment1NameEmailPassword() {
     }
 
     @Override
@@ -47,25 +47,25 @@ public class UserAccountFragment_1 extends Fragment implements TextWatcher {
 
         Bundle args = getArguments();
         mKey = args.getString(ARG_KEY);
-        mPage = (UserAccountPage_1) mCallbacks.onGetPage(mKey);
+        mPage = (UserAccountPage1NameEmailPassword) mCallbacks.onGetPage(mKey);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_wizardpage_user_account_1, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_wizardpage_user_account_1_name_email_password, container, false);
         ((TextView) rootView.findViewById(android.R.id.title)).setText(mPage.getTitle());
 
         mNameView = ((TextView) rootView.findViewById(R.id.usernameText));
-        mNameView.setText(mPage.getData().getString(UserAccountPage_1.USERNAME_DATA_KEY));
+        mNameView.setText(mPage.getData().getString(UserAccountPage1NameEmailPassword.USERNAME_DATA_KEY));
 
         mEmailView = ((TextView) rootView.findViewById(R.id.emailText));
-        mEmailView.setText(mPage.getData().getString(UserAccountPage_1.EMAIL_DATA_KEY));
+        mEmailView.setText(mPage.getData().getString(UserAccountPage1NameEmailPassword.EMAIL_DATA_KEY));
 
         mPasswordView = ((TextView) rootView.findViewById(R.id.passwordText));
-        mPasswordView.setText(mPage.getData().getString(UserAccountPage_1.PASSWORD_DATA_KEY));
+        mPasswordView.setText(mPage.getData().getString(UserAccountPage1NameEmailPassword.PASSWORD_DATA_KEY));
 
         mPassword2View = ((TextView) rootView.findViewById(R.id.password2Text));
-        mPassword2View.setText(mPage.getData().getString(UserAccountPage_1.PASSWORD2_DATA_KEY));
+        mPassword2View.setText(mPage.getData().getString(UserAccountPage1NameEmailPassword.PASSWORD2_DATA_KEY));
 
         return rootView;
     }
@@ -123,13 +123,13 @@ public class UserAccountFragment_1 extends Fragment implements TextWatcher {
     public void afterTextChanged(Editable editable) {
         String key = null;
         if (editable == mNameView) {
-            key = UserAccountPage_1.USERNAME_DATA_KEY;
+            key = UserAccountPage1NameEmailPassword.USERNAME_DATA_KEY;
         } else if (editable == mEmailView) {
-            key = UserAccountPage_1.EMAIL_DATA_KEY;
+            key = UserAccountPage1NameEmailPassword.EMAIL_DATA_KEY;
         } else if (editable == mPasswordView) {
-            key = UserAccountPage_1.PASSWORD_DATA_KEY;
+            key = UserAccountPage1NameEmailPassword.PASSWORD_DATA_KEY;
         } else if (editable == mPassword2View) {
-            key = UserAccountPage_1.PASSWORD2_DATA_KEY;
+            key = UserAccountPage1NameEmailPassword.PASSWORD2_DATA_KEY;
         }
 
         if (key != null) {
