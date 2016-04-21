@@ -89,6 +89,8 @@ public class UserAccountFragment_2 extends Fragment implements RadioGroup.OnChec
             } catch (ParseException e) {
                 e.printStackTrace();
             }
+        } else {
+            mBirthdateDatePicker.updateDate(2000, 0, 1);
         }
 
         return rootView;
