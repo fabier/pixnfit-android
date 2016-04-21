@@ -133,4 +133,11 @@
     <string name="hint_email">john.doe@yahoo.com</string>
     <string name="label_birthdate">Birthdate</string>
     <string name="label_genre">Genre</string>
+    <string name="label_bodytype">Body type</string>
+    <string name="label_visibility">Visibility</string>
+    <string name="visibility_public">Public</string>
+    <string name="visibility_followers">Followers</string>
+    <string name="visibility_private">Private</string>
+    <string name="label_height">Height</string>
+    <string name="label_weight">Weight</string>
 </resources>
