@@ -14,7 +14,7 @@ import java.util.ArrayList;
  * A page asking for a name and an email.
  */
 public class UserAccountPage2SexBirthdate extends Page {
-    public static final String GENRE_DATA_KEY = "genre";
+    public static final String GENDER_DATA_KEY = "gender";
     public static final String BIRTHDATE_DATA_KEY = "birthdate";
 
     public UserAccountPage2SexBirthdate(ModelCallbacks callbacks, String title) {
@@ -28,13 +28,13 @@ public class UserAccountPage2SexBirthdate extends Page {
 
     @Override
     public void getReviewItems(ArrayList<ReviewItem> dest) {
-        dest.add(new ReviewItem("Genre", mData.getString(GENRE_DATA_KEY), getKey(), -1));
+        dest.add(new ReviewItem("Gender", mData.getString(GENDER_DATA_KEY), getKey(), -1));
         dest.add(new ReviewItem("Birthdate", mData.getString(BIRTHDATE_DATA_KEY), getKey(), -1));
     }
 
     @Override
     public boolean isCompleted() {
-        return !TextUtils.isEmpty(mData.getString(GENRE_DATA_KEY))
+        return !TextUtils.isEmpty(mData.getString(GENDER_DATA_KEY))
                 && !TextUtils.isEmpty(mData.getString(BIRTHDATE_DATA_KEY));
     }
 }

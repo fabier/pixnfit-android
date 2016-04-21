@@ -30,9 +30,9 @@ public class UserAccountFragment2SexBirthdate extends Fragment implements RadioG
     private String mKey;
     private UserAccountPage2SexBirthdate mPage;
     private DatePicker mBirthdateDatePicker;
-    private RadioGroup mGenreRadioGroup;
-    private RadioButton mGenreMaleRadioButton;
-    private RadioButton mGenreFemaleRadioButton;
+    private RadioGroup mGenderRadioGroup;
+    private RadioButton mGenderMaleRadioButton;
+    private RadioButton mGenderFemaleRadioButton;
 
     public static UserAccountFragment2SexBirthdate create(String key) {
         Bundle args = new Bundle();
@@ -60,20 +60,20 @@ public class UserAccountFragment2SexBirthdate extends Fragment implements RadioG
         View rootView = inflater.inflate(R.layout.fragment_wizardpage_user_account_2_sex_birthdate, container, false);
         ((TextView) rootView.findViewById(android.R.id.title)).setText(mPage.getTitle());
 
-        mGenreRadioGroup = ((RadioGroup) rootView.findViewById(R.id.genreRadioGroup));
-        mGenreMaleRadioButton = ((RadioButton) rootView.findViewById(R.id.genreMaleRadioButton));
-        mGenreFemaleRadioButton = ((RadioButton) rootView.findViewById(R.id.genreFemaleRadioButton));
+        mGenderRadioGroup = ((RadioGroup) rootView.findViewById(R.id.genderRadioGroup));
+        mGenderMaleRadioButton = ((RadioButton) rootView.findViewById(R.id.genderMaleRadioButton));
+        mGenderFemaleRadioButton = ((RadioButton) rootView.findViewById(R.id.genderFemaleRadioButton));
 
-        String genre = mPage.getData().getString(UserAccountPage2SexBirthdate.GENRE_DATA_KEY);
-        if ("male".equals(genre)) {
-            mGenreMaleRadioButton.setChecked(true);
-            mGenreFemaleRadioButton.setChecked(false);
-        } else if ("female".equals(genre)) {
-            mGenreMaleRadioButton.setChecked(false);
-            mGenreFemaleRadioButton.setChecked(true);
+        String gender = mPage.getData().getString(UserAccountPage2SexBirthdate.GENDER_DATA_KEY);
+        if ("male".equals(gender)) {
+            mGenderMaleRadioButton.setChecked(true);
+            mGenderFemaleRadioButton.setChecked(false);
+        } else if ("female".equals(gender)) {
+            mGenderMaleRadioButton.setChecked(false);
+            mGenderFemaleRadioButton.setChecked(true);
         } else {
-            mGenreMaleRadioButton.setChecked(false);
-            mGenreFemaleRadioButton.setChecked(false);
+            mGenderMaleRadioButton.setChecked(false);
+            mGenderFemaleRadioButton.setChecked(false);
         }
 
         mBirthdateDatePicker = ((DatePicker) rootView.findViewById(R.id.birthdateDatePicker));
@@ -115,19 +115,19 @@ public class UserAccountFragment2SexBirthdate extends Fragment implements RadioG
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mGenreRadioGroup.setOnCheckedChangeListener(this);
+        mGenderRadioGroup.setOnCheckedChangeListener(this);
         mBirthdateDatePicker.getCalendarView().setOnDateChangeListener(this);
     }
 
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
         switch (checkedId) {
-            case R.id.genreMaleRadioButton:
-                mPage.getData().putString(UserAccountPage2SexBirthdate.GENRE_DATA_KEY, "male");
+            case R.id.genderMaleRadioButton:
+                mPage.getData().putString(UserAccountPage2SexBirthdate.GENDER_DATA_KEY, "male");
                 mPage.notifyDataChanged();
                 break;
-            case R.id.genreFemaleRadioButton:
-                mPage.getData().putString(UserAccountPage2SexBirthdate.GENRE_DATA_KEY, "female");
+            case R.id.genderFemaleRadioButton:
+                mPage.getData().putString(UserAccountPage2SexBirthdate.GENDER_DATA_KEY, "female");
                 mPage.notifyDataChanged();
                 break;
             default:

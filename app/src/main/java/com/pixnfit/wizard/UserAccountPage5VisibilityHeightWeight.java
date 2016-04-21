@@ -14,10 +14,9 @@ import java.util.ArrayList;
  * A page asking for a name and an email.
  */
 public class UserAccountPage5VisibilityHeightWeight extends Page {
-    public static final String USERNAME_DATA_KEY = "username";
-    public static final String EMAIL_DATA_KEY = "email";
-    public static final String PASSWORD_DATA_KEY = "password";
-    public static final String PASSWORD2_DATA_KEY = "password2";
+    public static final String VISIBILITY_DATA_KEY = "visibility";
+    public static final String HEIGHT_DATA_KEY = "height";
+    public static final String WEIGHT_DATA_KEY = "weight";
 
     public UserAccountPage5VisibilityHeightWeight(ModelCallbacks callbacks, String title) {
         super(callbacks, title);
@@ -30,18 +29,15 @@ public class UserAccountPage5VisibilityHeightWeight extends Page {
 
     @Override
     public void getReviewItems(ArrayList<ReviewItem> dest) {
-        dest.add(new ReviewItem("Username", mData.getString(USERNAME_DATA_KEY), getKey(), -1));
-        dest.add(new ReviewItem("Email", mData.getString(EMAIL_DATA_KEY), getKey(), -1));
-        dest.add(new ReviewItem("Password", mData.getString(PASSWORD_DATA_KEY), getKey(), -1));
-        dest.add(new ReviewItem("Confirm password", mData.getString(PASSWORD2_DATA_KEY), getKey(), -1));
+        dest.add(new ReviewItem("Visibility", Integer.toString(mData.getInt(VISIBILITY_DATA_KEY)), getKey(), -1));
+        dest.add(new ReviewItem("Height", Integer.toString(mData.getInt(HEIGHT_DATA_KEY)), getKey(), -1));
+        dest.add(new ReviewItem("Weight", Integer.toString(mData.getInt(WEIGHT_DATA_KEY)), getKey(), -1));
     }
 
     @Override
     public boolean isCompleted() {
-        return !TextUtils.isEmpty(mData.getString(USERNAME_DATA_KEY))
-                && !TextUtils.isEmpty(mData.getString(EMAIL_DATA_KEY))
-                && !TextUtils.isEmpty(mData.getString(PASSWORD_DATA_KEY))
-                && !TextUtils.isEmpty(mData.getString(PASSWORD2_DATA_KEY))
-                && mData.getString(PASSWORD_DATA_KEY).equals(mData.getString(PASSWORD2_DATA_KEY));
+        return !TextUtils.isEmpty(mData.getString(VISIBILITY_DATA_KEY))
+                && !TextUtils.isEmpty(mData.getString(HEIGHT_DATA_KEY))
+                && !TextUtils.isEmpty(mData.getString(WEIGHT_DATA_KEY));
     }
 }

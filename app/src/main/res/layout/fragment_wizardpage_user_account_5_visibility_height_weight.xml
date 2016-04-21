@@ -27,18 +27,21 @@
                 android:weightSum="3">
 
                 <RadioButton
+                    android:id="@+id/visibilityPublicRadioButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/visibility_public" />
 
                 <RadioButton
+                    android:id="@+id/visibilityFollowersRadioButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/visibility_followers" />
 
                 <RadioButton
+                    android:id="@+id/visibilityPrivateRadioButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -49,19 +52,19 @@
                 style="@style/WizardFormLabel"
                 android:text="@string/label_height" />
 
-            <Spinner
+            <NumberPicker
                 android:id="@+id/heightSpinner"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"></Spinner>
+                android:layout_height="wrap_content"></NumberPicker>
 
             <TextView
                 style="@style/WizardFormLabel"
                 android:text="@string/label_weight" />
 
-            <Spinner
+            <NumberPicker
                 android:id="@+id/weightSpinner"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"></Spinner>
+                android:layout_height="wrap_content"></NumberPicker>
 
         </LinearLayout>
     </ScrollView>

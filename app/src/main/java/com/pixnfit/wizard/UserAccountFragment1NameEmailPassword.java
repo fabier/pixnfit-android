@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,12 +12,13 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
 import com.pixnfit.R;
+import com.pixnfit.utils.TextWatcherAdapter;
 import com.tech.freak.wizardpager.ui.PageFragmentCallbacks;
 
 /**
  * Created by TechFreak on 04/09/2014.
  */
-public class UserAccountFragment1NameEmailPassword extends Fragment implements TextWatcher {
+public class UserAccountFragment1NameEmailPassword extends Fragment {
     private static final String ARG_KEY = "key";
 
     private PageFragmentCallbacks mCallbacks;
@@ -91,10 +91,34 @@ public class UserAccountFragment1NameEmailPassword extends Fragment implements T
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mNameView.addTextChangedListener(this);
-        mEmailView.addTextChangedListener(this);
-        mPasswordView.addTextChangedListener(this);
-        mPassword2View.addTextChangedListener(this);
+        mNameView.addTextChangedListener(new TextWatcherAdapter() {
+            @Override
+            public void afterTextChanged(Editable editable) {
+                mPage.getData().putString(UserAccountPage1NameEmailPassword.USERNAME_DATA_KEY, (editable != null) ? editable.toString() : null);
+                mPage.notifyDataChanged();
+            }
+        });
+        mEmailView.addTextChangedListener(new TextWatcherAdapter() {
+            @Override
+            public void afterTextChanged(Editable editable) {
+                mPage.getData().putString(UserAccountPage1NameEmailPassword.EMAIL_DATA_KEY, (editable != null) ? editable.toString() : null);
+                mPage.notifyDataChanged();
+            }
+        });
+        mPasswordView.addTextChangedListener(new TextWatcherAdapter() {
+            @Override
+            public void afterTextChanged(Editable editable) {
+                mPage.getData().putString(UserAccountPage1NameEmailPassword.PASSWORD_DATA_KEY, (editable != null) ? editable.toString() : null);
+                mPage.notifyDataChanged();
+            }
+        });
+        mPassword2View.addTextChangedListener(new TextWatcherAdapter() {
+            @Override
+            public void afterTextChanged(Editable editable) {
+                mPage.getData().putString(UserAccountPage1NameEmailPassword.PASSWORD2_DATA_KEY, (editable != null) ? editable.toString() : null);
+                mPage.notifyDataChanged();
+            }
+        });
     }
 
     @Override
@@ -108,33 +132,6 @@ public class UserAccountFragment1NameEmailPassword extends Fragment implements T
             if (!menuVisible) {
                 imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
             }
-        }
-    }
-
-    @Override
-    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-    }
-
-    @Override
-    public void onTextChanged(CharSequence s, int start, int before, int count) {
-    }
-
-    @Override
-    public void afterTextChanged(Editable editable) {
-        String key = null;
-        if (editable == mNameView) {
-            key = UserAccountPage1NameEmailPassword.USERNAME_DATA_KEY;
-        } else if (editable == mEmailView) {
-            key = UserAccountPage1NameEmailPassword.EMAIL_DATA_KEY;
-        } else if (editable == mPasswordView) {
-            key = UserAccountPage1NameEmailPassword.PASSWORD_DATA_KEY;
-        } else if (editable == mPassword2View) {
-            key = UserAccountPage1NameEmailPassword.PASSWORD2_DATA_KEY;
-        }
-
-        if (key != null) {
-            mPage.getData().putString(key, (editable != null) ? editable.toString() : null);
-            mPage.notifyDataChanged();
         }
     }
 }

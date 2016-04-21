@@ -32,8 +32,8 @@ public class UserAccountPage1NameEmailPassword extends Page {
     public void getReviewItems(ArrayList<ReviewItem> dest) {
         dest.add(new ReviewItem("Username", mData.getString(USERNAME_DATA_KEY), getKey(), -1));
         dest.add(new ReviewItem("Email", mData.getString(EMAIL_DATA_KEY), getKey(), -1));
-        dest.add(new ReviewItem("Password", mData.getString(PASSWORD_DATA_KEY), getKey(), -1));
-        dest.add(new ReviewItem("Confirm password", mData.getString(PASSWORD2_DATA_KEY), getKey(), -1));
+//        dest.add(new ReviewItem("Password", mData.getString(PASSWORD_DATA_KEY), getKey(), -1));
+//        dest.add(new ReviewItem("Confirm password", mData.getString(PASSWORD2_DATA_KEY), getKey(), -1));
     }
 
     @Override
