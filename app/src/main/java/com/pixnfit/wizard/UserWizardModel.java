@@ -18,15 +18,12 @@ package com.pixnfit.wizard;
 
 import android.content.Context;
 
-import com.pixnfit.common.User;
 import com.tech.freak.wizardpager.model.AbstractWizardModel;
 import com.tech.freak.wizardpager.model.BranchPage;
 import com.tech.freak.wizardpager.model.MultipleFixedChoicePage;
 import com.tech.freak.wizardpager.model.PageList;
 
 public class UserWizardModel extends AbstractWizardModel {
-    private User user;
-
     public UserWizardModel(Context context) {
         super(context);
     }
@@ -51,13 +48,5 @@ public class UserWizardModel extends AbstractWizardModel {
         );
 
         return userProfilePageList;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 }
