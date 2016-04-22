@@ -18,6 +18,7 @@ package com.pixnfit;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -31,7 +32,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.pixnfit.wizard.UserProfileModel;
+import com.pixnfit.common.User;
+import com.pixnfit.wizard.UserWizardModel;
+import com.pixnfit.ws.UpdateUserProfileAsyncTask;
 import com.tech.freak.wizardpager.model.AbstractWizardModel;
 import com.tech.freak.wizardpager.model.ModelCallbacks;
 import com.tech.freak.wizardpager.model.Page;
@@ -47,7 +50,7 @@ public class CreateAccountWizardActivity extends AppCompatActivity implements Pa
 
     private boolean mEditingAfterReview;
 
-    private AbstractWizardModel mWizardModel = new UserProfileModel(this);
+    private UserWizardModel mWizardModel = new UserWizardModel(this);
 
     private boolean mConsumePageSelectedEvent;
 
@@ -60,6 +63,8 @@ public class CreateAccountWizardActivity extends AppCompatActivity implements Pa
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wizard);
+
+        mWizardModel.setUser((User) getIntent().getSerializableExtra("user"));
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -112,7 +117,21 @@ public class CreateAccountWizardActivity extends AppCompatActivity implements Pa
                         public Dialog onCreateDialog(Bundle savedInstanceState) {
                             return new AlertDialog.Builder(getActivity())
                                     .setMessage(R.string.submit_confirm_message)
-                                    .setPositiveButton(R.string.submit_confirm_button, null)
+                                    .setPositiveButton(R.string.submit_confirm_button, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            UpdateUserProfileAsyncTask updateUserProfileAsyncTask = new UpdateUserProfileAsyncTask(getActivity(), ((UserWizardModel) onGetModel()).getUser()) {
+                                                @Override
+                                                protected void onPostExecute(User user) {
+                                                    super.onPostExecute(user);
+                                                    if(user != null){
+
+                                                    }
+                                                }
+                                            };
+                                            updateUserProfileAsyncTask.execute();
+                                        }
+                                    })
                                     .setNegativeButton(android.R.string.cancel, null).create();
                         }
                     };

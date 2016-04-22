@@ -18,20 +18,23 @@ package com.pixnfit.wizard;
 
 import android.content.Context;
 
+import com.pixnfit.common.User;
 import com.tech.freak.wizardpager.model.AbstractWizardModel;
 import com.tech.freak.wizardpager.model.BranchPage;
 import com.tech.freak.wizardpager.model.MultipleFixedChoicePage;
 import com.tech.freak.wizardpager.model.PageList;
 
-public class UserProfileModel extends AbstractWizardModel {
-    public UserProfileModel(Context context) {
+public class UserWizardModel extends AbstractWizardModel {
+    private User user;
+
+    public UserWizardModel(Context context) {
         super(context);
     }
 
     @Override
     protected PageList onNewRootPageList() {
         PageList userProfilePageList = new PageList(
-                new UserAccountPage1NameEmailPassword(this, "Account")
+                new UserAccountPage1NameEmailPassword(this, "Username")
                         .setRequired(true),
                 new UserAccountPage2Birthdate(this, "Setup")
                         .setRequired(true),
@@ -48,5 +51,13 @@ public class UserProfileModel extends AbstractWizardModel {
         );
 
         return userProfilePageList;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

@@ -1,14 +1,12 @@
 package com.pixnfit.wizard;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
 import com.pixnfit.R;
@@ -25,9 +23,9 @@ public class UserAccountFragment1NameEmailPassword extends Fragment {
     private String mKey;
     private UserAccountPage1NameEmailPassword mPage;
     private TextView mNameView;
-    private TextView mEmailView;
-    private TextView mPasswordView;
-    private TextView mPassword2View;
+//    private TextView mEmailView;
+//    private TextView mPasswordView;
+//    private TextView mPassword2View;
 
     public static UserAccountFragment1NameEmailPassword create(String key) {
         Bundle args = new Bundle();
@@ -58,14 +56,14 @@ public class UserAccountFragment1NameEmailPassword extends Fragment {
         mNameView = ((TextView) rootView.findViewById(R.id.usernameText));
         mNameView.setText(mPage.getData().getString(UserAccountPage1NameEmailPassword.USERNAME_DATA_KEY));
 
-        mEmailView = ((TextView) rootView.findViewById(R.id.emailText));
-        mEmailView.setText(mPage.getData().getString(UserAccountPage1NameEmailPassword.EMAIL_DATA_KEY));
+//        mEmailView = ((TextView) rootView.findViewById(R.id.emailText));
+//        mEmailView.setText(mPage.getData().getString(UserAccountPage1NameEmailPassword.EMAIL_DATA_KEY));
 
-        mPasswordView = ((TextView) rootView.findViewById(R.id.passwordText));
-        mPasswordView.setText(mPage.getData().getString(UserAccountPage1NameEmailPassword.PASSWORD_DATA_KEY));
+//        mPasswordView = ((TextView) rootView.findViewById(R.id.passwordText));
+//        mPasswordView.setText(mPage.getData().getString(UserAccountPage1NameEmailPassword.PASSWORD_DATA_KEY));
 
-        mPassword2View = ((TextView) rootView.findViewById(R.id.password2Text));
-        mPassword2View.setText(mPage.getData().getString(UserAccountPage1NameEmailPassword.PASSWORD2_DATA_KEY));
+//        mPassword2View = ((TextView) rootView.findViewById(R.id.password2Text));
+//        mPassword2View.setText(mPage.getData().getString(UserAccountPage1NameEmailPassword.PASSWORD2_DATA_KEY));
 
         return rootView;
     }
@@ -98,40 +96,26 @@ public class UserAccountFragment1NameEmailPassword extends Fragment {
                 mPage.notifyDataChanged();
             }
         });
-        mEmailView.addTextChangedListener(new TextWatcherAdapter() {
-            @Override
-            public void afterTextChanged(Editable editable) {
-                mPage.getData().putString(UserAccountPage1NameEmailPassword.EMAIL_DATA_KEY, (editable != null) ? editable.toString() : null);
-                mPage.notifyDataChanged();
-            }
-        });
-        mPasswordView.addTextChangedListener(new TextWatcherAdapter() {
-            @Override
-            public void afterTextChanged(Editable editable) {
-                mPage.getData().putString(UserAccountPage1NameEmailPassword.PASSWORD_DATA_KEY, (editable != null) ? editable.toString() : null);
-                mPage.notifyDataChanged();
-            }
-        });
-        mPassword2View.addTextChangedListener(new TextWatcherAdapter() {
-            @Override
-            public void afterTextChanged(Editable editable) {
-                mPage.getData().putString(UserAccountPage1NameEmailPassword.PASSWORD2_DATA_KEY, (editable != null) ? editable.toString() : null);
-                mPage.notifyDataChanged();
-            }
-        });
-    }
-
-    @Override
-    public void setMenuVisibility(boolean menuVisible) {
-        super.setMenuVisibility(menuVisible);
-
-        // In a future update to the support library, this should override setUserVisibleHint
-        // instead of setMenuVisibility.
-        if (mNameView != null) {
-            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-            if (!menuVisible) {
-                imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
-            }
-        }
+//        mEmailView.addTextChangedListener(new TextWatcherAdapter() {
+//            @Override
+//            public void afterTextChanged(Editable editable) {
+//                mPage.getData().putString(UserAccountPage1NameEmailPassword.EMAIL_DATA_KEY, (editable != null) ? editable.toString() : null);
+//                mPage.notifyDataChanged();
+//        }
+//        });
+//        mPasswordView.addTextChangedListener(new TextWatcherAdapter() {
+//            @Override
+//            public void afterTextChanged(Editable editable) {
+//                mPage.getData().putString(UserAccountPage1NameEmailPassword.PASSWORD_DATA_KEY, (editable != null) ? editable.toString() : null);
+//                mPage.notifyDataChanged();
+//            }
+//        });
+//        mPassword2View.addTextChangedListener(new TextWatcherAdapter() {
+//            @Override
+//            public void afterTextChanged(Editable editable) {
+//                mPage.getData().putString(UserAccountPage1NameEmailPassword.PASSWORD2_DATA_KEY, (editable != null) ? editable.toString() : null);
+//                mPage.notifyDataChanged();
+//            }
+//        });
     }
 }

@@ -116,7 +116,11 @@ public abstract class WsAsyncTask<Params, Progress, Result> extends AsyncTask<Pa
         URL url = new URL(BASE_URL + path);
         Log.i(TAG, method + " " + url.toString());
         HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-        httpURLConnection.setRequestProperty("Authorization", getAuthorization());
+
+        if (needsAuthentication()) {
+            httpURLConnection.setRequestProperty("Authorization", getAuthorization());
+        }
+
         httpURLConnection.setRequestProperty("Accept", "application/json");
         httpURLConnection.setConnectTimeout(getConnectTimeout());
         httpURLConnection.setReadTimeout(getReadTimeout());
@@ -129,6 +133,10 @@ public abstract class WsAsyncTask<Params, Progress, Result> extends AsyncTask<Pa
         }
 
         return httpURLConnection;
+    }
+
+    protected boolean needsAuthentication() {
+        return true;
     }
 
     protected int getConnectTimeout() {

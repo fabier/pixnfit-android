@@ -33,7 +33,24 @@
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:hint="Email" />
+                android:hint="Email"
+                android:inputType="textEmailAddress" />
+
+            <TextView
+                android:id="@+id/loginEditTextError"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Login must be a valid email"
+                android:textColor="@color/red"
+                android:textSize="12dp" />
+
+            <TextView
+                android:id="@+id/loginEditTextNotInListError"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Email is not in private beta list"
+                android:textColor="@color/red"
+                android:textSize="12dp" />
         </LinearLayout>
 
         <LinearLayout
@@ -52,6 +69,22 @@
                 android:layout_height="wrap_content"
                 android:hint="Password"
                 android:inputType="textPassword" />
+
+            <TextView
+                android:id="@+id/passwordEditTextError"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Password cannot be empty"
+                android:textColor="@color/red"
+                android:textSize="12dp" />
+
+            <TextView
+                android:id="@+id/passwordEditTextTooShortError"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Password is too simple or too short"
+                android:textColor="@color/red"
+                android:textSize="12dp" />
         </LinearLayout>
 
         <LinearLayout
