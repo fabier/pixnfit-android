@@ -7,6 +7,7 @@ import com.pixnfit.common.Country;
 import com.pixnfit.common.FashionStyle;
 import com.pixnfit.common.Gender;
 import com.pixnfit.common.Image;
+import com.pixnfit.common.ImageType;
 import com.pixnfit.common.Language;
 import com.pixnfit.common.Post;
 import com.pixnfit.common.PostComment;
@@ -108,6 +109,7 @@ public class JSONWsParser {
             user.weight = json.optInt("weight");
             user.country = parseCountry(json.optJSONObject("country"));
             user.language = parseLanguage(json.optJSONObject("language"));
+            user.visibility = parseVisibility(json.optJSONObject("visibility"));
             user.fashionStyles = parseFashionStyleList(json.optJSONArray("fashionStyles"));
             user.points = json.optInt("points");
             user.postCount = json.optInt("postCount");
@@ -251,6 +253,57 @@ public class JSONWsParser {
     // # SIMPLE DATA TYPES #
     // #####################
 
+    public static <T> List<T> parseList(Class<T> clazz, JSONArray array) throws JSONException {
+        if (array == null) {
+            return null;
+        } else {
+            List<T> listItems = new ArrayList<>();
+            for (int i = 0; i < array.length(); i++) {
+                T item = JSONWsParser.parseItem(clazz, array.getJSONObject(i));
+                listItems.add(item);
+            }
+            return listItems;
+        }
+    }
+
+    public static <T> T parseItem(Class<T> clazz, JSONObject jsonObject) throws JSONException {
+        if (BodyType.class.isAssignableFrom(clazz)) {
+            return (T) parseBodyType(jsonObject);
+        } else if (Country.class.isAssignableFrom(clazz)) {
+            return (T) parseCountry(jsonObject);
+        } else if (FashionStyle.class.isAssignableFrom(clazz)) {
+            return (T) parseFashionStyle(jsonObject);
+        } else if (Gender.class.isAssignableFrom(clazz)) {
+            return (T) parseGender(jsonObject);
+        } else if (Image.class.isAssignableFrom(clazz)) {
+            return (T) parseImage(jsonObject);
+        } else if (ImageType.class.isAssignableFrom(clazz)) {
+            return (T) parseImageType(jsonObject);
+        } else if (Language.class.isAssignableFrom(clazz)) {
+            return (T) parseLanguage(jsonObject);
+        } else if (Post.class.isAssignableFrom(clazz)) {
+            return (T) parsePost(jsonObject);
+        } else if (PostComment.class.isAssignableFrom(clazz)) {
+            return (T) parsePostComment(jsonObject);
+        } else if (PostMe.class.isAssignableFrom(clazz)) {
+            return (T) parsePostMe(jsonObject);
+        } else if (PostVote.class.isAssignableFrom(clazz)) {
+            return (T) parsePostVote(jsonObject);
+        } else if (State.class.isAssignableFrom(clazz)) {
+            return (T) parseState(jsonObject);
+        } else if (User.class.isAssignableFrom(clazz)) {
+            return (T) parseUser(jsonObject);
+        } else if (UserMe.class.isAssignableFrom(clazz)) {
+            return (T) parseUserMe(jsonObject);
+        } else if (Visibility.class.isAssignableFrom(clazz)) {
+            return (T) parseVisibility(jsonObject);
+        } else if (VoteReason.class.isAssignableFrom(clazz)) {
+            return (T) parseVoteReason(jsonObject);
+        } else {
+            throw new IllegalArgumentException("Unknown class : " + clazz);
+        }
+    }
+
     public static PostType parsePostType(JSONObject json) throws JSONException {
         if (json == null) {
             return null;
@@ -281,6 +334,17 @@ public class JSONWsParser {
             bodyType.id = json.getInt("id");
             bodyType.name = parseString(json.getString("name"));
             return bodyType;
+        }
+    }
+
+    public static ImageType parseImageType(JSONObject json) throws JSONException {
+        if (json == null) {
+            return null;
+        } else {
+            ImageType imageType = new ImageType();
+            imageType.id = json.getInt("id");
+            imageType.name = parseString(json.getString("name"));
+            return imageType;
         }
     }
 
