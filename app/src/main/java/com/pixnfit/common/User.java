@@ -17,6 +17,7 @@ public class User extends BaseEntity {
     public Integer weight;
     public Country country;
     public Language language;
+    public Visibility visibility;
     public List<FashionStyle> fashionStyles;
     public Integer points;
     public Integer postCount;
