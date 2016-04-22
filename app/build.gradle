@@ -42,4 +42,5 @@ dependencies {
     compile 'commons-io:commons-io:2.4'
     compile 'de.hdodenhof:circleimageview:2.0.0'
     compile 'com.github.TechFreak:WizardPager:1.0.3'
+    compile 'commons-validator:commons-validator:1.4.0'
 }
