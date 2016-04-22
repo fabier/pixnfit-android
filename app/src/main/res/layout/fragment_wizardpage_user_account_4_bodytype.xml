@@ -22,58 +22,49 @@
             <RadioGroup
                 android:id="@+id/bodyTypeRadioGroup"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="6">
-
-                <RadioButton
-                    android:id="@+id/bodytype_1_radioButton"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:drawableBottom="@drawable/bodytype_male_1"
-                    android:drawableTop="@drawable/bodytype_female_1" />
-
-                <RadioButton
-                    android:id="@+id/bodytype_2_radioButton"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:drawableBottom="@drawable/bodytype_male_2"
-                    android:drawableTop="@drawable/bodytype_female_2" />
-
-                <RadioButton
-                    android:id="@+id/bodytype_3_radioButton"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:drawableBottom="@drawable/bodytype_male_3"
-                    android:drawableTop="@drawable/bodytype_female_3" />
-
-                <RadioButton
-                    android:id="@+id/bodytype_4_radioButton"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:drawableBottom="@drawable/bodytype_male_4"
-                    android:drawableTop="@drawable/bodytype_female_4" />
-
-                <RadioButton
-                    android:id="@+id/bodytype_5_radioButton"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:drawableBottom="@drawable/bodytype_male_5"
-                    android:drawableTop="@drawable/bodytype_female_5" />
+                android:layout_height="wrap_content">
 
                 <RadioButton
                     android:id="@+id/bodytype_6_radioButton"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:drawableBottom="@drawable/bodytype_male_6"
-                    android:drawableTop="@drawable/bodytype_female_6" />
+                    android:drawableRight="@drawable/bodytype_female_6"
+                    android:text="Square" />
 
+                <RadioButton
+                    android:id="@+id/bodytype_3_radioButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableRight="@drawable/bodytype_female_3"
+                    android:text="Triangle" />
+
+                <RadioButton
+                    android:id="@+id/bodytype_2_radioButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableRight="@drawable/bodytype_female_2"
+                    android:text="Inverted triangle" />
+
+                <RadioButton
+                    android:id="@+id/bodytype_4_radioButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableRight="@drawable/bodytype_female_4"
+                    android:text="Double triangle" />
+
+                <RadioButton
+                    android:id="@+id/bodytype_5_radioButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableRight="@drawable/bodytype_female_5"
+                    android:text="Round" />
+
+                <RadioButton
+                    android:id="@+id/bodytype_1_radioButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableRight="@drawable/bodytype_female_1"
+                    android:text="8-shaped" />
             </RadioGroup>
 
         </LinearLayout>

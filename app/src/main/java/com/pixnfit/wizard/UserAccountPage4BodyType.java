@@ -1,7 +1,6 @@
 package com.pixnfit.wizard;
 
 import android.support.v4.app.Fragment;
-import android.text.TextUtils;
 
 import com.tech.freak.wizardpager.model.ModelCallbacks;
 import com.tech.freak.wizardpager.model.Page;
@@ -16,13 +15,18 @@ import java.util.ArrayList;
 public class UserAccountPage4BodyType extends Page {
     public static final String BODYTYPE_DATA_KEY = "bodytype";
 
-    public UserAccountPage4BodyType(ModelCallbacks callbacks, String title) {
+    public static final String TYPE_MALE = "male";
+    public static final String TYPE_FEMALE = "female";
+    private String type;
+
+    public UserAccountPage4BodyType(ModelCallbacks callbacks, String title, String type) {
         super(callbacks, title);
+        this.type = type;
     }
 
     @Override
     public Fragment createFragment() {
-        return UserAccountFragment4BodyType.create(getKey());
+        return UserAccountFragment4BodyType.create(getKey(), this.type);
     }
 
     @Override
@@ -32,6 +36,6 @@ public class UserAccountPage4BodyType extends Page {
 
     @Override
     public boolean isCompleted() {
-        return !TextUtils.isEmpty(mData.getString(BODYTYPE_DATA_KEY));
+        return mData.getInt(BODYTYPE_DATA_KEY) > 0;
     }
 }

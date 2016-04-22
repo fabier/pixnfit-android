@@ -129,8 +129,8 @@
     <string name="label_password">Password</string>
     <string name="label_email">Email</string>
     <string name="label_username">Username</string>
-    <string name="hint_username">John Doe</string>
-    <string name="hint_email">john.doe@yahoo.com</string>
+    <string name="hint_username">Firstname Lastname</string>
+    <string name="hint_email">user@yahoo.com</string>
     <string name="label_birthdate">Birthdate</string>
     <string name="label_genre">Genre</string>
     <string name="label_bodytype">Body type</string>
@@ -140,4 +140,5 @@
     <string name="visibility_private">Private</string>
     <string name="label_height">Height</string>
     <string name="label_weight">Weight</string>
+    <string name="label_introduce_yourself">Introduce yourself in a few words...</string>
 </resources>

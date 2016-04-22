@@ -1,7 +1,6 @@
 package com.pixnfit.wizard;
 
 import android.support.v4.app.Fragment;
-import android.text.TextUtils;
 
 import com.tech.freak.wizardpager.model.ModelCallbacks;
 import com.tech.freak.wizardpager.model.Page;
@@ -36,8 +35,8 @@ public class UserAccountPage5VisibilityHeightWeight extends Page {
 
     @Override
     public boolean isCompleted() {
-        return !TextUtils.isEmpty(mData.getString(VISIBILITY_DATA_KEY))
-                && !TextUtils.isEmpty(mData.getString(HEIGHT_DATA_KEY))
-                && !TextUtils.isEmpty(mData.getString(WEIGHT_DATA_KEY));
+        return mData.getInt(VISIBILITY_DATA_KEY) > 0
+                && mData.getInt(HEIGHT_DATA_KEY) > 0
+                && mData.getInt(WEIGHT_DATA_KEY) > 0;
     }
 }

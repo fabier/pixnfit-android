@@ -21,10 +21,7 @@ import android.content.Context;
 import com.tech.freak.wizardpager.model.AbstractWizardModel;
 import com.tech.freak.wizardpager.model.BranchPage;
 import com.tech.freak.wizardpager.model.MultipleFixedChoicePage;
-import com.tech.freak.wizardpager.model.NumberPage;
 import com.tech.freak.wizardpager.model.PageList;
-import com.tech.freak.wizardpager.model.SingleFixedChoicePage;
-import com.tech.freak.wizardpager.model.TextPage;
 
 public class UserProfileModel extends AbstractWizardModel {
     public UserProfileModel(Context context) {
@@ -34,36 +31,20 @@ public class UserProfileModel extends AbstractWizardModel {
     @Override
     protected PageList onNewRootPageList() {
         PageList userProfilePageList = new PageList(
-                new UserAccountPage1NameEmailPassword(this, "Account"),
-                new UserAccountPage2SexBirthdate(this, "Setup"),
+                new UserAccountPage1NameEmailPassword(this, "Account")
+                        .setRequired(true),
+                new UserAccountPage2Birthdate(this, "Setup")
+                        .setRequired(true),
+                new BranchPage(this, "Genre")
+                        .addBranch("Male", new UserAccountPage4BodyType(this, "Social profiles", UserAccountPage4BodyType.TYPE_MALE).setRequired(true))
+                        .addBranch("Female", new UserAccountPage4BodyType(this, "Social profiles", UserAccountPage4BodyType.TYPE_FEMALE).setRequired(true))
+                        .setRequired(true),
                 new MultipleFixedChoicePage(this, "Social style")
-                        .setChoices("Casual", "Chic", "Classic", "Hipster", "Rocker", "Sporty", "Urban", "Vintage"),
-                new UserAccountPage4BodyType(this, "Social profiles"),
-                new UserAccountPage5VisibilityHeightWeight(this, "Personal details"),
-                new TextPage(this, "Introduction")
-        );
-
-        PageList sandwichPageList = new PageList(
-                new BranchPage(this, "Order food")
-                        .addBranch("Sandwich",
-                                new SingleFixedChoicePage(this, "Bread").
-                                        setChoices("White", "Wheat", "Rye", "Pretzel", "Ciabatta").setRequired(true),
-                                new MultipleFixedChoicePage(this, "Meats").
-                                        setChoices("Pepperoni", "Turkey", "Ham", "Pastrami", "Roast Beef", "Bologna"),
-                                new MultipleFixedChoicePage(this, "Veggies").
-                                        setChoices("Tomatoes", "Lettuce", "Onions", "Pickles", "Cucumbers", "Peppers"),
-                                new MultipleFixedChoicePage(this, "Cheeses").
-                                        setChoices("Swiss", "American", "Pepperjack", "Muenster", "Provolone", "White American", "Cheddar", "Bleu"),
-                                new BranchPage(this, "Toasted?").
-                                        addBranch("Yes", new SingleFixedChoicePage(this, "Toast time").setChoices("30 seconds", "1 minute", "2 minutes")).
-                                        addBranch("No").setValue("No"))
-                        .addBranch("Salad",
-                                new SingleFixedChoicePage(this, "Salad type").
-                                        setChoices("Greek", "Caesar").setRequired(true),
-                                new SingleFixedChoicePage(this, "Dressing").
-                                        setChoices("No dressing", "Balsamic", "Oil & vinegar", "Thousand Island", "Italian").setValue("No dressing"),
-                                new NumberPage(this, "How Many Salads?").setRequired(true)).setRequired(true),
-                new TextPage(this, "Comments").setRequired(true).setRequired(true)
+                        .setChoices("Casual", "Chic", "Classic", "Hipster", "Rocker", "Sporty", "Urban", "Vintage")
+                        .setRequired(true),
+                new UserAccountPage5VisibilityHeightWeight(this, "Personal details")
+                        .setRequired(true),
+                new UserAccountPage6Introduction(this, "Introduction")
         );
 
         return userProfilePageList;

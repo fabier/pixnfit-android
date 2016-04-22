@@ -2,10 +2,12 @@ package com.pixnfit.wizard;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
@@ -17,15 +19,19 @@ import com.tech.freak.wizardpager.ui.PageFragmentCallbacks;
  */
 public class UserAccountFragment4BodyType extends Fragment implements RadioGroup.OnCheckedChangeListener {
     private static final String ARG_KEY = "key";
+    private static final String ARG_TYPE = "type";
 
     private PageFragmentCallbacks mCallbacks;
     private String mKey;
+    private String mType;
     private UserAccountPage4BodyType mPage;
     private RadioGroup mBodyTypeRadioGroup;
+    private View rootView;
 
-    public static UserAccountFragment4BodyType create(String key) {
+    public static UserAccountFragment4BodyType create(String key, String type) {
         Bundle args = new Bundle();
         args.putString(ARG_KEY, key);
+        args.putString(ARG_TYPE, type);
 
         UserAccountFragment4BodyType fragment = new UserAccountFragment4BodyType();
         fragment.setArguments(args);
@@ -41,12 +47,13 @@ public class UserAccountFragment4BodyType extends Fragment implements RadioGroup
 
         Bundle args = getArguments();
         mKey = args.getString(ARG_KEY);
+        mType = args.getString(ARG_TYPE);
         mPage = (UserAccountPage4BodyType) mCallbacks.onGetPage(mKey);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_wizardpage_user_account_4_bodytype, container, false);
+        this.rootView = inflater.inflate(R.layout.fragment_wizardpage_user_account_4_bodytype, container, false);
         ((TextView) rootView.findViewById(android.R.id.title)).setText(mPage.getTitle());
 
         mBodyTypeRadioGroup = ((RadioGroup) rootView.findViewById(R.id.bodyTypeRadioGroup));
@@ -91,11 +98,6 @@ public class UserAccountFragment4BodyType extends Fragment implements RadioGroup
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
     public void onDetach() {
         super.onDetach();
         mCallbacks = null;
@@ -105,7 +107,41 @@ public class UserAccountFragment4BodyType extends Fragment implements RadioGroup
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        mType = getArguments().getString(ARG_TYPE);
+
+        if (UserAccountPage4BodyType.TYPE_MALE.equals(mType)) {
+            ((RadioButton) rootView.findViewById(R.id.bodytype_1_radioButton)).setCompoundDrawablesWithIntrinsicBounds(R.drawable.bodytype_male_1, 0, 0, 0);
+            ((RadioButton) rootView.findViewById(R.id.bodytype_2_radioButton)).setCompoundDrawablesWithIntrinsicBounds(R.drawable.bodytype_male_2, 0, 0, 0);
+            ((RadioButton) rootView.findViewById(R.id.bodytype_3_radioButton)).setCompoundDrawablesWithIntrinsicBounds(R.drawable.bodytype_male_3, 0, 0, 0);
+            ((RadioButton) rootView.findViewById(R.id.bodytype_4_radioButton)).setCompoundDrawablesWithIntrinsicBounds(R.drawable.bodytype_male_4, 0, 0, 0);
+            ((RadioButton) rootView.findViewById(R.id.bodytype_5_radioButton)).setCompoundDrawablesWithIntrinsicBounds(R.drawable.bodytype_male_5, 0, 0, 0);
+            ((RadioButton) rootView.findViewById(R.id.bodytype_6_radioButton)).setCompoundDrawablesWithIntrinsicBounds(R.drawable.bodytype_male_6, 0, 0, 0);
+        } else if (UserAccountPage4BodyType.TYPE_FEMALE.equals(mType)) {
+            ((RadioButton) rootView.findViewById(R.id.bodytype_1_radioButton)).setCompoundDrawablesWithIntrinsicBounds(R.drawable.bodytype_female_1, 0, 0, 0);
+            ((RadioButton) rootView.findViewById(R.id.bodytype_2_radioButton)).setCompoundDrawablesWithIntrinsicBounds(R.drawable.bodytype_female_2, 0, 0, 0);
+            ((RadioButton) rootView.findViewById(R.id.bodytype_3_radioButton)).setCompoundDrawablesWithIntrinsicBounds(R.drawable.bodytype_female_3, 0, 0, 0);
+            ((RadioButton) rootView.findViewById(R.id.bodytype_4_radioButton)).setCompoundDrawablesWithIntrinsicBounds(R.drawable.bodytype_female_4, 0, 0, 0);
+            ((RadioButton) rootView.findViewById(R.id.bodytype_5_radioButton)).setCompoundDrawablesWithIntrinsicBounds(R.drawable.bodytype_female_5, 0, 0, 0);
+            ((RadioButton) rootView.findViewById(R.id.bodytype_6_radioButton)).setCompoundDrawablesWithIntrinsicBounds(R.drawable.bodytype_female_6, 0, 0, 0);
+        }
+
         mBodyTypeRadioGroup.setOnCheckedChangeListener(this);
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(ARG_TYPE, mType);
     }
 
     @Override

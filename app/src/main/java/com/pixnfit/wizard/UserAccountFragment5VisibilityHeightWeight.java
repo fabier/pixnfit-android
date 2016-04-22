@@ -13,6 +13,10 @@ import android.widget.TextView;
 import com.pixnfit.R;
 import com.tech.freak.wizardpager.ui.PageFragmentCallbacks;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Locale;
+
 /**
  * Created by TechFreak on 04/09/2014.
  */
@@ -53,34 +57,50 @@ public class UserAccountFragment5VisibilityHeightWeight extends Fragment impleme
         ((TextView) rootView.findViewById(android.R.id.title)).setText(mPage.getTitle());
 
         mVisibilityRadioGroup = ((RadioGroup) rootView.findViewById(R.id.visibilityRadioGroup));
-        int visibilityId = mPage.getData().getInt(UserAccountPage5VisibilityHeightWeight.VISIBILITY_DATA_KEY);
-        switch (visibilityId) {
-            case 1:
-                mVisibilityRadioGroup.check(R.id.visibilityPublicRadioButton);
-                break;
-            case 2:
-                mVisibilityRadioGroup.check(R.id.visibilityFollowersRadioButton);
-                break;
-            case 3:
-                mVisibilityRadioGroup.check(R.id.visibilityPrivateRadioButton);
-                break;
-            default:
-                break;
-        }
 
         mHeightSpinner = ((NumberPicker) rootView.findViewById(R.id.heightSpinner));
         mHeightSpinner.setMinValue(50);
         mHeightSpinner.setMaxValue(250);
-        int height = mPage.getData().getInt(UserAccountPage5VisibilityHeightWeight.HEIGHT_DATA_KEY, 170);
-        mHeightSpinner.setValue(height);
+        mHeightSpinner.setFormatter(new NumberPicker.Formatter() {
+            @Override
+            public String format(int value) {
+                return String.format(Locale.ENGLISH, "%.2fm", value / 100d);
+            }
+        });
+        hackFormatCorrectlyOnFirstRendering(mHeightSpinner);
 
         mWeightSpinner = ((NumberPicker) rootView.findViewById(R.id.weightSpinner));
         mWeightSpinner.setMinValue(40);
         mWeightSpinner.setMaxValue(200);
-        int weight = mPage.getData().getInt(UserAccountPage5VisibilityHeightWeight.WEIGHT_DATA_KEY, 70);
-        mWeightSpinner.setValue(weight);
+        mWeightSpinner.setFormatter(new NumberPicker.Formatter() {
+            @Override
+            public String format(int value) {
+                return String.format(Locale.ENGLISH, "%dkg", value);
+            }
+        });
+        hackFormatCorrectlyOnFirstRendering(mWeightSpinner);
 
         return rootView;
+    }
+
+    /**
+     * Due to this bug
+     * http://stackoverflow.com/questions/17708325/android-numberpicker-with-formatter-does-not-format-on-first-rendering
+     */
+    private void hackFormatCorrectlyOnFirstRendering(NumberPicker numberPicker) {
+        try {
+            Method method = numberPicker.getClass().getDeclaredMethod("changeValueByOne", boolean.class);
+            method.setAccessible(true);
+            method.invoke(numberPicker, true);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -107,6 +127,31 @@ public class UserAccountFragment5VisibilityHeightWeight extends Fragment impleme
         mVisibilityRadioGroup.setOnCheckedChangeListener(this);
         mHeightSpinner.setOnValueChangedListener(this);
         mWeightSpinner.setOnValueChangedListener(this);
+
+        int visibilityId = mPage.getData().getInt(UserAccountPage5VisibilityHeightWeight.VISIBILITY_DATA_KEY, 1);
+        mPage.getData().putInt(UserAccountPage5VisibilityHeightWeight.VISIBILITY_DATA_KEY, visibilityId);
+        switch (visibilityId) {
+            case 1:
+                mVisibilityRadioGroup.check(R.id.visibilityPublicRadioButton);
+                break;
+            case 2:
+                mVisibilityRadioGroup.check(R.id.visibilityFollowersRadioButton);
+                break;
+            case 3:
+                mVisibilityRadioGroup.check(R.id.visibilityPrivateRadioButton);
+                break;
+            default:
+                mVisibilityRadioGroup.check(R.id.visibilityPublicRadioButton);
+                break;
+        }
+
+        int height = mPage.getData().getInt(UserAccountPage5VisibilityHeightWeight.HEIGHT_DATA_KEY, 180);
+        mPage.getData().putInt(UserAccountPage5VisibilityHeightWeight.HEIGHT_DATA_KEY, height);
+        mHeightSpinner.setValue(height);
+
+        int weight = mPage.getData().getInt(UserAccountPage5VisibilityHeightWeight.WEIGHT_DATA_KEY, 70);
+        mPage.getData().putInt(UserAccountPage5VisibilityHeightWeight.WEIGHT_DATA_KEY, weight);
+        mWeightSpinner.setValue(weight);
     }
 
     @Override
