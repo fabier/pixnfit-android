@@ -96,12 +96,13 @@ public class UserAccountFragment1NameEmailPassword extends Fragment {
                 mPage.notifyDataChanged();
             }
         });
-//        mEmailView.addTextChangedListener(new TextWatcherAdapter() {
-//            @Override
-//            public void afterTextChanged(Editable editable) {
+    }
+
+//        @Override
+//        public void afterTextChanged(Editable editable) {
 //                mPage.getData().putString(UserAccountPage1NameEmailPassword.EMAIL_DATA_KEY, (editable != null) ? editable.toString() : null);
 //                mPage.notifyDataChanged();
-//        }
+//            }
 //        });
 //        mPasswordView.addTextChangedListener(new TextWatcherAdapter() {
 //            @Override
@@ -117,5 +118,4 @@ public class UserAccountFragment1NameEmailPassword extends Fragment {
 //                mPage.notifyDataChanged();
 //            }
 //        });
-    }
 }

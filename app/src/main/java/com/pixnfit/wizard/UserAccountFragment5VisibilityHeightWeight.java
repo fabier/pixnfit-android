@@ -25,7 +25,7 @@ public class UserAccountFragment5VisibilityHeightWeight extends Fragment impleme
 
     private PageFragmentCallbacks mCallbacks;
     private String mKey;
-    private UserAccountPage5VisibilityHeightWeight mPage;
+    private UserAccountPage5HeightWeight mPage;
     private RadioGroup mVisibilityRadioGroup;
     private NumberPicker mHeightSpinner;
     private NumberPicker mWeightSpinner;
@@ -48,7 +48,7 @@ public class UserAccountFragment5VisibilityHeightWeight extends Fragment impleme
 
         Bundle args = getArguments();
         mKey = args.getString(ARG_KEY);
-        mPage = (UserAccountPage5VisibilityHeightWeight) mCallbacks.onGetPage(mKey);
+        mPage = (UserAccountPage5HeightWeight) mCallbacks.onGetPage(mKey);
     }
 
     @Override
@@ -128,9 +128,9 @@ public class UserAccountFragment5VisibilityHeightWeight extends Fragment impleme
         mHeightSpinner.setOnValueChangedListener(this);
         mWeightSpinner.setOnValueChangedListener(this);
 
-        int visibilityId = mPage.getData().getInt(UserAccountPage5VisibilityHeightWeight.VISIBILITY_DATA_KEY, 1);
-        mPage.getData().putInt(UserAccountPage5VisibilityHeightWeight.VISIBILITY_DATA_KEY, visibilityId);
-        switch (visibilityId) {
+        long visibilityId = mPage.getData().getLong(UserAccountPage5HeightWeight.VISIBILITY_DATA_KEY, 1);
+        mPage.getData().putLong(UserAccountPage5HeightWeight.VISIBILITY_DATA_KEY, visibilityId);
+        switch ((int) visibilityId) {
             case 1:
                 mVisibilityRadioGroup.check(R.id.visibilityPublicRadioButton);
                 break;
@@ -145,12 +145,12 @@ public class UserAccountFragment5VisibilityHeightWeight extends Fragment impleme
                 break;
         }
 
-        int height = mPage.getData().getInt(UserAccountPage5VisibilityHeightWeight.HEIGHT_DATA_KEY, 180);
-        mPage.getData().putInt(UserAccountPage5VisibilityHeightWeight.HEIGHT_DATA_KEY, height);
+        int height = mPage.getData().getInt(UserAccountPage5HeightWeight.HEIGHT_DATA_KEY, 180);
+        mPage.getData().putInt(UserAccountPage5HeightWeight.HEIGHT_DATA_KEY, height);
         mHeightSpinner.setValue(height);
 
-        int weight = mPage.getData().getInt(UserAccountPage5VisibilityHeightWeight.WEIGHT_DATA_KEY, 70);
-        mPage.getData().putInt(UserAccountPage5VisibilityHeightWeight.WEIGHT_DATA_KEY, weight);
+        int weight = mPage.getData().getInt(UserAccountPage5HeightWeight.WEIGHT_DATA_KEY, 70);
+        mPage.getData().putInt(UserAccountPage5HeightWeight.WEIGHT_DATA_KEY, weight);
         mWeightSpinner.setValue(weight);
     }
 
@@ -158,11 +158,11 @@ public class UserAccountFragment5VisibilityHeightWeight extends Fragment impleme
     public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
         switch (picker.getId()) {
             case R.id.heightSpinner:
-                mPage.getData().putInt(UserAccountPage5VisibilityHeightWeight.HEIGHT_DATA_KEY, newVal);
+                mPage.getData().putInt(UserAccountPage5HeightWeight.HEIGHT_DATA_KEY, newVal);
                 mPage.notifyDataChanged();
                 break;
             case R.id.weightSpinner:
-                mPage.getData().putInt(UserAccountPage5VisibilityHeightWeight.WEIGHT_DATA_KEY, newVal);
+                mPage.getData().putInt(UserAccountPage5HeightWeight.WEIGHT_DATA_KEY, newVal);
                 mPage.notifyDataChanged();
                 break;
             default:
@@ -172,7 +172,7 @@ public class UserAccountFragment5VisibilityHeightWeight extends Fragment impleme
 
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
-        int visibilityId = -1;
+        long visibilityId = -1;
         switch (checkedId) {
             case R.id.visibilityPublicRadioButton:
                 visibilityId = 1;
@@ -186,7 +186,7 @@ public class UserAccountFragment5VisibilityHeightWeight extends Fragment impleme
             default:
                 break;
         }
-        mPage.getData().putInt(UserAccountPage5VisibilityHeightWeight.VISIBILITY_DATA_KEY, visibilityId);
+        mPage.getData().putLong(UserAccountPage5HeightWeight.VISIBILITY_DATA_KEY, visibilityId);
         mPage.notifyDataChanged();
     }
 }

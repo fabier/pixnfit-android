@@ -2,10 +2,12 @@ package com.pixnfit.ws;
 
 import android.content.Context;
 
+import com.pixnfit.common.FashionStyle;
 import com.pixnfit.common.User;
 import com.pixnfit.utils.JSONWsParser;
 import com.pixnfit.ws.tasks.WsPostAsyncTask;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -30,13 +32,24 @@ public class UpdateUserProfileAsyncTask extends WsPostAsyncTask<Void, Void, User
 
     @Override
     protected void writeToHTTP(JSONObject jsonObject, Void... voids) throws JSONException {
-        jsonObject.put("username", user.username);
-        jsonObject.put("description", user.description);
-        jsonObject.put("height", user.height > 0 ? user.height : null);
-        jsonObject.put("weight", user.weight > 0 ? user.weight : null);
-        jsonObject.put("bodytype", user.bodyType == null ? null : user.bodyType.id);
-        jsonObject.put("gender", user.gender == null ? null : user.gender.id);
-        jsonObject.put("birthdate", user.birthdate == null ? null: user.birthdate);
+        jsonObject.putOpt("username", user.username);
+        jsonObject.putOpt("description", user.description);
+        jsonObject.putOpt("height", user.height > 0 ? user.height : null);
+        jsonObject.putOpt("weight", user.weight > 0 ? user.weight : null);
+        jsonObject.putOpt("bodytype", user.bodyType == null ? null : user.bodyType.id);
+        jsonObject.putOpt("gender", user.gender == null ? null : user.gender.id);
+        jsonObject.putOpt("birthdate", user.birthdate == null ? null : user.birthdate);
+
+        JSONArray fashionStyleArray = new JSONArray();
+        for (FashionStyle fashionStyle : user.fashionStyles) {
+            if (fashionStyle != null) {
+                JSONObject fashionJSONObject = new JSONObject();
+                fashionJSONObject.put("id", fashionStyle.id);
+                fashionJSONObject.put("name", fashionStyle.name);
+                fashionStyleArray.put(fashionJSONObject);
+            }
+        }
+        jsonObject.put("fashionStyles", fashionStyleArray);
     }
 
     @Override

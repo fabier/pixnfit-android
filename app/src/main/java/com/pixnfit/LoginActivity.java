@@ -115,7 +115,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Tex
                             editor.putString("login", login);
                             editor.putString("password", password);
                             editor.commit();
-                            Intent createAccountIntent = new Intent(getApplicationContext(), CreateAccountWizardActivity.class);
+                            Intent createAccountIntent = new Intent(getApplicationContext(), CreateProfileWizardActivity.class);
                             createAccountIntent.putExtra("user", user);
                             startActivity(createAccountIntent);
                         } else {

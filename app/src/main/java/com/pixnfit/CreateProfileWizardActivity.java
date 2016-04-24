@@ -18,7 +18,9 @@ package com.pixnfit;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -30,10 +32,20 @@ import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 
+import com.pixnfit.common.BodyType;
+import com.pixnfit.common.FashionStyle;
+import com.pixnfit.common.Gender;
 import com.pixnfit.common.User;
+import com.pixnfit.common.Visibility;
+import com.pixnfit.wizard.UserAccountPage1NameEmailPassword;
+import com.pixnfit.wizard.UserAccountPage2Birthdate;
+import com.pixnfit.wizard.UserAccountPage5HeightWeight;
+import com.pixnfit.wizard.UserAccountPage6Introduction;
 import com.pixnfit.wizard.UserWizardModel;
+import com.pixnfit.wizard.entity.SingleFixedEntityChoicePage;
 import com.pixnfit.ws.UpdateUserProfileAsyncTask;
 import com.tech.freak.wizardpager.model.AbstractWizardModel;
 import com.tech.freak.wizardpager.model.ModelCallbacks;
@@ -42,9 +54,12 @@ import com.tech.freak.wizardpager.ui.PageFragmentCallbacks;
 import com.tech.freak.wizardpager.ui.ReviewFragment;
 import com.tech.freak.wizardpager.ui.StepPagerStrip;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 
-public class CreateAccountWizardActivity extends AppCompatActivity implements PageFragmentCallbacks, ReviewFragment.Callbacks, ModelCallbacks {
+public class CreateProfileWizardActivity extends AppCompatActivity implements PageFragmentCallbacks, ReviewFragment.Callbacks, ModelCallbacks {
     private ViewPager mPager;
     private MyPagerAdapter mPagerAdapter;
 
@@ -60,11 +75,13 @@ public class CreateAccountWizardActivity extends AppCompatActivity implements Pa
     private List<Page> mCurrentPageSequence;
     private StepPagerStrip mStepPagerStrip;
 
+    private User user;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wizard);
 
-        mWizardModel.setUser((User) getIntent().getSerializableExtra("user"));
+        this.user = (User) getIntent().getSerializableExtra("user");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -111,6 +128,10 @@ public class CreateAccountWizardActivity extends AppCompatActivity implements Pa
         mNextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // Cacher le clavier s'il était visible
+                final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+
                 if (mPager.getCurrentItem() == mCurrentPageSequence.size()) {
                     DialogFragment dg = new DialogFragment() {
                         @Override
@@ -120,12 +141,14 @@ public class CreateAccountWizardActivity extends AppCompatActivity implements Pa
                                     .setPositiveButton(R.string.submit_confirm_button, new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
-                                            UpdateUserProfileAsyncTask updateUserProfileAsyncTask = new UpdateUserProfileAsyncTask(getActivity(), ((UserWizardModel) onGetModel()).getUser()) {
+                                            UpdateUserProfileAsyncTask updateUserProfileAsyncTask = new UpdateUserProfileAsyncTask(getActivity(), user) {
                                                 @Override
                                                 protected void onPostExecute(User user) {
                                                     super.onPostExecute(user);
-                                                    if(user != null){
-
+                                                    if (user != null) {
+                                                        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                                                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                        startActivity(intent);
                                                     }
                                                 }
                                             };
@@ -215,12 +238,69 @@ public class CreateAccountWizardActivity extends AppCompatActivity implements Pa
     }
 
     @Override
-    public void onPageDataChanged(Page page) {
-        if (page.isRequired()) {
+    public void onPageDataChanged(Page changedPage) {
+        if (changedPage.isRequired()) {
             if (recalculateCutOffPage()) {
                 mPagerAdapter.notifyDataSetChanged();
                 updateBottomBar();
             }
+        }
+
+        // On met à jour le modèle de données (user)
+//        Bundle allDatas = new Bundle();
+//        for (Page page : mWizardModel.getCurrentPageSequence()) {
+//            allDatas.putAll(page.getData());
+//        }
+
+        Bundle changedPageData = changedPage.getData();
+
+        switch (changedPage.getKey()) {
+            // Page 1
+            case UserWizardModel.PAGE_USERNAME:
+                user.username = changedPageData.getString(UserAccountPage1NameEmailPassword.USERNAME_DATA_KEY);
+                break;
+            // Page 2
+            case UserWizardModel.PAGE_SETUP:
+                String sBirthdate = changedPageData.getString(UserAccountPage2Birthdate.BIRTHDATE_DATA_KEY);
+                if (sBirthdate != null) {
+                    try {
+                        user.birthdate = new SimpleDateFormat("yyyy/MM/dd", Locale.ENGLISH).parse(sBirthdate);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
+                break;
+            // Page 3
+            case UserWizardModel.PAGE_GENDER:
+                user.gender = (Gender) changedPageData.getSerializable(SingleFixedEntityChoicePage.SIMPLE_DATA_KEY);
+                break;
+            // Page 4
+            case UserWizardModel.PAGE_BODYTYPE:
+                user.bodyType = (BodyType) changedPageData.getSerializable(SingleFixedEntityChoicePage.SIMPLE_DATA_KEY);
+                break;
+            // Page 5
+            case UserWizardModel.PAGE_FASHIONSTYLE:
+                user.fashionStyles = (List<FashionStyle>) changedPageData.getSerializable(SingleFixedEntityChoicePage.SIMPLE_DATA_KEY);
+                break;
+            // Page 6
+            case UserWizardModel.PAGE_VISIBILITY:
+                user.visibility = (Visibility) changedPageData.getSerializable(SingleFixedEntityChoicePage.SIMPLE_DATA_KEY);
+                break;
+            // Page 7
+            case UserWizardModel.PAGE_PERSONALDETAILS:
+                user.height = changedPageData.getInt(UserAccountPage5HeightWeight.HEIGHT_DATA_KEY);
+                user.weight = changedPageData.getInt(UserAccountPage5HeightWeight.WEIGHT_DATA_KEY);
+                break;
+            // Page 8
+            case UserWizardModel.PAGE_INTRODUCTION:
+                user.description = changedPageData.getString(UserAccountPage6Introduction.INTRODUCTION_DATA_KEY);
+                break;
+            default:
+                // Pas encore dans le wizard :
+                user.country = null;
+                user.language = null;
+                user.image = null;
+                break;
         }
     }
 
@@ -246,6 +326,11 @@ public class CreateAccountWizardActivity extends AppCompatActivity implements Pa
         }
 
         return false;
+    }
+
+    @Override
+    public void onBackPressed() {
+        mPager.setCurrentItem(mPager.getCurrentItem() - 1);
     }
 
     public class MyPagerAdapter extends FragmentStatePagerAdapter {

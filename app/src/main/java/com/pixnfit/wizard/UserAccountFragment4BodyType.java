@@ -23,15 +23,13 @@ public class UserAccountFragment4BodyType extends Fragment implements RadioGroup
 
     private PageFragmentCallbacks mCallbacks;
     private String mKey;
-    private String mType;
     private UserAccountPage4BodyType mPage;
     private RadioGroup mBodyTypeRadioGroup;
     private View rootView;
 
-    public static UserAccountFragment4BodyType create(String key, String type) {
+    public static UserAccountFragment4BodyType create(String key) {
         Bundle args = new Bundle();
         args.putString(ARG_KEY, key);
-        args.putString(ARG_TYPE, type);
 
         UserAccountFragment4BodyType fragment = new UserAccountFragment4BodyType();
         fragment.setArguments(args);
@@ -47,7 +45,6 @@ public class UserAccountFragment4BodyType extends Fragment implements RadioGroup
 
         Bundle args = getArguments();
         mKey = args.getString(ARG_KEY);
-        mType = args.getString(ARG_TYPE);
         mPage = (UserAccountPage4BodyType) mCallbacks.onGetPage(mKey);
     }
 
@@ -59,8 +56,8 @@ public class UserAccountFragment4BodyType extends Fragment implements RadioGroup
         mBodyTypeRadioGroup = ((RadioGroup) rootView.findViewById(R.id.bodyTypeRadioGroup));
         mBodyTypeRadioGroup.clearCheck();
 
-        int bodytypeId = mPage.getData().getInt(UserAccountPage4BodyType.BODYTYPE_DATA_KEY);
-        switch (bodytypeId) {
+        long bodytypeId = mPage.getData().getLong(UserAccountPage4BodyType.BODYTYPE_DATA_KEY);
+        switch ((int) bodytypeId) {
             case 1:
                 mBodyTypeRadioGroup.check(R.id.bodytype_1_radioButton);
                 break;
@@ -107,16 +104,14 @@ public class UserAccountFragment4BodyType extends Fragment implements RadioGroup
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mType = getArguments().getString(ARG_TYPE);
-
-        if (UserAccountPage4BodyType.TYPE_MALE.equals(mType)) {
+        if (isMale()) {
             ((RadioButton) rootView.findViewById(R.id.bodytype_1_radioButton)).setCompoundDrawablesWithIntrinsicBounds(R.drawable.bodytype_male_1, 0, 0, 0);
             ((RadioButton) rootView.findViewById(R.id.bodytype_2_radioButton)).setCompoundDrawablesWithIntrinsicBounds(R.drawable.bodytype_male_2, 0, 0, 0);
             ((RadioButton) rootView.findViewById(R.id.bodytype_3_radioButton)).setCompoundDrawablesWithIntrinsicBounds(R.drawable.bodytype_male_3, 0, 0, 0);
             ((RadioButton) rootView.findViewById(R.id.bodytype_4_radioButton)).setCompoundDrawablesWithIntrinsicBounds(R.drawable.bodytype_male_4, 0, 0, 0);
             ((RadioButton) rootView.findViewById(R.id.bodytype_5_radioButton)).setCompoundDrawablesWithIntrinsicBounds(R.drawable.bodytype_male_5, 0, 0, 0);
             ((RadioButton) rootView.findViewById(R.id.bodytype_6_radioButton)).setCompoundDrawablesWithIntrinsicBounds(R.drawable.bodytype_male_6, 0, 0, 0);
-        } else if (UserAccountPage4BodyType.TYPE_FEMALE.equals(mType)) {
+        } else {
             ((RadioButton) rootView.findViewById(R.id.bodytype_1_radioButton)).setCompoundDrawablesWithIntrinsicBounds(R.drawable.bodytype_female_1, 0, 0, 0);
             ((RadioButton) rootView.findViewById(R.id.bodytype_2_radioButton)).setCompoundDrawablesWithIntrinsicBounds(R.drawable.bodytype_female_2, 0, 0, 0);
             ((RadioButton) rootView.findViewById(R.id.bodytype_3_radioButton)).setCompoundDrawablesWithIntrinsicBounds(R.drawable.bodytype_female_3, 0, 0, 0);
@@ -139,19 +134,13 @@ public class UserAccountFragment4BodyType extends Fragment implements RadioGroup
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putString(ARG_TYPE, mType);
-    }
-
-    @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
     }
 
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
-        int bodytypeId = -1;
+        long bodytypeId = -1;
         switch (checkedId) {
             case R.id.bodytype_1_radioButton:
                 bodytypeId = 1;
@@ -174,7 +163,12 @@ public class UserAccountFragment4BodyType extends Fragment implements RadioGroup
             default:
                 break;
         }
-        mPage.getData().putInt(UserAccountPage4BodyType.BODYTYPE_DATA_KEY, bodytypeId);
+        mPage.getData().putLong(UserAccountPage4BodyType.BODYTYPE_DATA_KEY, bodytypeId);
         mPage.notifyDataChanged();
+    }
+
+    public boolean isMale() {
+        // TODO : Récupérer ce que l'utilisateur a saisi à l'étape précédente
+        return false;
     }
 }
