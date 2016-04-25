@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  * Created by fabier on 16/02/16.
@@ -413,6 +414,19 @@ public class JSONWsParser {
                 fashionStyles.add(fashionStyle);
             }
             return fashionStyles;
+        }
+    }
+
+    public static String formatDate(Date date) {
+        if (date == null) {
+            return null;
+        } else {
+            // NOTE: SimpleDateFormat uses GMT[-+]hh:mm for the TZ which breaks
+            // things a bit. Before we go on we have to repair this.
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.ENGLISH);
+            df.setTimeZone(TimeZone.getTimeZone("UTC"));
+            String formattedDate = df.format(date);
+            return formattedDate;
         }
     }
 }
