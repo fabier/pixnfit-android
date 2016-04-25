@@ -1,11 +1,16 @@
 package com.pixnfit;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageButton;
+
+import com.pixnfit.common.Post;
+
+import java.io.Serializable;
+import java.util.Arrays;
 
 public class InboxActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -62,6 +67,27 @@ public class InboxActivity extends AppCompatActivity implements View.OnClickList
                 break;
             default:
                 break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case REQUESTCODE_CREATE_POST:
+                    Post post = (Post) data.getSerializableExtra("post");
+                    if (post != null) {
+                        // .. puis on affiche ce post en plein écran
+                        Intent intent = new Intent(this, PostActivity.class);
+                        intent.putExtra("posts", (Serializable) Arrays.asList(post));
+                        intent.putExtra("position", 0);
+                        startActivity(intent);
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }
