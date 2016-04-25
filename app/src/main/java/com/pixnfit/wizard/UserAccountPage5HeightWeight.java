@@ -13,7 +13,6 @@ import java.util.ArrayList;
  * A page asking for a name and an email.
  */
 public class UserAccountPage5HeightWeight extends Page {
-    public static final String VISIBILITY_DATA_KEY = "visibility";
     public static final String HEIGHT_DATA_KEY = "height";
     public static final String WEIGHT_DATA_KEY = "weight";
 
@@ -28,15 +27,12 @@ public class UserAccountPage5HeightWeight extends Page {
 
     @Override
     public void getReviewItems(ArrayList<ReviewItem> dest) {
-        dest.add(new ReviewItem("Visibility", Long.toString(mData.getLong(VISIBILITY_DATA_KEY)), getKey(), -1));
         dest.add(new ReviewItem("Height", Integer.toString(mData.getInt(HEIGHT_DATA_KEY)), getKey(), -1));
         dest.add(new ReviewItem("Weight", Integer.toString(mData.getInt(WEIGHT_DATA_KEY)), getKey(), -1));
     }
 
     @Override
     public boolean isCompleted() {
-        return mData.getLong(VISIBILITY_DATA_KEY) > 0
-                && mData.getInt(HEIGHT_DATA_KEY) > 0
-                && mData.getInt(WEIGHT_DATA_KEY) > 0;
+        return mData.getInt(HEIGHT_DATA_KEY) > 0 && mData.getInt(WEIGHT_DATA_KEY) > 0;
     }
 }

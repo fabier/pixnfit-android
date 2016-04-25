@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.NumberPicker;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.pixnfit.R;
@@ -20,13 +19,12 @@ import java.util.Locale;
 /**
  * Created by TechFreak on 04/09/2014.
  */
-public class UserAccountFragment5HeightWeight extends Fragment implements NumberPicker.OnValueChangeListener, RadioGroup.OnCheckedChangeListener {
+public class UserAccountFragment5HeightWeight extends Fragment implements NumberPicker.OnValueChangeListener {
     private static final String ARG_KEY = "key";
 
     private PageFragmentCallbacks mCallbacks;
     private String mKey;
     private UserAccountPage5HeightWeight mPage;
-    private RadioGroup mVisibilityRadioGroup;
     private NumberPicker mHeightSpinner;
     private NumberPicker mWeightSpinner;
 
@@ -55,8 +53,6 @@ public class UserAccountFragment5HeightWeight extends Fragment implements Number
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_wizardpage_user_account_5_height_weight, container, false);
         ((TextView) rootView.findViewById(android.R.id.title)).setText(mPage.getTitle());
-
-        mVisibilityRadioGroup = ((RadioGroup) rootView.findViewById(R.id.visibilityRadioGroup));
 
         mHeightSpinner = ((NumberPicker) rootView.findViewById(R.id.heightSpinner));
         mHeightSpinner.setMinValue(50);
@@ -124,26 +120,8 @@ public class UserAccountFragment5HeightWeight extends Fragment implements Number
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mVisibilityRadioGroup.setOnCheckedChangeListener(this);
         mHeightSpinner.setOnValueChangedListener(this);
         mWeightSpinner.setOnValueChangedListener(this);
-
-        long visibilityId = mPage.getData().getLong(UserAccountPage5HeightWeight.VISIBILITY_DATA_KEY, 1);
-        mPage.getData().putLong(UserAccountPage5HeightWeight.VISIBILITY_DATA_KEY, visibilityId);
-        switch ((int) visibilityId) {
-            case 1:
-                mVisibilityRadioGroup.check(R.id.visibilityPublicRadioButton);
-                break;
-            case 2:
-                mVisibilityRadioGroup.check(R.id.visibilityFollowersRadioButton);
-                break;
-            case 3:
-                mVisibilityRadioGroup.check(R.id.visibilityPrivateRadioButton);
-                break;
-            default:
-                mVisibilityRadioGroup.check(R.id.visibilityPublicRadioButton);
-                break;
-        }
 
         int height = mPage.getData().getInt(UserAccountPage5HeightWeight.HEIGHT_DATA_KEY, 180);
         mPage.getData().putInt(UserAccountPage5HeightWeight.HEIGHT_DATA_KEY, height);
@@ -168,25 +146,5 @@ public class UserAccountFragment5HeightWeight extends Fragment implements Number
             default:
                 break;
         }
-    }
-
-    @Override
-    public void onCheckedChanged(RadioGroup group, int checkedId) {
-        long visibilityId = -1;
-        switch (checkedId) {
-            case R.id.visibilityPublicRadioButton:
-                visibilityId = 1;
-                break;
-            case R.id.visibilityFollowersRadioButton:
-                visibilityId = 2;
-                break;
-            case R.id.visibilityPrivateRadioButton:
-                visibilityId = 3;
-                break;
-            default:
-                break;
-        }
-        mPage.getData().putLong(UserAccountPage5HeightWeight.VISIBILITY_DATA_KEY, visibilityId);
-        mPage.notifyDataChanged();
     }
 }
