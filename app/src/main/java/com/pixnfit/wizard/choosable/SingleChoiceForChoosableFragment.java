@@ -61,7 +61,7 @@ public class SingleChoiceForChoosableFragment extends ListFragment {
         ((TextView) rootView.findViewById(android.R.id.title)).setText(mPage.getTitle());
 
         final ListView listView = (ListView) rootView.findViewById(android.R.id.list);
-        setListAdapter(new ChoosableArrayAdapter(getActivity(), android.R.layout.simple_list_item_single_choice, android.R.id.text1, mChoices));
+        setListAdapter(new ChoosableArrayAdapter(getActivity(), R.layout.simple_list_item_choosable_single_choice, android.R.id.text1, mChoices));
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
         // Pre-select currently selected item.
