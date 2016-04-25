@@ -1,8 +1,7 @@
-package com.pixnfit.wizard.entity;
+package com.pixnfit.wizard.choosable;
 
 import android.support.v4.app.Fragment;
 
-import com.pixnfit.common.BaseEntity;
 import com.tech.freak.wizardpager.model.ModelCallbacks;
 import com.tech.freak.wizardpager.model.Page;
 import com.tech.freak.wizardpager.model.ReviewItem;
@@ -13,19 +12,19 @@ import java.util.Arrays;
 /**
  * Created by fabier on 24/04/16.
  */
-public class SingleFixedEntityChoicePage extends Page {
-    protected ArrayList<BaseEntity> mChoices = new ArrayList<>();
+public class SingleFixedChoiceForChoosablePage extends Page {
+    protected ArrayList<Choosable> mChoices = new ArrayList<>();
 
-    public SingleFixedEntityChoicePage(ModelCallbacks callbacks, String title) {
+    public SingleFixedChoiceForChoosablePage(ModelCallbacks callbacks, String title) {
         super(callbacks, title);
     }
 
     @Override
     public Fragment createFragment() {
-        return SingleEntityChoiceFragment.create(getKey());
+        return SingleChoiceForChoosableFragment.create(getKey());
     }
 
-    public BaseEntity getOptionAt(int position) {
+    public Choosable getOptionAt(int position) {
         return mChoices.get(position);
     }
 
@@ -35,9 +34,9 @@ public class SingleFixedEntityChoicePage extends Page {
 
     @Override
     public void getReviewItems(ArrayList<ReviewItem> dest) {
-        BaseEntity entity = (BaseEntity) mData.getSerializable(SIMPLE_DATA_KEY);
-        if (entity != null) {
-            dest.add(new ReviewItem(getTitle(), entity.toReviewString(), getKey()));
+        Choosable choosable = (Choosable) mData.getSerializable(SIMPLE_DATA_KEY);
+        if (choosable != null) {
+            dest.add(new ReviewItem(getTitle(), choosable.getChoiceAsString(), getKey()));
         }
     }
 
@@ -46,12 +45,12 @@ public class SingleFixedEntityChoicePage extends Page {
         return mData.getLong(SIMPLE_DATA_KEY) > 0;
     }
 
-    public SingleFixedEntityChoicePage setChoices(BaseEntity... choices) {
+    public SingleFixedChoiceForChoosablePage setChoices(Choosable... choices) {
         mChoices.addAll(Arrays.asList(choices));
         return this;
     }
 
-    public SingleFixedEntityChoicePage setValue(BaseEntity value) {
+    public SingleFixedChoiceForChoosablePage setValue(Choosable value) {
         mData.putSerializable(SIMPLE_DATA_KEY, value);
         return this;
     }

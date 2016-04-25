@@ -18,10 +18,12 @@ package com.pixnfit;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -45,8 +47,8 @@ import com.pixnfit.wizard.UserAccountPage2Birthdate;
 import com.pixnfit.wizard.UserAccountPage5HeightWeight;
 import com.pixnfit.wizard.UserAccountPage6Introduction;
 import com.pixnfit.wizard.UserWizardModel;
-import com.pixnfit.wizard.entity.SingleFixedEntityChoicePage;
-import com.pixnfit.ws.UpdateUserProfileAsyncTask;
+import com.pixnfit.wizard.choosable.SingleFixedChoiceForChoosablePage;
+import com.pixnfit.ws.InitProfileAccountAsyncTask;
 import com.tech.freak.wizardpager.model.AbstractWizardModel;
 import com.tech.freak.wizardpager.model.ModelCallbacks;
 import com.tech.freak.wizardpager.model.Page;
@@ -127,12 +129,13 @@ public class CreateProfileWizardActivity extends AppCompatActivity implements Pa
 
         mNextButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(final View view) {
                 // Cacher le clavier s'il était visible
                 final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
 
                 if (mPager.getCurrentItem() == mCurrentPageSequence.size()) {
+                    ProgressDialog.show(getBaseContext(), "Account creation in progress...", "Please wait...", true);
                     DialogFragment dg = new DialogFragment() {
                         @Override
                         public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -141,14 +144,17 @@ public class CreateProfileWizardActivity extends AppCompatActivity implements Pa
                                     .setPositiveButton(R.string.submit_confirm_button, new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
-                                            UpdateUserProfileAsyncTask updateUserProfileAsyncTask = new UpdateUserProfileAsyncTask(getActivity(), user) {
+                                            InitProfileAccountAsyncTask updateUserProfileAsyncTask = new InitProfileAccountAsyncTask(getActivity(), user) {
                                                 @Override
                                                 protected void onPostExecute(User user) {
                                                     super.onPostExecute(user);
                                                     if (user != null) {
+                                                        Snackbar.make(view, "Account creation successful", Snackbar.LENGTH_LONG);
                                                         Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                                                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                                         startActivity(intent);
+                                                    } else {
+                                                        Snackbar.make(view, "Account creation failed", Snackbar.LENGTH_LONG);
                                                     }
                                                 }
                                             };
@@ -158,10 +164,11 @@ public class CreateProfileWizardActivity extends AppCompatActivity implements Pa
                                     .setNegativeButton(android.R.string.cancel, null).create();
                         }
                     };
-                    dg.show(getSupportFragmentManager(), "place_order_dialog");
+                    dg.show(getSupportFragmentManager(), "create_account_dialog");
                 } else {
                     if (mEditingAfterReview) {
                         mPager.setCurrentItem(mPagerAdapter.getCount() - 1);
+                        mEditingAfterReview = false;
                     } else {
                         mPager.setCurrentItem(mPager.getCurrentItem() + 1);
                     }
@@ -246,12 +253,6 @@ public class CreateProfileWizardActivity extends AppCompatActivity implements Pa
             }
         }
 
-        // On met à jour le modèle de données (user)
-//        Bundle allDatas = new Bundle();
-//        for (Page page : mWizardModel.getCurrentPageSequence()) {
-//            allDatas.putAll(page.getData());
-//        }
-
         Bundle changedPageData = changedPage.getData();
 
         switch (changedPage.getKey()) {
@@ -272,19 +273,19 @@ public class CreateProfileWizardActivity extends AppCompatActivity implements Pa
                 break;
             // Page 3
             case UserWizardModel.PAGE_GENDER:
-                user.gender = (Gender) changedPageData.getSerializable(SingleFixedEntityChoicePage.SIMPLE_DATA_KEY);
+                user.gender = (Gender) changedPageData.getSerializable(SingleFixedChoiceForChoosablePage.SIMPLE_DATA_KEY);
                 break;
             // Page 4
             case UserWizardModel.PAGE_BODYTYPE:
-                user.bodyType = (BodyType) changedPageData.getSerializable(SingleFixedEntityChoicePage.SIMPLE_DATA_KEY);
+                user.bodyType = (BodyType) changedPageData.getSerializable(SingleFixedChoiceForChoosablePage.SIMPLE_DATA_KEY);
                 break;
             // Page 5
             case UserWizardModel.PAGE_FASHIONSTYLE:
-                user.fashionStyles = (List<FashionStyle>) changedPageData.getSerializable(SingleFixedEntityChoicePage.SIMPLE_DATA_KEY);
+                user.fashionStyles = (List<FashionStyle>) changedPageData.getSerializable(SingleFixedChoiceForChoosablePage.SIMPLE_DATA_KEY);
                 break;
             // Page 6
             case UserWizardModel.PAGE_VISIBILITY:
-                user.visibility = (Visibility) changedPageData.getSerializable(SingleFixedEntityChoicePage.SIMPLE_DATA_KEY);
+                user.visibility = (Visibility) changedPageData.getSerializable(SingleFixedChoiceForChoosablePage.SIMPLE_DATA_KEY);
                 break;
             // Page 7
             case UserWizardModel.PAGE_PERSONALDETAILS:
@@ -330,7 +331,12 @@ public class CreateProfileWizardActivity extends AppCompatActivity implements Pa
 
     @Override
     public void onBackPressed() {
-        mPager.setCurrentItem(mPager.getCurrentItem() - 1);
+        if (mEditingAfterReview) {
+            mPager.setCurrentItem(mPagerAdapter.getCount() - 1);
+            mEditingAfterReview = false;
+        } else {
+            mPager.setCurrentItem(mPager.getCurrentItem() - 1);
+        }
     }
 
     public class MyPagerAdapter extends FragmentStatePagerAdapter {

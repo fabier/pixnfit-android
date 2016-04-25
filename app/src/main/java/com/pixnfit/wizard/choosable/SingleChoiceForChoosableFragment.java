@@ -1,48 +1,43 @@
-package com.pixnfit.wizard.entity;
+package com.pixnfit.wizard.choosable;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.ListFragment;
-import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.pixnfit.R;
-import com.pixnfit.common.BaseEntity;
 import com.tech.freak.wizardpager.model.Page;
 import com.tech.freak.wizardpager.ui.PageFragmentCallbacks;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by fabier on 24/04/16.
  */
-public class MultipleEntityChoiceFragment extends ListFragment {
+public class SingleChoiceForChoosableFragment extends ListFragment {
     private static final String ARG_KEY = "key";
 
     private PageFragmentCallbacks mCallbacks;
+    private List<Choosable> mChoices;
     private String mKey;
-    private List<BaseEntity> mChoices;
     private Page mPage;
 
-    public static MultipleEntityChoiceFragment create(String key) {
+    public static SingleChoiceForChoosableFragment create(String key) {
         Bundle args = new Bundle();
         args.putString(ARG_KEY, key);
 
-        MultipleEntityChoiceFragment fragment = new MultipleEntityChoiceFragment();
+        SingleChoiceForChoosableFragment fragment = new SingleChoiceForChoosableFragment();
         fragment.setArguments(args);
         return fragment;
     }
 
-    public MultipleEntityChoiceFragment() {
+    public SingleChoiceForChoosableFragment() {
     }
 
     @Override
@@ -53,7 +48,7 @@ public class MultipleEntityChoiceFragment extends ListFragment {
         mKey = args.getString(ARG_KEY);
         mPage = mCallbacks.onGetPage(mKey);
 
-        MultipleFixedEntityChoicePage fixedChoicePage = (MultipleFixedEntityChoicePage) mPage;
+        SingleFixedChoiceForChoosablePage fixedChoicePage = (SingleFixedChoiceForChoosablePage) mPage;
         mChoices = new ArrayList<>();
         for (int i = 0; i < fixedChoicePage.getOptionCount(); i++) {
             mChoices.add(fixedChoicePage.getOptionAt(i));
@@ -66,23 +61,18 @@ public class MultipleEntityChoiceFragment extends ListFragment {
         ((TextView) rootView.findViewById(android.R.id.title)).setText(mPage.getTitle());
 
         final ListView listView = (ListView) rootView.findViewById(android.R.id.list);
-        setListAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_multiple_choice, android.R.id.text1, mChoices));
-        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        setListAdapter(new ChoosableArrayAdapter(getActivity(), android.R.layout.simple_list_item_single_choice, android.R.id.text1, mChoices));
+        listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
-        // Pre-select currently selected items.
+        // Pre-select currently selected item.
         new Handler().post(new Runnable() {
             @Override
             public void run() {
-                List<BaseEntity> selectedItems = (List<BaseEntity>) mPage.getData().getSerializable(Page.SIMPLE_DATA_KEY);
-                if (selectedItems == null || selectedItems.size() == 0) {
-                    return;
-                }
-
-                Set<BaseEntity> selectedSet = new HashSet<>(selectedItems);
-
+                Choosable selection = (Choosable) mPage.getData().getSerializable(Page.SIMPLE_DATA_KEY);
                 for (int i = 0; i < mChoices.size(); i++) {
-                    if (selectedSet.contains(mChoices.get(i))) {
+                    if (mChoices.get(i).equals(selection)) {
                         listView.setItemChecked(i, true);
+                        break;
                     }
                 }
             }
@@ -110,16 +100,7 @@ public class MultipleEntityChoiceFragment extends ListFragment {
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        SparseBooleanArray checkedPositions = getListView().getCheckedItemPositions();
-        ArrayList<BaseEntity> selections = new ArrayList<>();
-        for (int i = 0; i < checkedPositions.size(); i++) {
-            if (checkedPositions.valueAt(i)) {
-                BaseEntity baseEntity = (BaseEntity) getListAdapter().getItem(checkedPositions.keyAt(i));
-                selections.add(baseEntity);
-            }
-        }
-
-        mPage.getData().putSerializable(Page.SIMPLE_DATA_KEY, selections);
+        mPage.getData().putSerializable(Page.SIMPLE_DATA_KEY, (Choosable) getListAdapter().getItem(position));
         mPage.notifyDataChanged();
     }
 }

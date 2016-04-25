@@ -1,6 +1,6 @@
 package com.pixnfit.common;
 
-import com.pixnfit.wizard.entity.ReviewableElement;
+import com.pixnfit.wizard.choosable.Choosable;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
 
@@ -9,7 +9,7 @@ import java.io.Serializable;
 /**
  * Created by fabier on 16/02/16.
  */
-public class BaseEntity implements Serializable, ReviewableElement {
+public class BaseEntity implements Serializable, Choosable {
     public long id;
 
     @Override
@@ -26,7 +26,7 @@ public class BaseEntity implements Serializable, ReviewableElement {
         }
     }
 
-    public String toReviewString() {
+    public String getChoiceAsString() {
         try {
             return (String) FieldUtils.readField(this, "name");
         } catch (IllegalAccessException e) {

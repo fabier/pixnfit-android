@@ -24,8 +24,8 @@ import com.pixnfit.common.FashionStyle;
 import com.pixnfit.common.Gender;
 import com.pixnfit.common.Visibility;
 import com.pixnfit.utils.EntityUtils;
-import com.pixnfit.wizard.entity.MultipleFixedEntityChoicePage;
-import com.pixnfit.wizard.entity.SingleFixedEntityChoicePage;
+import com.pixnfit.wizard.choosable.MultipleFixedChoiceForChoosablePage;
+import com.pixnfit.wizard.choosable.SingleFixedChoiceForChoosablePage;
 import com.tech.freak.wizardpager.model.AbstractWizardModel;
 import com.tech.freak.wizardpager.model.PageList;
 
@@ -60,19 +60,19 @@ public class UserWizardModel extends AbstractWizardModel {
                 new UserAccountPage2Birthdate(this, PAGE_SETUP)
                         .setRequired(true),
                 // Page 3 : Male/Female
-                new SingleFixedEntityChoicePage(this, PAGE_GENDER)
+                new SingleFixedChoiceForChoosablePage(this, PAGE_GENDER)
                         .setChoices(genders.toArray(new BaseEntity[genders.size()]))
                         .setRequired(true),
                 // Page 4 : BodyType
-                new SingleFixedEntityChoicePage(this, PAGE_BODYTYPE)
+                new SingleFixedChoiceForChoosablePage(this, PAGE_BODYTYPE)
                         .setChoices(bodyTypes.toArray(new BaseEntity[bodyTypes.size()]))
                         .setRequired(true),
                 // Page 5 : Style
-                new MultipleFixedEntityChoicePage(this, PAGE_FASHIONSTYLE)
+                new MultipleFixedChoiceForChoosablePage(this, PAGE_FASHIONSTYLE)
                         .setChoices(fashionStyles.toArray(new BaseEntity[fashionStyles.size()]))
                         .setRequired(true),
                 // Page 6 : Public/Followers/Private
-                new MultipleFixedEntityChoicePage(this, PAGE_VISIBILITY)
+                new MultipleFixedChoiceForChoosablePage(this, PAGE_VISIBILITY)
                         .setChoices(visibilities.toArray(new BaseEntity[visibilities.size()]))
                         .setRequired(true),
                 // Page 6
