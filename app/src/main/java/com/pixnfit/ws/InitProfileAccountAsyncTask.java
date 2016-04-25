@@ -16,11 +16,11 @@ import java.util.Locale;
 /**
  * Created by fabier on 19/02/16.
  */
-public class UpdateUserProfileAsyncTask extends WsPostAsyncTask<Void, Void, User> {
+public class InitProfileAccountAsyncTask extends WsPostAsyncTask<Void, Void, User> {
 
     private User user;
 
-    public UpdateUserProfileAsyncTask(Context context, User user) {
+    public InitProfileAccountAsyncTask(Context context, User user) {
         super(context);
         this.user = user;
     }
@@ -36,8 +36,13 @@ public class UpdateUserProfileAsyncTask extends WsPostAsyncTask<Void, Void, User
         jsonObject.putOpt("description", user.description);
         jsonObject.putOpt("height", user.height > 0 ? user.height : null);
         jsonObject.putOpt("weight", user.weight > 0 ? user.weight : null);
-        jsonObject.putOpt("bodytype", user.bodyType == null ? null : user.bodyType.id);
-        jsonObject.putOpt("gender", user.gender == null ? null : user.gender.id);
+
+        jsonObject.putOpt("bodytypeId", user.bodyType == null ? null : user.bodyType.id);
+        jsonObject.putOpt("genderId", user.gender == null ? null : user.gender.id);
+        jsonObject.putOpt("countryId", user.country == null ? null : user.country.id);
+        jsonObject.putOpt("languageId", user.language == null ? null : user.language.id);
+        jsonObject.putOpt("visibilityId", user.visibility == null ? null : user.visibility.id);
+
         jsonObject.putOpt("birthdate", user.birthdate == null ? null : user.birthdate);
 
         JSONArray fashionStyleArray = new JSONArray();
