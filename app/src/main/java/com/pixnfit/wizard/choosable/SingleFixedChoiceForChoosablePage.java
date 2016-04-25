@@ -42,7 +42,7 @@ public class SingleFixedChoiceForChoosablePage extends Page {
 
     @Override
     public boolean isCompleted() {
-        return mData.getLong(SIMPLE_DATA_KEY) > 0;
+        return mData.getSerializable(SIMPLE_DATA_KEY) != null;
     }
 
     public SingleFixedChoiceForChoosablePage setChoices(Choosable... choices) {
