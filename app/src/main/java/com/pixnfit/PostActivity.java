@@ -71,8 +71,8 @@ public class PostActivity extends AppCompatActivity implements View.OnClickListe
         ImageButton profileButtonBar = (ImageButton) findViewById(R.id.profileButtonBar);
         profileButtonBar.setOnClickListener(this);
 
-        // Set none as selected
-        // homeButtonBar.setBackgroundColor(getResources().getColor(R.color.pixnfitPrimaryDark));
+        // Set home as selected
+        homeButtonBar.setBackgroundColor(getResources().getColor(R.color.pixnfitPrimaryDark));
     }
 
     @Override
