@@ -16,15 +16,11 @@
 
 package com.pixnfit;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -60,6 +56,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 public class CreateProfileWizardActivity extends AppCompatActivity implements PageFragmentCallbacks, ReviewFragment.Callbacks, ModelCallbacks {
     private ViewPager mPager;
@@ -135,36 +132,25 @@ public class CreateProfileWizardActivity extends AppCompatActivity implements Pa
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
 
                 if (mPager.getCurrentItem() == mCurrentPageSequence.size()) {
-                    ProgressDialog.show(getBaseContext(), "Account creation in progress...", "Please wait...", true);
-                    DialogFragment dg = new DialogFragment() {
+                    final ProgressDialog progressDialog = ProgressDialog.show(CreateProfileWizardActivity.this, "Account creation in progress...", "Please wait...", true);
+                    InitProfileAccountAsyncTask updateUserProfileAsyncTask = new InitProfileAccountAsyncTask(getApplication(), user) {
                         @Override
-                        public Dialog onCreateDialog(Bundle savedInstanceState) {
-                            return new AlertDialog.Builder(getActivity())
-                                    .setMessage(R.string.submit_confirm_message)
-                                    .setPositiveButton(R.string.submit_confirm_button, new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            InitProfileAccountAsyncTask updateUserProfileAsyncTask = new InitProfileAccountAsyncTask(getActivity(), user) {
-                                                @Override
-                                                protected void onPostExecute(User user) {
-                                                    super.onPostExecute(user);
-                                                    if (user != null) {
-                                                        Snackbar.make(view, "Account creation successful", Snackbar.LENGTH_LONG);
-                                                        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-                                                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                                        startActivity(intent);
-                                                    } else {
-                                                        Snackbar.make(view, "Account creation failed", Snackbar.LENGTH_LONG);
-                                                    }
-                                                }
-                                            };
-                                            updateUserProfileAsyncTask.execute();
-                                        }
-                                    })
-                                    .setNegativeButton(android.R.string.cancel, null).create();
+                        protected void onPostExecute(User user) {
+                            super.onPostExecute(user);
+                            if (user != null) {
+                                Snackbar.make(view, "Account creation successful", Snackbar.LENGTH_LONG).show();
+                                Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                            } else {
+                                Snackbar.make(view, "Account creation failed", Snackbar.LENGTH_LONG).show();
+                            }
+                            progressDialog.dismiss();
                         }
                     };
-                    dg.show(getSupportFragmentManager(), "create_account_dialog");
+                    updateUserProfileAsyncTask.execute();
+//                    DialogFragment dialogFragment = new DialogFragment();
+//                    dialogFragment.show(getSupportFragmentManager(), "create_account_dialog");
                 } else {
                     if (mEditingAfterReview) {
                         mPager.setCurrentItem(mPagerAdapter.getCount() - 1);
@@ -265,7 +251,9 @@ public class CreateProfileWizardActivity extends AppCompatActivity implements Pa
                 String sBirthdate = changedPageData.getString(UserAccountPage2Birthdate.BIRTHDATE_DATA_KEY);
                 if (sBirthdate != null) {
                     try {
-                        user.birthdate = new SimpleDateFormat("yyyy/MM/dd", Locale.ENGLISH).parse(sBirthdate);
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd", Locale.ENGLISH);
+                        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+                        user.birthdate = dateFormat.parse(sBirthdate);
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
