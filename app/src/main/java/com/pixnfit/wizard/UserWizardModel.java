@@ -18,7 +18,6 @@ package com.pixnfit.wizard;
 
 import android.content.Context;
 
-import com.pixnfit.common.BaseEntity;
 import com.pixnfit.common.BodyType;
 import com.pixnfit.common.FashionStyle;
 import com.pixnfit.common.Gender;
@@ -61,19 +60,19 @@ public class UserWizardModel extends AbstractWizardModel {
                         .setRequired(true),
                 // Page 3 : Male/Female
                 new SingleFixedChoiceForChoosablePage(this, PAGE_GENDER)
-                        .setChoices(genders.toArray(new BaseEntity[genders.size()]))
+                        .setChoices(genders)
                         .setRequired(true),
                 // Page 4 : BodyType
                 new SingleFixedChoiceForChoosablePage(this, PAGE_BODYTYPE)
-                        .setChoices(bodyTypes.toArray(new BaseEntity[bodyTypes.size()]))
+                        .setChoices(bodyTypes)
                         .setRequired(true),
                 // Page 5 : Style
                 new MultipleFixedChoiceForChoosablePage(this, PAGE_FASHIONSTYLE)
-                        .setChoices(fashionStyles.toArray(new BaseEntity[fashionStyles.size()]))
+                        .setChoices(fashionStyles)
                         .setRequired(true),
                 // Page 6 : Public/Followers/Private
-                new MultipleFixedChoiceForChoosablePage(this, PAGE_VISIBILITY)
-                        .setChoices(visibilities.toArray(new BaseEntity[visibilities.size()]))
+                new SingleFixedChoiceForChoosablePage(this, PAGE_VISIBILITY)
+                        .setChoices(visibilities)
                         .setRequired(true),
                 // Page 6
                 new UserAccountPage5HeightWeight(this, PAGE_PERSONALDETAILS)

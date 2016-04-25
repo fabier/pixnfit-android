@@ -8,6 +8,7 @@ import com.tech.freak.wizardpager.model.ReviewItem;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 
 /**
  * Created by fabier on 24/04/16.
@@ -43,6 +44,11 @@ public class SingleFixedChoiceForChoosablePage extends Page {
     @Override
     public boolean isCompleted() {
         return mData.getSerializable(SIMPLE_DATA_KEY) != null;
+    }
+
+    public SingleFixedChoiceForChoosablePage setChoices(Collection<? extends Choosable> choices) {
+        mChoices.addAll(choices);
+        return this;
     }
 
     public SingleFixedChoiceForChoosablePage setChoices(Choosable... choices) {
