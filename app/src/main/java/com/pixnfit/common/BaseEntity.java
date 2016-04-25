@@ -34,4 +34,9 @@ public class BaseEntity implements Serializable, Choosable {
             return null;
         }
     }
+
+    @Override
+    public int getDrawableId() {
+        return 0;
+    }
 }
