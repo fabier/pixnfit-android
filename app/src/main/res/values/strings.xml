@@ -121,7 +121,7 @@
     <string name="this_user_hasnt_followers_yet">This user hasn\'t followers yet.</string>
     <string name="prev">Previous</string>
     <string name="next">Next</string>
-    <string name="submit_confirm_message">Submit</string>
+    <string name="submit_confirm_message">You are going to create an account</string>
     <string name="submit_confirm_button">Confirm</string>
     <string name="finish">Finish</string>
     <string name="createAccount">Create</string>
@@ -129,7 +129,7 @@
     <string name="label_password">Password</string>
     <string name="label_email">Email</string>
     <string name="label_username">Username</string>
-    <string name="hint_username">Firstname Lastname</string>
+    <string name="hint_username">Christian Cordulo</string>
     <string name="hint_email">user@yahoo.com</string>
     <string name="label_birthdate">Birthdate</string>
     <string name="label_genre">Genre</string>
