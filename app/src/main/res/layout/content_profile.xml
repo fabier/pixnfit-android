@@ -33,6 +33,18 @@
         android:layout_above="@+id/bottom_bar"
         android:layout_below="@+id/tab_layout" />
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabFollow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/bottom_bar"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@drawable/ic_add_white_24dp"
+        app:backgroundTint="@color/red" />
+
     <include
         android:id="@+id/bottom_bar"
         layout="@layout/footer_bottom_bar"
