@@ -5,4 +5,9 @@ package com.pixnfit.common;
  */
 public class ImageType extends BaseEntity {
     public String name;
+
+    @Override
+    public String getChoiceAsString() {
+        return this.name;
+    }
 }

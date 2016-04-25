@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CheckedTextView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -102,6 +103,11 @@ public class ChoosableArrayAdapter extends ArrayAdapter<Choosable> {
 
         Choosable item = getItem(position);
         text.setText(item.getChoiceAsString());
+
+        int drawableId = item.getDrawableId();
+        if (drawableId > 0 && view instanceof CheckedTextView) {
+            ((CheckedTextView) view).setCompoundDrawablesWithIntrinsicBounds(drawableId, 0, 0, 0);
+        }
 
         return view;
     }

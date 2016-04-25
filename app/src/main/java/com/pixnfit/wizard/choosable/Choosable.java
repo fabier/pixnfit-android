@@ -7,4 +7,6 @@ import java.io.Serializable;
  */
 public interface Choosable extends Serializable {
     String getChoiceAsString();
+
+    int getDrawableId();
 }

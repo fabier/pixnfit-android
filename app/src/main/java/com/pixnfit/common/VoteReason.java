@@ -5,4 +5,9 @@ package com.pixnfit.common;
  */
 public class VoteReason extends BaseEntity {
     public String name;
+
+    @Override
+    public String getChoiceAsString() {
+        return this.name;
+    }
 }
