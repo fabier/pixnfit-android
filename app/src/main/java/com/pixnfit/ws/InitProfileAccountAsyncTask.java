@@ -11,6 +11,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.HttpURLConnection;
 import java.util.Locale;
 
 /**
@@ -60,6 +61,11 @@ public class InitProfileAccountAsyncTask extends WsPostAsyncTask<Void, Void, Use
             }
         }
         jsonObject.put("fashionStyles", fashionStyleArray);
+    }
+
+    @Override
+    protected int getExpectedHTTPResponseCode() {
+        return HttpURLConnection.HTTP_OK;
     }
 
     @Override
