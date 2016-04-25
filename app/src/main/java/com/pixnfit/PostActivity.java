@@ -56,16 +56,47 @@ public class PostActivity extends AppCompatActivity implements View.OnClickListe
 
         viewPager.setCurrentItem(position);
 
-        ImageButton cameraButton = (ImageButton) findViewById(R.id.cameraButtonBar);
-        cameraButton.setOnClickListener(this);
+        initFooterButtonBar();
+    }
+
+    private void initFooterButtonBar() {
+        ImageButton homeButtonBar = (ImageButton) findViewById(R.id.homeButtonBar);
+        homeButtonBar.setOnClickListener(this);
+        ImageButton followersButtonBar = (ImageButton) findViewById(R.id.followersButtonBar);
+        followersButtonBar.setOnClickListener(this);
+        ImageButton cameraButtonBar = (ImageButton) findViewById(R.id.cameraButtonBar);
+        cameraButtonBar.setOnClickListener(this);
+        ImageButton inboxButtonBar = (ImageButton) findViewById(R.id.inboxButtonBar);
+        inboxButtonBar.setOnClickListener(this);
+        ImageButton profileButtonBar = (ImageButton) findViewById(R.id.profileButtonBar);
+        profileButtonBar.setOnClickListener(this);
+
+        // Set none as selected
+        // homeButtonBar.setBackgroundColor(getResources().getColor(R.color.pixnfitPrimaryDark));
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.homeButtonBar:
+                Intent homeIntent = new Intent(this, HomeActivity.class);
+                startActivity(homeIntent);
+                break;
+            case R.id.followersButtonBar:
+                Intent followersIntent = new Intent(this, FollowersActivity.class);
+                startActivity(followersIntent);
+                break;
             case R.id.cameraButtonBar:
                 Intent createPostIntent = new Intent(this, CreatePostActivity.class);
                 startActivityForResult(createPostIntent, REQUESTCODE_CREATE_POST);
+                break;
+            case R.id.inboxButtonBar:
+                Intent inboxIntent = new Intent(this, InboxActivity.class);
+                startActivity(inboxIntent);
+                break;
+            case R.id.profileButtonBar:
+                Intent profileIntent = new Intent(this, ProfileActivity.class);
+                startActivity(profileIntent);
                 break;
             default:
                 break;

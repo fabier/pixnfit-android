@@ -1,5 +1,6 @@
 package com.pixnfit;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -9,11 +10,13 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.pixnfit.adapter.ProfilePagerAdapter;
 import com.pixnfit.async.BitmapWorkerTask;
+import com.pixnfit.common.Post;
 import com.pixnfit.common.User;
 import com.pixnfit.common.UserMe;
 import com.pixnfit.utils.ThreadPools;
@@ -23,12 +26,17 @@ import com.pixnfit.ws.GetUserAsyncTask;
 import com.pixnfit.ws.GetUserMeAsyncTask;
 import com.pixnfit.ws.UnfollowUserAsyncTask;
 
+import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Locale;
 
 /**
  * Created by fabier on 31/03/16.
  */
 public class ProfileActivity extends AppCompatActivity implements View.OnClickListener {
+
+    private static final int REQUESTCODE_CREATE_POST = 1;
+
     // When requested, this adapter returns a DemoObjectFragment,
     // representing an object in the collection.
     ProfilePagerAdapter profilePagerAdapter;
@@ -118,6 +126,24 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             };
             getMeAsyncTask.executeOnExecutor(ThreadPools.METADATA_THREADPOOL);
         }
+
+        initFooterButtonBar();
+    }
+
+    private void initFooterButtonBar() {
+        ImageButton homeButtonBar = (ImageButton) findViewById(R.id.homeButtonBar);
+        homeButtonBar.setOnClickListener(this);
+        ImageButton followersButtonBar = (ImageButton) findViewById(R.id.followersButtonBar);
+        followersButtonBar.setOnClickListener(this);
+        ImageButton cameraButtonBar = (ImageButton) findViewById(R.id.cameraButtonBar);
+        cameraButtonBar.setOnClickListener(this);
+        ImageButton inboxButtonBar = (ImageButton) findViewById(R.id.inboxButtonBar);
+        inboxButtonBar.setOnClickListener(this);
+        ImageButton profileButtonBar = (ImageButton) findViewById(R.id.profileButtonBar);
+        profileButtonBar.setOnClickListener(this);
+
+        // Set none as selected
+        profileButtonBar.setBackgroundColor(getResources().getColor(R.color.colorAccent));
     }
 
     protected void setUser(User user) {
@@ -211,8 +237,48 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                     }.execute();
                 }
                 break;
+            case R.id.homeButtonBar:
+                Intent homeIntent = new Intent(this, HomeActivity.class);
+                startActivity(homeIntent);
+                break;
+            case R.id.followersButtonBar:
+                Intent followersIntent = new Intent(this, FollowersActivity.class);
+                startActivity(followersIntent);
+                break;
+            case R.id.cameraButtonBar:
+                Intent createPostIntent = new Intent(this, CreatePostActivity.class);
+                startActivityForResult(createPostIntent, REQUESTCODE_CREATE_POST);
+                break;
+            case R.id.inboxButtonBar:
+                Intent inboxIntent = new Intent(this, InboxActivity.class);
+                startActivity(inboxIntent);
+                break;
+            case R.id.profileButtonBar:
+                // already there
+                break;
             default:
                 break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case REQUESTCODE_CREATE_POST:
+                    Post post = (Post) data.getSerializableExtra("post");
+                    if (post != null) {
+                        // .. puis on affiche ce post en plein écran
+                        Intent intent = new Intent(this, PostActivity.class);
+                        intent.putExtra("posts", (Serializable) Arrays.asList(post));
+                        intent.putExtra("position", 0);
+                        startActivity(intent);
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
     }
 

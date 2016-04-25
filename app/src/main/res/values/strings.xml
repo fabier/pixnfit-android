@@ -143,4 +143,11 @@
     <string name="label_introduce_yourself">Introduce yourself in a few words...</string>
     <string name="gender_male">Male</string>
     <string name="gender_female">Female</string>
+    <string name="title_followers_activity">Followers</string>
+    <string name="title_inbox_activity">Inbox</string>
+    <string name="title_home_activity">PixnFit</string>
+    <string name="title_create_post_activity">New post</string>
+    <string name="title_create_profile_activity">New account</string>
+    <string name="title_post_activity">PixnFit</string>
+    <string name="title_profile_activity">PixnFit</string>
 </resources>
