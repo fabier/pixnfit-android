@@ -20,7 +20,7 @@ import java.util.Locale;
 /**
  * Created by TechFreak on 04/09/2014.
  */
-public class UserAccountFragment5VisibilityHeightWeight extends Fragment implements NumberPicker.OnValueChangeListener, RadioGroup.OnCheckedChangeListener {
+public class UserAccountFragment5HeightWeight extends Fragment implements NumberPicker.OnValueChangeListener, RadioGroup.OnCheckedChangeListener {
     private static final String ARG_KEY = "key";
 
     private PageFragmentCallbacks mCallbacks;
@@ -30,16 +30,16 @@ public class UserAccountFragment5VisibilityHeightWeight extends Fragment impleme
     private NumberPicker mHeightSpinner;
     private NumberPicker mWeightSpinner;
 
-    public static UserAccountFragment5VisibilityHeightWeight create(String key) {
+    public static UserAccountFragment5HeightWeight create(String key) {
         Bundle args = new Bundle();
         args.putString(ARG_KEY, key);
 
-        UserAccountFragment5VisibilityHeightWeight fragment = new UserAccountFragment5VisibilityHeightWeight();
+        UserAccountFragment5HeightWeight fragment = new UserAccountFragment5HeightWeight();
         fragment.setArguments(args);
         return fragment;
     }
 
-    public UserAccountFragment5VisibilityHeightWeight() {
+    public UserAccountFragment5HeightWeight() {
     }
 
     @Override
@@ -53,7 +53,7 @@ public class UserAccountFragment5VisibilityHeightWeight extends Fragment impleme
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_wizardpage_user_account_5_visibility_height_weight, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_wizardpage_user_account_5_height_weight, container, false);
         ((TextView) rootView.findViewById(android.R.id.title)).setText(mPage.getTitle());
 
         mVisibilityRadioGroup = ((RadioGroup) rootView.findViewById(R.id.visibilityRadioGroup));

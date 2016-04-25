@@ -17,34 +17,6 @@
 
             <TextView
                 style="@style/WizardFormLabel"
-                android:text="@string/label_visibility" />
-
-            <RadioGroup
-                android:id="@+id/visibilityRadioGroup"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="3">
-
-                <RadioButton
-                    android:id="@+id/genderMaleRadioButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:tag="1"
-                    android:text="@string/gender_male" />
-
-                <RadioButton
-                    android:id="@+id/genderFemaleRadioButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:tag="2"
-                    android:text="@string/gender_female" />
-            </RadioGroup>
-
-            <TextView
-                style="@style/WizardFormLabel"
                 android:text="@string/label_height" />
 
             <NumberPicker

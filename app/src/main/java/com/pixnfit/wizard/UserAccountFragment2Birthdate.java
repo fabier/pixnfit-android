@@ -52,7 +52,7 @@ public class UserAccountFragment2Birthdate extends Fragment implements CalendarV
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_wizardpage_user_account_2_sex_birthdate, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_wizardpage_user_account_2_birthdate, container, false);
         ((TextView) rootView.findViewById(android.R.id.title)).setText(mPage.getTitle());
 
         mBirthdateDatePicker = ((DatePicker) rootView.findViewById(R.id.birthdateDatePicker));

@@ -23,7 +23,7 @@ public class UserAccountPage5HeightWeight extends Page {
 
     @Override
     public Fragment createFragment() {
-        return UserAccountFragment5VisibilityHeightWeight.create(getKey());
+        return UserAccountFragment5HeightWeight.create(getKey());
     }
 
     @Override
