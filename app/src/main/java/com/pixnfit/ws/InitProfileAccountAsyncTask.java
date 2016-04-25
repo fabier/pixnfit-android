@@ -26,6 +26,11 @@ public class InitProfileAccountAsyncTask extends WsPostAsyncTask<Void, Void, Use
     }
 
     @Override
+    protected boolean needsAuthentication() {
+        return false;
+    }
+
+    @Override
     protected String getUrl(Void... params) {
         return String.format(Locale.ENGLISH, "/users/%d/initProfile", user.id);
     }
@@ -43,7 +48,7 @@ public class InitProfileAccountAsyncTask extends WsPostAsyncTask<Void, Void, Use
         jsonObject.putOpt("languageId", user.language == null ? null : user.language.id);
         jsonObject.putOpt("visibilityId", user.visibility == null ? null : user.visibility.id);
 
-        jsonObject.putOpt("birthdate", user.birthdate == null ? null : user.birthdate);
+        jsonObject.putOpt("birthdate", JSONWsParser.formatDate(user.birthdate));
 
         JSONArray fashionStyleArray = new JSONArray();
         for (FashionStyle fashionStyle : user.fashionStyles) {
