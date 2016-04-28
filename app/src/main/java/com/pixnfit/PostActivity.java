@@ -72,7 +72,7 @@ public class PostActivity extends AppCompatActivity implements View.OnClickListe
         profileButtonBar.setOnClickListener(this);
 
         // Set home as selected
-        homeButtonBar.setBackgroundColor(getResources().getColor(R.color.pixnfitPrimaryDark));
+        homeButtonBar.setBackgroundColor(getResources().getColor(R.color.colorAccent));
     }
 
     @Override
