@@ -76,7 +76,8 @@
             android:background="@color/background_floating_material_light"
             android:padding="5dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/share" />
+            android:src="@drawable/share"
+            android:visibility="invisible" />
 
         <View
             android:layout_width="0dp"
@@ -92,7 +93,8 @@
             android:background="@color/background_floating_material_light"
             android:padding="5dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/hanger" />
+            android:src="@drawable/hanger"
+            android:visibility="invisible" />
 
         <ImageButton
             android:id="@+id/postButtonMoreOptions"
@@ -102,7 +104,8 @@
             android:background="@color/background_floating_material_light"
             android:padding="5dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/more_options" />
+            android:src="@drawable/more_options"
+            android:visibility="invisible" />
     </LinearLayout>
 
     <LinearLayout
