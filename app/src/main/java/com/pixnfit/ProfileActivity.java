@@ -43,6 +43,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     ViewPager profileViewPager;
 
     private User user;
+    private User me;
+
     private ImageView profileImageView;
     private TextView profileRankingTextView;
     private TextView profilePicturesTextView;
@@ -100,32 +102,34 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             }
         });
 
-        User user = (User) getIntent().getSerializableExtra("user");
 
-        if (user != null) {
-            GetUserAsyncTask getUserAsyncTask = new GetUserAsyncTask(getApplication()) {
-                @Override
-                protected void onPostExecute(User user) {
-                    super.onPostExecute(user);
-                    if (!isCancelled()) {
-                        setUser(user);
+        GetMeAsyncTask getMeAsyncTask = new GetMeAsyncTask(getApplication()) {
+            @Override
+            protected void onPostExecute(User me) {
+                super.onPostExecute(me);
+                if (!isCancelled()) {
+                    setMe(me);
+
+                    User user = (User) getIntent().getSerializableExtra("user");
+                    if (user != null) {
+                        GetUserAsyncTask getUserAsyncTask = new GetUserAsyncTask(getApplication()) {
+                            @Override
+                            protected void onPostExecute(User user) {
+                                super.onPostExecute(user);
+                                if (!isCancelled()) {
+                                    setUser(user);
+                                    loadUserMe(user);
+                                }
+                            }
+                        };
+                        getUserAsyncTask.executeOnExecutor(ThreadPools.METADATA_THREADPOOL, user);
+                    } else {
+                        setUser(me);
                     }
                 }
-            };
-            getUserAsyncTask.executeOnExecutor(ThreadPools.METADATA_THREADPOOL, user);
-            loadUserMe(user);
-        } else {
-            GetMeAsyncTask getMeAsyncTask = new GetMeAsyncTask(getApplication()) {
-                @Override
-                protected void onPostExecute(User user) {
-                    super.onPostExecute(user);
-                    if (!isCancelled()) {
-                        setUser(user);
-                    }
-                }
-            };
-            getMeAsyncTask.executeOnExecutor(ThreadPools.METADATA_THREADPOOL);
-        }
+            }
+        };
+        getMeAsyncTask.executeOnExecutor(ThreadPools.METADATA_THREADPOOL);
 
         initFooterButtonBar();
     }
@@ -144,6 +148,10 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         // Set none as selected
         profileButtonBar.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+    }
+
+    protected void setMe(User me) {
+        this.me = me;
     }
 
     protected void setUser(User user) {
@@ -168,8 +176,14 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             this.profileFollowingTextView.setText(Integer.toString(user.followedCount));
 
             // On active le bouton pour suivre l'utilisateur
-            this.fabFollow.setVisibility(View.VISIBLE);
-            this.fabFollow.setOnClickListener(this);
+            if (this.me.equals(this.user)) {
+                // On ne peut pas se suivre soi même
+                this.fabFollow.setVisibility(View.GONE);
+                this.fabFollow.setOnClickListener(null);
+            } else {
+                this.fabFollow.setVisibility(View.VISIBLE);
+                this.fabFollow.setOnClickListener(this);
+            }
         }
 
         this.profilePagerAdapter.setUser(user);
