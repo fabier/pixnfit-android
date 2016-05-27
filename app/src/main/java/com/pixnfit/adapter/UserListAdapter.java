@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.pixnfit.R;
 import com.pixnfit.async.AsyncDrawable;
@@ -64,14 +65,17 @@ public class UserListAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         View view;
         ImageView imageView;
+        TextView userNameView;
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.grid_item_user, null);
             imageView = (ImageView) view.findViewById(R.id.userImageView);
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            userNameView = (TextView) view.findViewById(R.id.userNameView);
         } else {
             view = convertView;
             imageView = (ImageView) view.findViewById(R.id.userImageView);
+            userNameView = (TextView) view.findViewById(R.id.userNameView);
         }
 
         if (imageView != null) {
@@ -82,6 +86,7 @@ public class UserListAdapter extends BaseAdapter {
             } else {
                 imageView.setImageResource(R.drawable.profile);
             }
+            userNameView.setText(user.username);
         }
 
         return view;
